@@ -1,8 +1,8 @@
-\section{Transformers}
+\section*{Transformers}
 
 - A transformer is a neural network that iteratively transforms a sequence to another sequence and mixes the information between the sequence elements via self-attention.
 
-\subsection{Architecture}
+\subsection*{Architecture}
 
 
 \begin{wrapfigure}{r}{0.4\columnwidth} 
@@ -26,10 +26,7 @@
 %   \label{fig:cfm_pca2D_wrapped}
 \end{wrapfigure}
 
-\vspace{4pt}
-\hrule
-\vspace{4pt}
-\subsection{Text Token Embeddings}
+\subsection*{Text Token Embeddings}
 
 - Tokenization: split the input text into a sequence of input tokens (typically word fragments + some special symbols) according to some predefined tokenizer procedure: 
 
@@ -42,10 +39,7 @@
 
 - The whole input sequence of $T$ tokens leads to an input matrix $X\in\mathbb{R}^{T\times D}$
 
-\vspace{4pt}
-\hrule
-\vspace{4pt}
-\subsection{Attention}
+\subsection*{Attention}
 
 - Attention is a function that transforms a sequence of tokens to a new sequence of tokens using a learned input-dependent weighted average
 
@@ -72,10 +66,7 @@ $z_{i}=\sum_{j=1}^{T_{i}}p_{i j}v_{j}$ i.e. $Z=P V$
 - $P=\mathrm{softmax}\left({\frac{Q K^{\mathsf{T}}}{\sqrt{D_{K}}}}\right)$ The softmax is applied on each row independently. Scaling ensures uniformity
 at initialization and faster convergence
 
-\vspace{4pt}
-\hrule
-\vspace{4pt}
-\subsection{Self-Attention}
+\subsection*{Self-Attention}
 
 \begin{wrapfigure}{r}{0.4\columnwidth}
   % \centering
@@ -97,7 +88,7 @@ sequence $X\in\mathbb{R}^{T\times D}$
 
 - $Z=\mathrm{softmax}\left(\frac{X W_{Q}W_{K}^{T}X^{T}}{\sqrt{D_{K}}}\right)X W_{V}$
 
-\subsubsection{Multi-Head Self-Attention}
+\subsubsection*{Multi-Head Self-Attention}
 
 \begin{wrapfigure}{r}{0.3\columnwidth} 
   \centering
@@ -114,10 +105,7 @@ sequence $X\in\mathbb{R}^{T\times D}$
 - The final output is obtained by concatenating head-outputs and applying a linear transformation $Z=[Z_{1},\dots,Z_{H}]W_{o}$ where $W_{O}\in\mathbb{R}^{H D_{V}\times D}$ is learned via backpropagation
 % \lipsum[1]
 
-\vspace{4pt}
-\hrule
-\vspace{4pt}
-\subsection{Positional Information}
+\subsection*{Positional Information}
 
 - Attention by itself does not account for the order of input
 
@@ -125,10 +113,7 @@ sequence $X\in\mathbb{R}^{T\times D}$
 
 - The most basic choice is to add a positional embedding $W_{p o s}$ corresponding to each token's position $t$ to the input embedding. $W_{p o s}\in\mathbb{R}^{D\times T}$ is learned via backpropagation along with the other parameters
 
-\vspace{4pt}
-\hrule
-\vspace{4pt}
-\subsection{MLP}
+\subsection*{MLP}
 
 - Mixing Information within Tokens
 
@@ -137,20 +122,14 @@ independently: $M L P(X)=\varphi(X W_{1})W_{2}$
 
 - $W_{1},W_{2}\in\mathbb{R}^{D\times D}$ learned via backprop
 
-\vspace{4pt}
-\hrule
-\vspace{4pt}
-\subsection{Output Transformations}
+\subsection*{Output Transformations}
 
 - typically simple: linear
 transformation or a small MLP
 
 - dependent on the task: Single output (e.g.,sequence-level classification): apply an output transformation to a special taskspecific input token or to the average of all tokens. Multiple outputs (e.g., per-token classification): apply an output transformation to each token independently
 
-\vspace{4pt}
-\hrule
-\vspace{4pt}
-\subsection{Vision Transformer Architecture}
+\subsection*{Vision Transformer Architecture}
 
 - Self-attention is more general than convolution and can potentially express it
 
@@ -160,10 +139,7 @@ transformation or a small MLP
 
 - In many cases, the model attends to image regions that are semantically relevant for classification
 
-\vspace{4pt}
-\hrule
-\vspace{4pt}
-\subsection{Encoders \& Decoders}
+\subsection*{Encoders \& Decoders}
 
 \begin{wrapfigure}{r}{0.3\columnwidth} 
   \centering
@@ -175,7 +151,3 @@ transformation or a small MLP
 - Decoders (e.g., ChatGPT): Auto-regressively sample the next token as $x_{t+1}\sim s o f i m a x(f(x_{1},....,x_{t}))$ and use it as new input token. Capable of generating responses of arbitrary length.
 
 - Encoder-decoder (e.g., translation): First encode the whole input (e.g., in one language) and then decode to token by token (e.g., in a different language)
-
-\vspace{4pt}
-\hrule
-\vspace{4pt}

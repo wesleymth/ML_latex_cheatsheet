@@ -4,7 +4,6 @@
 %\usepackage{graphicx} % Required for inserting images
 \usepackage{graphicx}
 \usepackage{multicol}
-\usepackage{titlesec}
 \usepackage{xcolor}
 \usepackage{amsfonts}
 \usepackage{wrapfig}
@@ -14,26 +13,80 @@
 
 \usepackage{lipsum}
 
-\usepackage{titlesec}
+\usepackage[compact]{titlesec}
+% Change title spacing
+\titlespacing{\section}{0pt}{*0}{*0}
+\titlespacing{\subsection}{0pt}{*0}{*0}
+\titlespacing{\subsubsection}{0pt}{*0}{*0}
 
-% Make titles smaller
-\titleformat{\section}
-  {\normalfont\fontsize{10}{10}\bfseries}{\thesection}{1em}{}
+% Change title color
+% \newcommand{\sectionnewcolor}[1]{%
+%     \definecolor{section_color}{rgb}{#1}%
+%     \titleformat*{\section}{\normalfont\normalsize\bfseries\color{section_color}}%
+%     \titleformat*{\subsection}{\normalfont\normalsize\bfseries\color{section_color}}%
+%     \titleformat*{\subsubsection}{\normalfont\normalsize\bfseries\color{section_color}}%
+% }
+\definecolor{default_section_color}{rgb}{0,0,0} % Default color
+\newcounter{colornumber}
+\setcounter{colornumber}{1}
+\newcommand{\sectionnewcolor}{%
+    \ifcase\thecolornumber%
+        \colorlet{section_color}{red}%
+    \or
+        \colorlet{section_color}{green}%
+    \or
+        \colorlet{section_color}{blue}%
+    \or
+        \colorlet{section_color}{cyan}%
+    \or
+        \colorlet{section_color}{magenta}%
+    \or
+        \colorlet{section_color}{yellow}%
+    \or
+        \colorlet{section_color}{orange}%
+    \or
+        \colorlet{section_color}{purple}%
+    \or
+        \colorlet{section_color}{teal}%
+    \or
+        \colorlet{section_color}{lime}%
+    \or
+        \colorlet{section_color}{pink}%
+    \or
+        \colorlet{section_color}{brown}%
+    \or
+        \colorlet{section_color}{indigo}%
+    \or
+        \colorlet{section_color}{turquoise}%
+    \or
+        \colorlet{section_color}{gold}%
+    \or
+        \colorlet{section_color}{silver}%
+    \or
+        \colorlet{section_color}{slategray}%
+    \or
+        \colorlet{section_color}{olive}%
+    \or
+        \colorlet{section_color}{maroon}%
+    \else
+        \colorlet{section_color}{default_section_color}%
+    \fi
+    
+    \titleformat*{\section}{\normalfont\normalsize\bfseries\color{section_color}}%
+    \titleformat*{\subsection}{\normalfont\normalsize\bfseries\color{section_color}}%
+    \titleformat*{\subsubsection}{\normalfont\normalsize\bfseries\color{section_color}}%
+    \stepcounter{colornumber}%
+}
 
-\titleformat{\subsection}
-  {\normalfont\fontsize{10}{10}\bfseries}{\thesubsection}{1em}{}
+\newcommand{\sectiondivider}{%
+    \vspace{4pt}%
+    \hrule%
+    \vspace{4pt}%
+}
 
-
+% Change text spacing
 \setlength{\parindent}{0pt}
 \setlength{\columnseprule}{0.2pt}
-
-% Adjust spacing before and after sections
-\titlespacing\section{0pt}{\parskip}{-\parskip}
-% Adjust spacing before and after subsections
-\titlespacing\subsection{0pt}{\parskip}{-\parskip}
-% Adjust spacing before and after subsubsections
-\titlespacing\subsubsection{0pt}{\parskip}{-\parskip}
-
 \setlength{\intextsep}{0pt}%
 % \setlength{\columnsep}{7pt}%
 
@@ -41,19 +94,33 @@
 
 \begin{multicols*}{4}
 
-% \small
-
+\sectionnewcolor
 \input{1_regression.tex}
+\sectiondivider
 
+\sectionnewcolor
 \input{2_optimisation.tex}
+\sectiondivider
 
+\sectionnewcolor
 \input{9a_transformers.tex}
+\sectiondivider
 
+\sectionnewcolor
 \input{9b_adversarial_ml.tex}
+\sectiondivider
 
+\sectionnewcolor
 \input{12a_matrix_factorisation.tex}
+\sectiondivider
 
+\sectionnewcolor
+\input{12b_text.tex}
+\sectiondivider
+
+\sectionnewcolor
 \input{99_experiments.tex}
+\sectiondivider
 
 \end{multicols*}
 

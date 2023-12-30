@@ -1,6 +1,5 @@
-
-\section{Regression}
-\subsection{Terminology}
+\section*{Regression}
+\subsection*{Terminology}
 
 - Data consists of \textbf{pairs} ($\mathbf{x}_n$, $y_n$), where $y_n$ is the n’th output and $x_n$ is a vector of $D$ inputs. The number of pairs $N$ is the data-size and $D$ is the dimensionality.
 
@@ -14,10 +13,7 @@
 
 - \textbf{Output variables} a.k.a. target, label, response, outcome, dependent variable, endogenous variables, measured variable, regressands.
 
-\vspace{4pt}
-\hrule
-\vspace{4pt}
-\subsection{Linear Regression}
+\subsection*{Linear Regression}
 
 - Assumes linear relationship between inputs and output.
 
@@ -27,10 +23,7 @@
 
 - Overparameterisation $D > N$ eg. univariate linear regression with a single data point $y_{1}\approx w_{0}+w_{1}x_{11}$. This makes the task under-determined (no unique solution).
 
-\vspace{4pt}
-\hrule
-\vspace{4pt}
-\subsection{Loss Functions $\mathcal{L}$}
+\subsection*{Loss Functions $\mathcal{L}$}
 
 - A loss function (a.k.a. energy, cost, training objective) quantifies how well the model does (how costly its mistakes are).
 
@@ -78,7 +71,3 @@ ${\cal H}u b e r(e):=\left\{\begin{array}{l l}{{\frac{1}{2}e^{2}}}&{{,\mathrm{if
 $\frac{\partial\mathcal{L}}{\partial e}:=\left\{\begin{array}{l l}{{e\{1-e^{2}/\delta^{2}\}^{2}}}&{{,\mathrm{if}\,\,|e|\leq\delta}}\\ {{0}}&{{,\mathrm{if} \ |e| > \delta}}\end{array}\right.$ non-convex, but robust to outliers.
 
 \includegraphics[width=\linewidth]{loss_functions.png}
-
-\vspace{4pt}
-\hrule
-\vspace{4pt}

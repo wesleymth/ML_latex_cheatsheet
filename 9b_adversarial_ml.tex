@@ -1,4 +1,4 @@
-\section{Adversarial ML}
+\section*{Adversarial ML}
 
 - We don't understand how NN models generalize and react to shifts in the distribution of data (i.e., distribution shifts)
 
@@ -9,10 +9,7 @@
 
 - Adversarial risk: average zero-one loss over small, worst-case perturbations of $X$: $R_{\varepsilon}(f)={{{\mathbb{E}}}}_{\mathcal{D}}\left[\operatorname*{max}_{\hat{x},\|\hat{x}-X\|\leq\varepsilon}1_{f(\hat{x})\neq Y}\right]$
 
-\vspace{4pt}
-\hrule
-\vspace{4pt}
-\subsection{Generating adversarial examples}
+\subsection*{Generating adversarial examples}
 
 - Task: given an input $(x, y)$ and a model $f : \mathcal{X}\rightarrow \{-1,1\}$ find an input $\hat{x}$ s.t.: 
 a) $\|{\hat{x}}-x\|\leq\varepsilon$ b) the model $f$ makes a mistake on it.
@@ -33,10 +30,7 @@ a) $\|{\hat{x}}-x\|\leq\varepsilon$ b) the model $f$ makes a mistake on it.
 \end{wrapfigure}
 - decreasing, margin-based (i.e., dependent on $y * g(x)$) classification losses
 
-\vspace{4pt}
-\hrule
-\vspace{4pt}
-\subsection{White-Box attacks}
+\subsection*{White-Box attacks}
 
 - Solve $\operatorname*{max}_{\hat{x},\|\hat{x}-X\|\leq\varepsilon}\ell(yg(\hat{x}))$ knowing $g$
 
@@ -56,10 +50,7 @@ $\operatorname*{max}_{\|{\hat{x}}-x\|\leq\varepsilon}{\tilde{\ell}}(x)\\\approx\
 
 - This is a simple problem for which we can get a closed-form solution depending on the norm used to measure the perturbation size $||\delta||$
 
-\vspace{4pt}
-\hrule
-\vspace{4pt}
-\subsubsection{One-step attack}
+\subsubsection*{One-step attack}
 
 - Solution for the $\ell_2$ norm:
 
@@ -69,10 +60,7 @@ $\delta_{2}^{\star}=\varepsilon\cdot\frac{\nabla_{x}\tilde{\ell}(x)}{||\nabla_{x
 
 $\delta_{\infty}^{\star}=\varepsilon\cdot\mathrm{sign}(\nabla_{x}\tilde{\ell}(x))=-\,\varepsilon y\cdot\mathrm{sign}(\nabla_{x}g(x)) \Rightarrow \\ {\hat{x}}=x-\varepsilon y\cdot\operatorname{sign}(\nabla_{x}g(x))$
 
-\vspace{4pt}
-\hrule
-\vspace{4pt}
-\subsubsection{Multi-step attack}
+\subsubsection*{Multi-step attack}
 
 
 - These updates can be done iteratively and combined with a projection $\Pi$ on the feasible set (i.e., balls $\ell_2$ / $\ell_\infty$ here)
@@ -95,10 +83,7 @@ $\Pi_{B_{\infty}(\varepsilon)}(\delta)_i=\left\{\begin{array}{l l}{\varepsilon\c
 
 \includegraphics[width=\columnwidth]{figures/lp_norms.png}
 
-\vspace{4pt}
-\hrule
-\vspace{4pt}
-\subsection{Black-box attacks}
+\subsection*{Black-box attacks}
 
 - We don't know $g(x)$
 
@@ -106,7 +91,7 @@ $\Pi_{B_{\infty}(\varepsilon)}(\delta)_i=\left\{\begin{array}{l l}{\varepsilon\c
 
 - Query-based methods often require a lot of queries (10k-100k), easy to restrict access for the attacker!
 
-\subsubsection{Query-based gradient estimation}
+\subsubsection*{Query-based gradient estimation}
 
 - Score-based: we can query the continuous model scores $g(x)\in \mathbb{R}$. We can approximate the gradient by using the finite difference formula:
 
@@ -114,17 +99,14 @@ $\nabla_{x}g(x)\approx\sum_{i=1}^{d}\frac{g(x+\alpha e_{i})-g(x)}{\alpha}e_{i}$
 
 - Decision-based: we can query only the predicted class $f(x) \in \{-1,1\}$, similar techniques can be adapted for the decision-based case.
 
-\subsubsection{Transfer Attacks}
+\subsubsection*{Transfer Attacks}
 
 - Train a similar surrogate model ${\hat{f}}\approx f$ on similar data
 
 - Model stealing (query $f$ given some unlabeled inputs $\{x_{n},f(x_{n})\}_{n=1}^{N}$) can facilitate transfer attacks.
 
 
-\vspace{4pt}
-\hrule
-\vspace{4pt}
-\subsection{Adversarial training}
+\subsection*{Adversarial training}
 
 - Adversarial training: the goal is to minimize the adversarial risk:
 
@@ -138,7 +120,7 @@ $\operatorname*{min}_{\theta}{\frac{1}{N}}\sum_{n=1}^{N} \operatorname*{max}_{\h
 
 2) GD step w.r.t. $\theta$ using $\frac{1}{N}\sum_{n=1}^{N}\nabla_{\theta}{\ell}(y_{n}g_{\theta}({\hat{x}}_{n}^{\star}))$
 
-\subsubsection{Advantages}
+\subsubsection*{Advantages}
 
 - state-of-the-art approach for robust classification
 
@@ -146,16 +128,13 @@ $\operatorname*{min}_{\theta}{\frac{1}{N}}\sum_{n=1}^{N} \operatorname*{max}_{\h
 
 - fully compatible with SGD
 
-\subsubsection{Disadvantages}
+\subsubsection*{Disadvantages}
 
 - Increased computational time: proportional to the number of PGD steps
 
 - Robustness-accuracy tradeoff: using too large $\varepsilon$ leads to worse standard accuracy
 
-\vspace{4pt}
-\hrule
-\vspace{4pt}
-\subsubsection{Adversarial Example}
+\subsubsection*{Adversarial Example}
 % \begin{wrapfigure}{r}{0.5\columnwidth} 
 %     \centering
 %     \includegraphics[width=0.5\columnwidth]{figures/adversarial_example.png}
@@ -217,7 +196,3 @@ ${\hat{x}}_{1}=\left(1-2\sqrt{\frac{\log d}{d-1}}\right)y+Z_{1}$, almost unaffec
 $\hat{x}_{i}=-\sqrt{\frac{\log d}{d-1}}y+Z_{i}$, completely flipped
 
 $R_{\varepsilon}(f) \approx 1 \Rightarrow$ tradeoff between accuracy and robustness.
-
-\vspace{4pt}
-\hrule
-\vspace{4pt}
