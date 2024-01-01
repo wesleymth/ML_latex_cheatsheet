@@ -121,274 +121,180 @@ $
 for $\mathbf{g}$ a subgradient to $\mathcal{L}$ at the current iterate $\mathbf{w}^{(t)}$.
 
 \subsection*{Example: Optimizing Linear MAE}
-\begin{enumerate}
-  \item Compute a subgradient of the absolute value function
-\end{enumerate}
-
+1) Compute a subgradient of the absolute value function
 $h: \mathbb{R} \rightarrow \mathbb{R}, h(e):=|e|$.
 
-\begin{enumerate}
-  \setcounter{enumi}{1}
-  \item Recall the definition of the mean absolute error:
-\end{enumerate}
+$g=\left\{\begin{array}{cc}-1 & \text { if } e<0 \\ {[-1,1]} & \text { if } e=0 \\ 1 & \text { if } e>0\end{array}\right.$
+
+2) Recall the definition of the mean absolute error:
 
 $\mathcal{L}(\mathbf{w})=\operatorname{MAE}(\mathbf{w}):=\frac{1}{N} \sum_{n=1}^{N}\left|y_{n}-f_{\mathbf{w}}\left(\mathbf{x}_{n}\right)\right|$
 
 For linear regression, its (sub)gradient is easy to compute using the chain rule. Compute it!
 
+The subgradient is given by:
+
+$
+\partial\mathcal{L}(\mathbf{w})=\frac1N\sum_{n=1}^Ng(e_n)\nabla f_\mathbf{w}(\mathbf{x}_n) = \frac{1}{N} \sum_{n=1}^{N} g(e_n) \mathbf{x}_n
+$
+
+since $f_\mathbf{w}(\mathbf{x}_n)=\mathbf{w}^T\mathbf{x}_n,\text{then }\nabla f_\mathbf{w}(\mathbf{x}_n)=\mathbf{x}_n$
+where \(e_n = y_n - f_{\mathbf{w}}(\mathbf{x}_n)\).
+
 See Exercise Sheet 2.
 
 \subsection*{Stochastic Subgradient Descent}
-Stochastic SubGradient Descent (still abbreviated SGD commonly).
+- still abbreviated SGD commonly.
 
-Same, $\mathbf{g}$ being a subgradient to the randomly selected $\mathcal{L}_{n}$ at the current iterate $\mathbf{w}^{(t)}$.
+- Same, $\mathbf{g}$ being a subgradient to the randomly selected $\mathcal{L}_{n}$ at the current iterate $\mathbf{w}^{(t)}$.
 
-Exercise: Compute the SGD update for linear MAE.
+- SGD update for linear MAE: \\ $\mathbf{w}^{(t+1)}:=\mathbf{w}^{(t)}+\gamma g(e_n)\mathbf{x}_n$
 
 \subsection*{Variants of SGD}
 \subsubsection*{SGD with Momentum}
 pick a stochastic gradient $\mathbf{g}$
 
-$$
+$
 \begin{aligned}
 & \mathbf{m}^{(t+1)}:=\beta_{1} \mathbf{m}^{(t)}+\left(1-\beta_{1}\right) \mathbf{g} \quad \text { (momentum term) } \\
 & \mathbf{w}^{(t+1)}:=\mathbf{w}^{(t)}-\gamma \mathbf{m}^{(t+1)}
 \end{aligned}
-$$
+$
 
-\begin{itemize}
-  \item momentum from previous gradients (acceleration)
-\end{itemize}
+- momentum from previous gradients (acceleration)
 
 \subsubsection*{Adam}
-pick a stochastic gradient $\mathbf{g}$
+- pick a stochastic gradient $\mathbf{g}$
 
-$$
-\begin{aligned}
-\mathbf{m}^{(t+1)} & :=\beta_{1} \mathbf{m}^{(t)}+\left(1-\beta_{1}\right) \mathbf{g} \\
-\mathbf{v}_{i}^{(t+1)} & :=\beta_{2} \mathbf{v}_{i}^{(t)}+\left(1-\beta_{2}\right)\left(\mathbf{g}_{i}\right)^{2} \quad \forall i \quad \text { (2nomentum term) } \\
-\mathbf{w}_{i}^{(t+1)} & :=\mathbf{w}_{i}^{(t)}-\frac{\gamma}{\sqrt{\mathbf{v}_{i}^{(t+1)}}} \mathbf{m}_{i}^{(t+1)} \quad \forall i
-\end{aligned}
-$$
+$
+\mathbf{m}^{(t+1)} := \beta_{1} \mathbf{m}^{(t)} + \left(1-\beta_{1}\right) \mathbf{g} \\
+\mathbf{v}_{i}^{(t+1)} := \beta_{2} \mathbf{v}_{i}^{(t)} + \left(1-\beta_{2}\right)\left(\mathbf{g}_{i}\right)^{2} \quad \forall i \quad \text{(Momentum term)} \\
+\mathbf{w}_{i}^{(t+1)} := \mathbf{w}_{i}^{(t)} - \frac{\gamma}{\sqrt{\mathbf{v}_{i}^{(t+1)}}} \mathbf{m}_{i}^{(t+1)} \quad \forall i
+$
 
-\begin{itemize}
-  \item faster forgetting of older weights
-  \item is a momentum variant of Adagrad
-  \item coordinate-wise adjusted learning rate
-  \item strong performance in practice, e.g. for self-attention networks
-\end{itemize}
+- faster forgetting of older weights
+
+- is a momentum variant of Adagrad
+
+- coordinate-wise adjusted learning rate
+
+-strong performance in practice, e.g. for self-attention networks
+
 
 \subsubsection*{SignSGD}
 pick a stochastic gradient $\mathbf{g}$
 
-$$
+$
 \mathbf{w}_{i}^{(t+1)}:=\mathbf{w}_{i}^{(t)}-\gamma \operatorname{sign}\left(\mathbf{g}_{i}\right)
-$$
+$
 
-\begin{itemize}
-  \item only use the sign (one bit) of each gradient entry $\rightarrow$ communication efficient for distributed training
-  \item convergence issues
-\end{itemize}
+- only use the sign (one bit) of each gradient entry $\rightarrow$ communication efficient for distributed training
+
+- convergence issues
 
 \subsection*{Constrained Optimization}
-Sometimes, optimization problems come posed with additional constraints:
+- Sometimes, optimization problems come posed with additional constraints:
 
 $\min _{\mathbf{w}} \mathcal{L}(\mathbf{w}), \quad$ subject to $\mathbf{w} \in \mathcal{C}$.
 
-The set $\mathcal{C} \subset \mathbb{R}^{D}$ is called the constraint set.
-
-Solving Constrained Optimization Problems
-
-A) Projected Gradient Descent
-
-B) Transform it into an unconstrained problem
+- The set $\mathcal{C} \subset \mathbb{R}^{D}$ is called the constraint set.
 
 \subsection*{Convex Sets}
-A set $\mathcal{C}$ is convex iff
+A set $\mathcal{C}$ is convex iff the line segment between any two points of $\mathcal{C}$ lies in $\mathcal{C}$, i.e., if for any $\mathbf{u}, \mathbf{v} \in \mathcal{C}$ and any $\theta$ with $0 \leq \theta \leq 1$, we have
 
-the line segment between any two
-
-points of $\mathcal{C}$ lies in $\mathcal{C}$, i.e., if for any
-
-$\mathbf{u}, \mathbf{v} \in \mathcal{C}$ and any $\theta$ with $0 \leq \theta \leq 1$,
-
-we have
-
-$$
+$
 \theta \mathbf{u}+(1-\theta) \mathbf{v} \in \mathcal{C}
-$$
+$
 
+- Intersubsections of convex sets are convex
+- Projections onto convex sets are unique.(and often efficient to compute)
 
-*Figure 2.2 from S. Boyd, L. Vandenberghe
-
-\subsection*{Properties of Convex Sets}
-\begin{itemize}
-  \item Intersubsections of convex sets are convex
-  \item Projections onto convex sets are unique.
-\end{itemize}
-
-(and often efficient to compute)
-
-Formal definition:
+- Formal definition:
 
 $P_{\mathcal{C}}\left(\mathbf{w}^{\prime}\right):=\arg \min _{\mathbf{v} \in \mathcal{C}}\left\|\mathbf{v}-\mathbf{w}^{\prime}\right\|$.
 
 \subsection*{Projected Gradient Descent}
-Idea: add a projection onto $\mathcal{C}$ after every step:
 
-$$
+\begin{wrapfigure}{r}{0.3\columnwidth} 
+    \centering
+    \includegraphics*[width=0.3\columnwidth]{figures/PGD.jpg}
+    \vspace{-10pt}
+\end{wrapfigure}
+
+- Idea: add a projection onto $\mathcal{C}$ after every step:
+
+$
 P_{\mathcal{C}}\left(\mathbf{w}^{\prime}\right):=\arg \min _{\mathbf{v} \in \mathcal{C}}\left\|\mathbf{v}-\mathbf{w}^{\prime}\right\| .
-$$
+$
 
-Update rule:
-
-$$
+$
 \mathbf{w}^{(t+1)}:=P_{\mathcal{C}}\left[\mathbf{w}^{(t)}-\gamma \nabla \mathcal{L}\left(\mathbf{w}^{(t)}\right)\right]
-$$
+$
 
+- Projected SGD. Same SGD step, followed by the projection step. Same convergence properties.
 
-\subsection*{Projected SGD. Same SGD}
- step, followed by the projection step, as above. Same convergence properties.Computational cost of projection?
+\subsection*{Constrained $\rightarrow$ Unconstrained Problems}
 
-Crucial!
+$\min_{w\in C}\mathcal{L}(w)\sim\min_{w}\mathcal{L}(w)+P(w)$
 
-\subsection*{Turning Constrained into Unconstrained Problems}
-(Alternatives to projected gradient
+- Alternatives to projected gradient methods
 
-methods)
+- Use penalty functions instead of directly solving $\min _{\mathbf{w} \in \mathcal{C}} \mathcal{L}(\mathbf{w})$.
 
-Use penalty functions instead of directly solving $\min _{\mathbf{w} \in \mathcal{C}} \mathcal{L}(\mathbf{w})$.
+- ``brick wall" (indicator function)
 
-\begin{itemize}
-  \item "brick wall" (indicator function)
-\end{itemize}
+$
+P(w) = I_{\mathcal{C}}(\mathbf{w}):= \begin{cases}0 & \mathbf{w} \in \mathcal{C} \\
+\infty & \mathbf{w} \notin \mathcal{C}\end{cases}
+$
 
-$$
-\begin{aligned}
-& I_{\mathcal{C}}(\mathbf{w}):= \begin{cases}0 & \mathbf{w} \in \mathcal{C} \\
-\infty & \mathbf{w} \notin \mathcal{C}\end{cases} \\
-& \Rightarrow \min _{\mathbf{w} \in \mathbb{R}^{D}} \mathcal{L}(\mathbf{w})+I_{\mathcal{C}}(\mathbf{w})
-\end{aligned}
-$$
+Can't run GD because non-continuous objective.
 
-\begin{itemize}
-  \item Penalize error. Example:
-\end{itemize}
+- Penalize error. Example:
 
-$$
-\begin{aligned}
-& \mathcal{C}=\left\{\mathbf{w} \in \mathbb{R}^{D} \mid A \mathbf{w}=\mathbf{b}\right\} \\
-& \Rightarrow \min _{\mathbf{w} \in \mathbb{R}^{D}} \mathcal{L}(\mathbf{w})+\lambda\|A \mathbf{w}-\mathbf{b}\|^{2}
-\end{aligned}
-$$
+$
+\mathcal{C}=\left\{\mathbf{w} \in \mathbb{R}^{D} \mid A \mathbf{w}=\mathbf{b}\right\} \Rightarrow P(w) = \lambda\|A \mathbf{w}-\mathbf{b}\|^{2}
+$
 
-\begin{itemize}
-  \item Linearized Penalty Functions (see Lagrange Multipliers)
-\end{itemize}
+- $\ell_1$ norm encourages sparsity which reduces memory:
+$
+P(w) = \lambda\|\mathbf{w}\|_1
+$
+
+- Linearized Penalty Functions (see Lagrange Multipliers)
 
 \subsection*{Implementation Issues}
-For gradient methods:
 
-\subsection*{Stopping criteria: When $\nabla \mathcal{L}(\mathbf{w})$}
-is (close to) zero, we are (often) close to the optimum value.
+1) Stopping criteria: $\nabla \mathcal{L}(\mathbf{w}) \approx 0$
 
-Optimality: If the second-order derivative is positive (positive semidefinite to be precise), then it is a (possibly local) minimum. If the function is also convex, then this condition implies that we are at a global optimum. See the supplementary subsection on Optimality Conditions.
+2) Optimality: 
 
-Step-size selection: If $\gamma$ is too big, the method might diverge. If it is too small, convergence is slow. Convergence to a local minimum is guaranteed only when $\gamma<\gamma_{\text {min }}$ where $\gamma_{\min }$ is a fixed constant that depends on the problem.
+\underline{1st order optimiality condition}: 
+if $\mathcal{L} \text{ is convex and } \nabla \mathcal{L}(w^*)=0 \Rightarrow$ global optimality
 
-Line-search methods: For some objectives $\mathcal{L}$, we can set step-size automatically using a line-search method. More details on "backtracking" methods can be found in Chapter 1 of Bertsekas' book on "nonlinear programming".
+\underline{2nd order}:
+$\mathcal{L} \text{ potentially non-convex, if } \nabla \mathcal{L}(w^*)=0 \ \& \ \nabla^2 \mathcal{L}(w^*) \geq 0 \Rightarrow w$ local minimum.
 
-\subsection*{Feature normalization and pre-}
- conditioning: Gradient descent is very sensitive to ill-conditioning. Therefore, it is typically advised to normalize your input features. In other words, we pre-condition the optimization problem. Without this, step-size selection is more difficult since different "directions" might converge at different speed.\subsection*{Non-Convex Optimization}
+$\nabla^{2} \mathcal{L}(\mathbf{w}):=\frac{\partial^{2} \mathcal{L}}{\partial \mathbf{w} \partial \mathbf{w}^{\top}}(\mathbf{w})$ is expensive.
 
+3) Step-size selection: $\gamma >>$ might diverge. $\gamma <<$ slow convergence. Convergence to local minimum guaranteed only when $\gamma<\gamma_{\text {min }}$, $\gamma_{\min }$ depends on the problem.
 
-Real-world problems are not convex!
+4) Line-search methods: For some $\mathcal{L}$, set step-size automatically.
 
-All we have learnt on algorithm design and performance of convex algorithms still helps us in the nonconvex world.
+5) Feature normalization: 
+GD is sensitive to ill-conditioning $\rightarrow$ Normalize your input features i.e. pre-condition the optimization problem. 
 
-\subsection*{Additional Notes}
-\subsection*{Grid Search and Hyper-Parameter Optimization}
-Read more about grid search and other methods for "hyperparameter" setting:
+\subsection*{Non-Convex Optimization}
 
+- Real-world problems are not convex!
 
-\subsection*{Computational Complexity}
-The computation cost is expressed using the big- $\mathcal{O}$ notation. Here is a definition taken from Wikipedia. Let $f$ and $g$ be two functions defined on some subset of the real numbers. We write $f(x)=\mathcal{O}(g(x))$ as $x \rightarrow \infty$, if and only if there exists a positive real number $c$ and a real number $x_{0}$ such that $|f(x)| \leq c|g(x)|, \quad \forall x>x_{0}$.
-
-\begin{itemize}
-  \item What is the computational complexity of matrix multiplication?
-  \item What is the computational complexity of matrix-vector multiplication?
-\end{itemize}
-
-\subsection*{Optimality Conditions}
-For a smooth optimization problem, the first-order necessary condition says that at an optimum the gradient is equal to zero. Points of zero gradient are called critical points.
-
-$$
-\nabla \mathcal{L}\left(\mathbf{w}^{\star}\right)=\mathbf{0}
-$$
-
-We can use the second derivative to study if a candidate point is a local minimum (not a local maximum or saddle-point) using the Hessian
-matrix, which is the matrix of second derivatives:
-
-$$
-\nabla^{2} \mathcal{L}(\mathbf{w}):=\frac{\partial^{2} \mathcal{L}}{\partial \mathbf{w} \partial \mathbf{w}^{\top}}(\mathbf{w})
-$$
-
-The second-order sufficient condition states that if
-
-\begin{itemize}
-  \item $\nabla \mathcal{L}(\mathbf{w})=\mathbf{0} \quad$ (critical point)
-  \item and $\nabla^{2} \mathcal{L}(\mathbf{w}) \succ 0 \quad$ (positive definite),
-\end{itemize}
-
-then $\mathbf{w}$ is a local minimum.
-
-The Hessian is also related to the convexity of a function: a twicedifferentiable function is convex if and only if the Hessian is positive semi-definite at all points.
+- All we have learnt on algorithm design and performance of convex algorithms still helps us in the nonconvex world.
 
 \subsection*{SGD Theory}
-As we have seen above, when $N$ is large, choosing a random training example $\left(\mathbf{x}_{n}, y_{n}\right)$ and taking an SGD step is advantageous:
+- For convergence, $\gamma^{(t)} \rightarrow 0$ ``appropriately". Robbins-Monroe condition suggests to take $\gamma^{(t)}$ s.t.:
 
-$$
-\mathbf{w}^{(t+1)}:=\mathbf{w}^{(t)}-\gamma^{(t)} \nabla \mathcal{L}_{n}\left(\mathbf{w}^{(t)}\right)
-$$
-
-For convergence, $\gamma^{(t)} \rightarrow 0$ "appropriately". One such condition called the Robbins-Monroe condition suggests to take $\gamma^{(t)}$ such that:
-
-$$
+$
 \sum_{t=1}^{\infty} \gamma^{(t)}=\infty, \quad \sum_{t=1}^{\infty}\left(\gamma^{(t)}\right)^{2}<\infty
-$$
+$
 
-One way to obtain such sequences is $\gamma^{(t)}:=1 /(t+1)^{r}$ where $r \in(0.5,1)$.
-
-\subsection*{More Optimization Theory}
-If you want, you can gain a deeper understanding of several optimization methods relevant for machine learning from this survey:
-
-Convex Optimization: Algorithms and Complexity
-
-\begin{itemize}
-  \item by Sébastien Bubeck
-\end{itemize}
-
-And also from the book of Boyd \& Vandenberghe (both are free online PDFs)
-
-
-\subsection*{Exercises}
-\begin{enumerate}
-  \item Chain-rule
-\end{enumerate}
-
-
-If it has been a while, familiarize yourself with it again.
-
-\begin{enumerate}
-  \setcounter{enumi}{1}
-  \item Revise computational complexity (also see the Wikipedia link in Page 6 of lecture notes).
-
-  \item Derive the computational complexity of grid-search, gradient descent and stochastic gradient descent for linear MSE (\# steps and cost per step).
-
-  \item Derive the gradients for the linear MSE and MAE cost functions.
-
-  \item Implement gradient descent and gain experience in setting the step-size.
-
-  \item Implement SGD and gain experience in setting the step-size.
-
-\end{enumerate}
+Example: $\gamma^{(t)}:=1 /(t+1)^{r}$ where $r \in(0.5,1)$.
