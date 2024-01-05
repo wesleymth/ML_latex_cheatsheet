@@ -6,7 +6,7 @@
 \nabla \mathcal{L}\left(\mathbf{w}^{\star}\right)=\mathbf{0} .
 $)
 
-\section*{Normal Equations}
+\subsection*{Normal Equations}
 $\mathcal{L}(\mathbf{w})=\frac{1}{2 N} \sum_{n=1}^{N}\left(y_{n}-\mathbf{x}_{n}^{\top} \mathbf{w}\right)^{2}\\=\frac{1}{2 N}(\mathbf{y}-\mathbf{X} \mathbf{w})^{\top}(\mathbf{y}-\mathbf{X} \mathbf{w})$,
 
 % where
@@ -71,14 +71,14 @@ $
 \Rightarrow\mathbf{X}^{\top} \underbrace{(\mathbf{y}-\mathbf{X} \mathbf{w})}_{\text {error }}=\mathbf{0}
 $
 
-\section*{Geometric Interpretation}
+\subsection*{Geometric Interpretation}
 
 % \begin{center}
     \includegraphics*[width=0.7\columnwidth]{figures/geom_ls.png}
 % \end{center}
 
 
-\section*{Closed form}
+\subsection*{Closed form}
 - $\mathbf{X}^{\top} \mathbf{X} \in \mathbb{R}^{D \times D}$ is called the Gram matrix. 
 
 - If invertible, we can get a closed-form expression for the minimum:
@@ -87,10 +87,10 @@ $
 \mathbf{w}^{\star}=\left(\mathbf{X}^{\top} \mathbf{X}\right)^{-1} \mathbf{X}^{\top} \mathbf{y}
 $
 
-\section*{Invertibility and Uniqueness}
+\subsection*{Invertibility and Uniqueness}
 - $\mathbf{X}^{\top} \mathbf{X} \in \mathbb{R}^{D \times D}$ invertible iff $\operatorname{rank}(\mathbf{X})=D$.
 
-- Proof: To see this assume first that $\operatorname{rank}(\mathbf{X})<D$. Then there exists a non-zero vector $\mathbf{u}$ so that $\mathbf{X u}=\mathbf{0}$. It follows that $\mathbf{X}^{\top} \mathbf{X u}=\mathbf{0}$, and so $\operatorname{rank}\left(\mathbf{X}^{\top} \mathbf{X}\right)<D$. Therefore, $\mathbf{X}^{\top} \mathbf{X}$ is not invertible.
+- Proof: assume $\operatorname{rank}(\mathbf{X})<D$. Then there exists a non-zero vector $\mathbf{u}$ so that $\mathbf{X u}=\mathbf{0}$. It follows that $\mathbf{X}^{\top} \mathbf{X u}=\mathbf{0}$, and so $\operatorname{rank}\left(\mathbf{X}^{\top} \mathbf{X}\right)<D$. Therefore, $\mathbf{X}^{\top} \mathbf{X}$ is not invertible.
 
 Conversely, assume that $\mathbf{X}^{\top} \mathbf{X}$ is not invertible. Hence, there exists a non-zero vector $\mathbf{v}$ so that $\mathbf{X}^{\top} \mathbf{X v}=\mathbf{0}$. It follows that
 
@@ -100,21 +100,15 @@ $$
 
 This implies that $\mathbf{X v}=\mathbf{0}$, i.e., $\operatorname{rank}(\mathbf{X})<D$.
 
-\section*{Rank Deficiency and III-Conditioning}
-Unfortunately, in practice, $\mathbf{X}$ is often rank deficient.
+\subsection*{Rank Deficiency and Ill-Conditioning}
+- In practice, $\mathbf{X}$ is often rank deficient.
 
-\begin{itemize}
-  \item If $D>N$, we always have $\operatorname{rank}(\mathbf{X})<D$
-\end{itemize}
+- If $D>N$, we always have $\operatorname{rank}(\mathbf{X})<D$ (since row rank $=$ col. rank)
 
-(since row rank $=$ col. rank)
+- If $D \leq N$, but some of the columns $\mathbf{x}_{:}$are (nearly) collinear, then the matrix is illconditioned, leading to numerical issues when solving the linear system.
 
-\begin{itemize}
-  \item If $D \leq N$, but some of the columns $\mathbf{x}_{:}$are (nearly) collinear, then the matrix is illconditioned, leading to numerical issues when solving the linear system.
-\end{itemize}
+- Using a linear system solver, one can solve this problem.
 
-Can we solve least squares if $\mathbf{X}$ is rank deficient? Yes, using a linear system solver.
-
-\section*{Closed-form solution for MAE}
+\subsection*{Closed-form solution for MAE}
 Can you derive closed-form solution for 1-parameter model when using MAE cost function?
 

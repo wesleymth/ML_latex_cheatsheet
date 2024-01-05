@@ -9,6 +9,7 @@
 \usepackage{wrapfig}
 \usepackage{amsmath}  % For various math symbols and 
 \usepackage{amssymb}  % For additional math symbols
+\usepackage{mathrsfs}
 \usepackage{bm}       % For bold math symbols
 
 \usepackage{lipsum}
@@ -55,19 +56,27 @@
     \or
         \colorlet{section_color}{brown}%
     \or
-        \colorlet{section_color}{indigo}%
+        \colorlet{section_color}{green}%
     \or
-        \colorlet{section_color}{turquoise}%
+        \colorlet{section_color}{blue}%
     \or
-        \colorlet{section_color}{gold}%
+        \colorlet{section_color}{cyan}%
     \or
-        \colorlet{section_color}{silver}%
+        \colorlet{section_color}{magenta}%
     \or
-        \colorlet{section_color}{slategray}%
+        \colorlet{section_color}{yellow}%
     \or
-        \colorlet{section_color}{olive}%
+        \colorlet{section_color}{orange}%
     \or
-        \colorlet{section_color}{maroon}%
+        \colorlet{section_color}{purple}%
+    \or
+        \colorlet{section_color}{teal}%
+    \or
+        \colorlet{section_color}{lime}%
+    \or
+        \colorlet{section_color}{pink}%
+    \or
+        \colorlet{section_color}{brown}%
     \else
         \colorlet{section_color}{default_section_color}%
     \fi
@@ -107,15 +116,43 @@
 \sectiondivider
 
 \sectionnewcolor
-\input{3b_overfitting.tex}
-\sectiondivider
-
-\sectionnewcolor
 \input{3c_MLE.tex}
 \sectiondivider
 
 \sectionnewcolor
 \input{3d_regularization.tex}
+\sectiondivider
+
+\sectionnewcolor
+\input{4a_model_selection.tex}
+\sectiondivider
+
+\sectionnewcolor
+\input{4b_bias_variance.tex}
+\sectiondivider
+
+\sectionnewcolor
+\input{5a_classification.tex}
+\sectiondivider
+
+\sectionnewcolor
+\input{5b_logistic_regression.tex}
+\sectiondivider
+
+\sectionnewcolor
+\input{6a_svm.tex}
+\sectiondivider
+
+\sectionnewcolor
+\input{6b_knn.tex}
+\sectiondivider
+
+\sectionnewcolor
+\input{7a.tex}
+\sectiondivider
+
+\sectionnewcolor
+\input{8a.tex}
 \sectiondivider
 
 \sectionnewcolor
@@ -127,6 +164,18 @@
 \sectiondivider
 
 \sectionnewcolor
+\input{10c.tex}
+\sectiondivider
+
+\sectionnewcolor
+\input{11a.tex}
+\sectiondivider
+
+\sectionnewcolor
+\input{11b.tex}
+\sectiondivider
+
+\sectionnewcolor
 \input{12a_matrix_factorisation.tex}
 \sectiondivider
 
@@ -134,9 +183,9 @@
 \input{12b_text.tex}
 \sectiondivider
 
-\sectionnewcolor
-\input{99_experiments.tex}
-\sectiondivider
+% \sectionnewcolor
+% \input{99_experiments.tex}
+% \sectiondivider
 
 \end{multicols*}
 

@@ -1,0 +1,258 @@
+
+\section*{Logistic Regression}
+- Binary classification : We observe some data $S=\left\{x_{n}, y_{n}\right\}_{n=1}^{N} \in \mathscr{X} \times\{0,1\}$
+
+
+\subsection*{Motivation for logistic regression}
+Instead of directly modeling the output $Y$, we can model the probability that $Y$ belongs to a specific class. Map the prediction from $(-\infty,+\infty)$ to $[0,1]$
+
+\subsection*{The logistic function}
+$
+\sigma(\eta):=\frac{e^{\eta}}{1+e^{\eta}}
+$
+
+- Properties of the logistic function:
+
+
+$1-\sigma(\eta)=\frac{1+e^{\eta}-e^{\eta}}{1+e^{\eta}}=\left(1+e^{\eta}\right)^{-1}$
+$\sigma^{\prime}(\eta)=\frac{e^{\eta}\left(1+e^{\eta}\right)-e^{\eta} e^{\eta}}{\left(1+e^{\eta}\right)^{2}}=\frac{e^{\eta}}{\left(1+e^{\eta}\right)^{2}}=\sigma(\eta)(1-\sigma(\eta))$
+
+\subsection*{Logistic Regression}
+$
+\begin{aligned}
+& p(1 \mid x):=\mathbb{P}(Y=1 \mid X=x)=\sigma\left(x^{\top} w+w_{0}\right) \\
+& p(0 \mid x):=\mathbb{P}(Y=0 \mid X=x)=1-\sigma\left(x^{\top} w+w_{0}\right)
+\end{aligned}
+$
+
+Logistic regression models the probability that $Y$ belongs to a particular class using the logistic function $\sigma$
+
+Label prediction: quantize the probability:
+
+$
+\begin{aligned}
+& \text { If } p(1 \mid x) \geq 1 / 2, \text { you predict the class } 1 \\
+& \text { If } p(1 \mid x)<1 / 2 \text {, you predict the class } 0
+\end{aligned}
+$
+
+- Interpretation:
+
+Very large $\left|x^{\top} w+w_{0}\right|$ corresponds to $p(1 \mid x)$ very close to 0 or 1 (high confidence)
+
+Small $\left|x^{\top} w+w_{0}\right|$ corresponds to $p(1 \mid x)$ very close to .5 (low confidence)
+
+
+\subsection*{Comparison of logistic and linear regression for data with extreme values}
+
+- More robust to unbalanced data and extremes.
+
+\subsection*{Geometric Interpretation}
+
+- The vector $w$ is orthogonal to the "surface of transition"
+
+- The transition between the two levels happens at the hyperplane $w^{\perp}=\left\{v, v^{\top} w=0\right\}$
+
+- Scaling $w$ makes the transition faster or slower
+
+
+- Changing $w_{0}$ shifts the decision region along the $w$ vector
+
+- The transition happens at the hyperplane $\left\{v, v^{\top} w+w_{0}=0\right\}$
+
+- Bias term: should consider a shift $w_{0}$ as there is no reason for the transition hyperplane to pass through the origin:
+$
+p(1 \mid x)=\sigma\left(w^{\top} x+w_{0}\right)
+$
+For simplicity, add the constant 1 to the feature vector
+$
+x=\left(\begin{array}{c}
+x \\
+1
+\end{array}\right)
+$
+It is crucial for allowing to shift the decision region
+
+\subsection*{MLE for logistic regression}
+- Assumption: The inputs $\mathbf{X}$ do not depend on the parameter $w$ we choose:
+
+$
+\begin{aligned}
+& \mathscr{L}(w)=p(\mathbf{y}, \mathbf{X} \mid w)=p(\mathbf{X} \mid w) p(\mathbf{y} \mid \mathbf{X}, w) \\ & \underset{\mathbf{X} \perp \perp w}{=} p(\mathbf{X}) p(\mathbf{y} \mid \mathbf{X}, w) \\
+& \begin{aligned}
+p(\mathbf{y} \mid \mathbf{X}, w) & =\Pi_{n=1}^{N} p\left(y_{n} \mid x_{n}, w\right) \\
+& =\Pi_{n: y_{n}=1} p\left(y_{n}=1 \mid x_{n}, w\right) \\ & \qquad \times \Pi_{n: y_{n}=0} p\left(y_{n}=0 \mid x_{n}, w\right) \\
+& =\Pi_{n=1}^{N} \sigma\left(x_{n}^{\top} w\right)^{y_{n}}\left[1-\sigma\left(x_{n}^{\top} w\right)\right]^{1-y_{n}}
+\end{aligned}
+\end{aligned}
+$
+
+The likelihood is proportional to:
+
+$
+\mathscr{L}(w) \propto \prod_{n=1}^{N} \sigma\left(x_{n}^{\top} w\right)^{y_{n}}\left[1-\sigma\left(x_{n}^{\top} w\right)\right]^{1-y_{n}}
+$
+
+\subsection*{Minimum of the NLL}
+$
+\begin{aligned}
+& -\log (p(\mathbf{y} \mid \mathbf{X}, w))
+\\ & =-\log \left(\prod_{n=1}^{N} \sigma\left(x_{n}^{\top} w\right)^{y_{n}}\left[1-\sigma\left(x_{n}^{\top} w\right)\right]^{1-y_{n}}\right) \\
+& =-\sum_{n=1}^{N} y_{n} \log \sigma\left(x_{n}^{\top} w\right)
+\\ & \qquad +\left(1-y_{n}\right) \log \left(1-\sigma\left(x_{n}^{\top} w\right)\right) \\
+& =\sum_{n=1}^{N} y_{n} \log \left(\frac{1-\sigma\left(x_{n}^{\top} w\right)}{\sigma\left(x_{n}^{\top} w\right)}\right)-\log \left(1-\sigma\left(x_{n}^{\top} w\right)\right) \\
+& =\sum_{n=1}^{N}-y_{n} x_{n}^{\top} w+\log \left(1+e^{x_{n}^{\top} w}\right) 
+\\ & \longleftarrow 1-\sigma(\eta)=\frac{1}{1+e^{\eta}} \Longrightarrow \frac{1-\sigma(\eta)}{\sigma(\eta)}=e^{-\eta}
+\end{aligned}
+$
+
+We obtain the following cost function we will minimize to learn the parameter
+$
+w_{*}=\arg \min L(w) \\ :=\frac{1}{N} \sum_{n=1}^{N}-y_{n} x_{n}^{\top} w+\log \left(1+e^{x_{n}^{\top} w}\right)
+$
+
+- If we are considering $y \in\{-1,1\}$, we will have a different function
+
+\subsection*{A side note on logistic loss}
+- In logistic regression, the negative log likelihood is equivalent to ERM for the logistic loss (a surrogate for $0-1$ loss, as discussed yesterday)
+
+- Logistic loss for $y \in\{0,1\}$ :
+
+$
+\ell(y, g(x))=-y g(x)+\log (1+\exp (g(x)))
+$
+
+- Logistic loss for $y \in\{-1,1\}$ :
+
+$
+\ell(y, g(x))=\log (1+\exp (-y g(x)))
+$
+
+- Note: the logistic loss can be applied in modern machine learning as well: $g(x)$ can represent the output of a neural network
+
+\subsection*{Gradient of the negative log likelihood}
+
+$\nabla L(w)=\nabla\left[\frac{1}{N} \sum_{n=1}^{N} \log \left(1+e^{x_{n}^{\top} w}\right)-y_{n} x_{n}^{\top} w\right]=\\\frac{1}{N} \sum_{n=1}^{N} \frac{e^{x_{n}^{\top} w} x_{n}}{1+e^{x_{n}^{\top} w}}-y_{n} x_{n}=\frac{1}{N} \sum_{n=1}^{N}\left(\sigma\left(x_{n}^{\top} w\right)-y_{n}\right) x_{n}$
+
+$$
+\nabla L(w)=\frac{1}{N} \mathbf{X}^{\top}(\sigma(\mathbf{X} w)-\mathbf{y})
+$$
+
+- Same gradient as in LS but with $\sigma$
+- No closed form solution to $\nabla L(w)=0$
+- Good news: the cost function $L$ is convex
+
+\subsection*{Convexity of the loss function $L$}
+$
+L(w)=\frac{1}{N} \sum_{n=1}^{N}-y_{n} x_{n}^{\top} w+\log \left(1+e^{x_{n}^{\top} w}\right)
+$
+
+is convex in the weight vector $w$
+
+- Proof: $L$ is obtained through simple convexity preserving operations:
+
+1) Positive combinations of convex functions is convex
+
+2) Composition of a convex and a linear functions is convex
+
+3) A linear function is both convex and concave
+
+4) $\eta \mapsto \log \left(1+e^{\eta}\right)$ is convex
+
+- Proof of 4: $h(\eta):=\log \left(1+e^{\eta}\right)$ is cvx
+
+$h^{\prime}(\eta)=\frac{e^{\eta}}{1+e^{\eta}}=\sigma(\eta)$
+
+$
+h^{\prime \prime}(\eta)=\sigma^{\prime}(\eta)=\frac{e^{\eta}}{\left(1+e^{\eta}\right)^{2}} \geq 0
+$
+
+- 2) + 4) $ \Rightarrow
+\log \left(1+e^{x_{n}^{\top} w}\right) \text { is convex }
+$
+
+- 3) $ \Rightarrow
+-y_{n} x_{n}^{\top} w \text { is convex }
+$
+
+- 1) $ \Rightarrow
+L(w) \text{ is convex }
+$
+
+\subsection*{Second proof: Hessian of $L$ is psd}
+- The Hessian $\nabla^{2} L$ is the matrix whose entries are the second derivatives $\frac{\partial^{2}}{\partial w_{i} \partial w_{j}} L(w)$
+
+$
+\begin{aligned}
+\nabla^{2} L(w) & =\nabla[\nabla L(w)]^{\top} \\
+& =\nabla\left[\frac{1}{N} \sum_{n=1}^{N} x_{n}\left(\sigma\left(x_{n}^{\top} w\right)-y_{n}\right)\right]^{\top} \\
+& =\frac{1}{N} \sum_{n=1}^{N} \nabla \sigma\left(x_{n}^{\top} w\right) x_{n}^{\top}=\frac{1}{N} \sum_{n=1}^{N} \sigma\left(x_{n}^{\top} w\right)\left(1-\sigma\left(x_{n}^{\top} w\right)\right) x_{n} x_{n}^{\top}
+\end{aligned}
+$
+
+It can be written under the matrix form:
+
+$
+\nabla^{2} L(w)=\frac{1}{N} \mathbf{X}^{\top} S \mathbf{X} \\ \text { where } S=\operatorname{diag}\left[\sigma\left(x_{n}^{\top} w\right)\left(1-\sigma\left(x_{n}^{\top} w\right)\right)\right] \succcurlyeq 0
+$
+
+$\Rightarrow \mathrm{L}$ is convex since $\nabla^{2} L(w) \geqslant 0$
+
+\subsection*{How to minimize the convex function L?}
+\underline{GD:}
+
+$
+\left\{\begin{array}{l}
+w_{0} \in \mathbb{R}^{d} \\
+w_{t+1}=w_{t}-\frac{\gamma_{t}}{N} \sum_{n=1}^{N}\left(\sigma\left(x_{n}^{\top} w_{t}\right)-y_{n}\right) x_{n}
+\end{array}\right.
+$
+
+- can be slow ($\Theta(N\times T)$)
+
+\underline{SGD:}
+
+$
+\left\{\begin{array}{l}
+w_{0} \in \mathbb{R}^{d} \\
+w_{t+1}=w_{t}-\gamma_{t}\left(\sigma\left(x_{n_{t}}^{\top} w_{t}\right)-y_{n_{t}}\right) x_{n_{t}}
+\end{array}\right. \\ \text { where } \mathbb{P}\left[n_{t}=n\right]=1 / N
+$
+
+- is faster but converges slower
+
+\subsection*{Newton's method uses second order information}
+- Newton's method minimizes the quadratic approximation:
+
+$
+L(w) \sim L\left(w_{t}\right)+\nabla L\left(w_{t}\right)^{\top}\left(w-w_{t}\right)+\frac{1}{2}\left(w-w_{t}\right)^{\top} \nabla^{2} L\left(w_{t}\right)\left(w-w_{t}\right) :=\phi_{t}(w) \\
+\tilde{w}=\arg \min \phi_{t}(w) \Rightarrow \\\nabla L\left(w_{t}\right)+\nabla^{2} L\left(w_{t}\right)\left(\tilde{w}-w_{t}\right)=0
+$
+
+- Newton's method: \\ $\quad w_{t+1}=w_{t}-\gamma_{t} \nabla^{2} L\left(w_{t}\right)^{-1} \nabla L\left(w_{t}\right)$
+
+- The step-size is needed to ensure convergence (damped Newton's method)
+
+- The convergence is typically faster than with gradient descent but the computational complexity is higher (computing Hessian and solving a linear system)
+
+\subsection*{Problem when the data are linearly separable}
+
+- Weights go to infinity.
+
+$
+\inf _{w} L(w)=0=\lim _{\alpha \rightarrow \infty} L(\alpha \cdot \bar{w})
+$
+
+- The inf value is not attained for a finite $w$
+
+- If we use an optimization algorithm, the weights will go to $\infty$
+
+- Solution: add a $\ell_{2}$-regularization
+
+- \underline{Ridge logistic regression}:
+
+$\frac{1}{N} \sum_{n=1}^{N}-y_{n} x_{n}^{\top} w+\log \left(1+e^{x_{n}^{\top} w}\right)+\frac{\lambda}{2}\|w\|_{2}^{2}$
+
+- Optimization perspective: stabilize the optimization process
+
+- Statistical perspective: avoid overfitting
