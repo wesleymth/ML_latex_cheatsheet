@@ -186,7 +186,8 @@ $
 \begin{aligned}
 \nabla^{2} L(w) & =\nabla[\nabla L(w)]^{\top} \\
 & =\nabla\left[\frac{1}{N} \sum_{n=1}^{N} x_{n}\left(\sigma\left(x_{n}^{\top} w\right)-y_{n}\right)\right]^{\top} \\
-& =\frac{1}{N} \sum_{n=1}^{N} \nabla \sigma\left(x_{n}^{\top} w\right) x_{n}^{\top}=\frac{1}{N} \sum_{n=1}^{N} \sigma\left(x_{n}^{\top} w\right)\left(1-\sigma\left(x_{n}^{\top} w\right)\right) x_{n} x_{n}^{\top}
+& =\frac{1}{N} \sum_{n=1}^{N} \nabla \sigma\left(x_{n}^{\top} w\right) x_{n}^{\top} \\
+& =\frac{1}{N} \sum_{n=1}^{N} \sigma\left(x_{n}^{\top} w\right)\left(1-\sigma\left(x_{n}^{\top} w\right)\right) x_{n} x_{n}^{\top}
 \end{aligned}
 $
 

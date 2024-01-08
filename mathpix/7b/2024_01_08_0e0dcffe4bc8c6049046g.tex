@@ -1,0 +1,639 @@
+\documentclass[10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage[export]{adjustbox}
+\graphicspath{ {./images/} }
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[version=4]{mhchem}
+\usepackage{stmaryrd}
+\usepackage{mathrsfs}
+\usepackage{bbold}
+
+\title{Neural Networks: Basic Structure, Representation Power }
+
+
+\author{Machine Learning Course - CS-433\\
+Nov 1, 2023\\
+Nicolas Flammarion}
+\date{}
+
+
+\begin{document}
+\maketitle
+EPFL
+
+\section*{Deep Learning: ML Breakthrough}
+State of the art performance across a broad range of useful tasks
+
+\begin{center}
+\includegraphics[max width=\textwidth]{2024_01_08_0e0dcffe4bc8c6049046g-02}
+\end{center}
+
+\section*{From Linear Models to NNs}
+Supervised learning: we observe some data $S_{\text {train }}=\left\{x_{n}, y_{n}\right\}_{n=1}^{N} \in \mathscr{X} \times \mathscr{Y}$
+
+$\Rightarrow$ given a new $x$, we want to predict its label $y$
+
+Linear prediction (with augmented features): $\quad y=f_{\operatorname{Lin}}(x)=\phi(x)^{\top} w$
+
+Features are given
+
+Prediction with a neural network (NN):
+
+\begin{center}
+\includegraphics[max width=\textwidth]{2024_01_08_0e0dcffe4bc8c6049046g-03}
+\end{center}
+
+First layers transform the input
+
+into a good representation
+
+\section*{Why Neural Networks?}
+Linear models vs. neural networks:
+
+$$
+\left.y=f_{\operatorname{Lin}}(x)=\phi(x)^{\top} w(\text { fixed } \phi) \quad \text { vs. } \quad y=f_{\mathrm{NN}}(x)=f(x)^{\top} w \text { (learned } f\right)
+$$
+
+Classical machine learning:
+
+\begin{itemize}
+  \item Relatively simple models on top of features handcrafted by domain experts
+
+  \item Only works well when used with good handcrafted features
+
+\end{itemize}
+
+Deep learning:
+
+\begin{itemize}
+  \item Large neural networks that learn features directly from the data
+
+  \item Can be viewed as a complicated feature extractor + linear prediction
+
+  \item Requires large amounts of data and compute to train
+
+  \item Quality often continues to improve substantially with more data and larger models
+
+\end{itemize}
+
+The Basic Structure of Neural Networks
+
+\section*{Recap: Logistic Regression}
+Logistic Regression:
+
+$f_{L R}(x)=p(1 \mid x)=\sigma\left(x^{\top} w+b\right)=\sigma\left(\sum_{i=1}^{d} x_{i} w_{i}+b\right)$
+
+where $\sigma(z)=(1+\exp (-z))^{-1}$ is the sigmoid
+
+Pattern-matching perspective:
+
+\begin{itemize}
+  \item Task: classify between digit 1 and digit 0 using logistic regression
+
+  \item We learn a single pattern $w$ which we apply elementwise to each input $x$ (very restrictive!)
+
+  \item We classify the digit as 1 if $p(1 \mid x) \geq 0.5$ or, equivalently, if $\sum_{i=1}^{d} x_{i} w_{i} \geq-b$
+Logistic regression
+
+\end{itemize}
+
+\begin{center}
+\includegraphics[max width=\textwidth]{2024_01_08_0e0dcffe4bc8c6049046g-06(1)}
+\end{center}
+
+\begin{center}
+\includegraphics[max width=\textwidth]{2024_01_08_0e0dcffe4bc8c6049046g-06}
+\end{center}
+
+\section*{Two-Layer Neural Networks}
+Two-layer neural network (aka two-layer perceptron):
+
+\begin{itemize}
+  \item Stack logistic regression units $\phi(x)_{j}=\sigma\left(\sum_{i=1}^{d} x_{i} w_{i, j}^{(1)}+b_{j}\right)$ (aka hidden units or neurons) in a hidden layer
+
+  \item Aggregate the hidden units using a linear function $\phi(x)^{\top} w^{(2)}$
+
+\end{itemize}
+
+\section*{Pattern-matching perspective:}
+\begin{itemize}
+  \item Task: classify between digit 1 and digit 0 with a two-layer neural network
+
+  \item Each hidden unit learns a different pattern (not necessarily interpretable!)
+
+  \item We classify based on a linear combination of these patterns $\Rightarrow$ much more flexible
+Two-layer neural network
+
+\end{itemize}
+
+\begin{center}
+\includegraphics[max width=\textwidth]{2024_01_08_0e0dcffe4bc8c6049046g-07}
+\end{center}
+
+input
+
+layer
+
+hidden
+
+layer
+
+output layer
+
+$\begin{array}{llll}\text { learned } w_{:, 1}^{(1)} & \text { learned } w_{:, 2}^{(1)} \quad \text { learned } w_{:, 3}^{(1)} \quad \text { learned } w_{: 4}^{(1)}\end{array}$
+\includegraphics[max width=\textwidth, center]{2024_01_08_0e0dcffe4bc8c6049046g-07(1)}
+
+\section*{Multi-layer Neural Networks}
+Input nodes but not neurons
+
+Input
+
+\begin{center}
+\includegraphics[max width=\textwidth]{2024_01_08_0e0dcffe4bc8c6049046g-08}
+\end{center}
+
+\begin{center}
+\includegraphics[max width=\textwidth]{2024_01_08_0e0dcffe4bc8c6049046g-08(1)}
+\end{center}
+
+Output layer
+
+Assume $L$ hidden layers with $K$ neurons each + output layer with single node
+
+Learnable Parameters: Weight matrices $\mathbf{W}^{(l)}$ and bias vectors $b^{(l)}$ for $1 \leq l \leq L+1$ - Each column of $\mathbf{W}^{(l)}$ corresponds to the weights of one perceptron
+
+Outputs of hidden layer $l$ given by vector: $x^{(l)}=f^{(l)}\left(x^{(l-1)}\right):=\phi\left(\left(\mathbf{W}^{(l)}\right)^{\top} x^{(l-1)}+b^{(l)}\right)$
+
+\section*{Single Neuron View}
+\begin{center}
+\includegraphics[max width=\textwidth]{2024_01_08_0e0dcffe4bc8c6049046g-09}
+\end{center}
+
+$$
+x_{j}^{(l)}=\phi\left(\sum_{i=1}^{K} x_{i}^{(l-1)} w_{i, j}^{(l)}+b_{j}^{(l)}\right)
+$$
+
+Important: $\phi$ is non-linear otherwise we can only represent linear functions
+
+weight of the edge going from node $i$ in layer $l-1$ to node $j$ in layer $l$
+
+bias term associated with node $j$ in layer $l$
+
+\section*{NNs extract suitable features from the input}
+A NN can be decomposed into a feature extractor and the output layer. Feature extractor from $\mathbb{R}^{d}$ to $\mathbb{R}^{K}$ :
+\includegraphics[max width=\textwidth, center]{2024_01_08_0e0dcffe4bc8c6049046g-10}
+
+This function is defined by
+
+\begin{itemize}
+  \item The biases $\left\{b^{(l)}\right\}_{l \in[L]}$ and weights $\left\{\mathbf{W}^{(l)}\right\}_{l \in[L]}$ so we learn
+\end{itemize}
+
+$\Rightarrow O\left(d K+K^{2} L\right) \approx O\left(K^{2} L\right)$ parameters
+
+\begin{itemize}
+  \item The activation function $\phi$ we pick
+\end{itemize}
+
+In practice: both $L$ and $K$ are large - overparametrized NNs
+
+\section*{Neural Network: Inference Time}
+\begin{center}
+\includegraphics[max width=\textwidth]{2024_01_08_0e0dcffe4bc8c6049046g-11}
+\end{center}
+
+Data representation
+Linear prediction
+Regression
+
+$h(x)$
+
+Binary Classification with $y \in\{-1,1\}$
+
+$\operatorname{sign}(h(x))$
+
+Multi-Class Classification with $y \in\{1, \ldots, K\}$ (see the exercise!)
+
+$$
+\operatorname{argmax}_{c \in\{1, \ldots, K\}} h(x)_{c}
+$$
+
+ML task
+
+With a suitable representation of the data $f(x)$, the last layer only performs a linear regression or classification step
+
+\section*{Neural Network: Training Time}
+\begin{center}
+\includegraphics[max width=\textwidth]{2024_01_08_0e0dcffe4bc8c6049046g-12}
+\end{center}
+
+Data representation
+Linear prediction
+Regression
+
+$$
+\ell(y, h(x))=(h(x)-y)^{2}
+$$
+
+Binary Classification with $y \in\{-1,1\}$
+
+$$
+\ell(y, h(x))=\log (1+\exp (-y h(x)))
+$$
+
+Multi-Class Classification with $y \in\{1, \ldots, K\}$ (see the exercise!)
+
+$$
+\ell(y, h(x))=-\log \frac{e^{h(x)_{y}}}{\sum_{i=1}^{K} e^{h(x)_{i}}}
+$$
+
+ML task
+
+With a suitable representation of the data $f(x)$, the last layer only performs a linear regression or classification step
+
+\section*{Popular activation functions}
+\begin{itemize}
+  \item Sigmoid: $\phi(x)=\sigma(x)=\frac{1}{1+e^{-x}}$
+
+  \item $\operatorname{ReLU}: \phi(x)=(x)_{+}=\max \{0, x\}$
+
+  \item GELU: $\phi(x)=x \cdot \Phi(x) \approx x \cdot \sigma(1.702 x)$
+
+\end{itemize}
+
+\begin{center}
+\includegraphics[max width=\textwidth]{2024_01_08_0e0dcffe4bc8c6049046g-13}
+\end{center}
+
+\begin{itemize}
+  \item In practice: ReLU and GeLU are the most widely used activation functions
+\end{itemize}
+
+Representational Power of NNs
+
+\section*{Three theoretical questions in Deep Learning}
+\begin{itemize}
+  \item Expressive power of NNs: Why can neural networks approximate the functions we are interested in so effectively?
+
+  \item Success of naive optimization: Why does gradient descent consistently lead to a good local minimum?
+
+  \item Generalization miracle: Why don't neural networks overfit, despite having so many parameters?
+
+\end{itemize}
+
+\section*{$L_{2}$ Approximation: Barron's result}
+Let $f: \mathbb{R}^{d} \rightarrow \mathbb{R}$ and define $\hat{f}(\omega)=\int_{\mathbb{R}^{d}} f(x) e^{-i \omega^{\top} x} d x$, its Fourier transform
+
+Assumption: $\int_{\mathbb{R}^{d}}|\omega||\hat{f}(\omega)| d \omega \leq C$ (smoothness assumption)
+
+Claim: For all $n \geq 1$ and $r>0$, there exists a function $f_{n}$ of the form
+
+$$
+f_{n}(x)=\sum_{j=1}^{n} c_{j} \phi\left(x^{\top} w_{j}+b_{j}\right)+c_{0}
+$$
+
+such that
+
+$$
+\int_{|x| \leq r}\left(f(x)-f_{n}(x)\right)^{2} d x \leq \frac{(2 C r)^{2}}{n}
+$$
+
+\section*{All sufficiently smooth function can be approximated by a one-hidden-layer NN}
+$$
+\int_{|x| \leq r}\left(f(x)-f_{n}(x)\right)^{2} d x \leq \frac{(2 C r)^{2}}{n}
+$$
+
+\begin{itemize}
+  \item The more neurons allowed, the smaller the error.
+  \item The smoother the function (the smaller $C$ ), the smaller the error
+  \item The larger the domain (the larger $r$ ), the greater the error
+  \item Approximation is in average (in $\ell_{2}$-norm)
+  \item Applicable for any "sigmoid-like" activation function
+\end{itemize}
+
+The function $f_{n}$ is a one-hidden-layer $\mathrm{NN}$ with $n$ nodes
+
+$$
+f_{n}(x)=\sum_{j=1}^{n} c_{j} \phi\left(x^{\top} w_{j}+b_{j}\right)+c_{0}=c^{\top} \phi\left(W^{\top} x+b\right)+c_{0}
+$$
+
+\begin{center}
+\includegraphics[max width=\textwidth]{2024_01_08_0e0dcffe4bc8c6049046g-18}
+\end{center}
+
+\section*{$L_{1}$ Approximation: Proof by picture}
+Simple and intuitive explanation of a slightly different result:
+
+"A NN with sigmoid activation and at most two hidden layers can approximate well a smooth function in $\ell_{1}$-norm"
+
+Approximation in $\ell_{1}$-norm:
+
+$$
+\int_{|x| \leq r}\left|f(x)-f_{n}(x)\right| d x \leq \text { Something small }
+$$
+
+\section*{$L_{1}$ Approximation: Proof by picture}
+Consider a function $f: \mathbb{R} \rightarrow \mathbb{R}$ on a bounded domain
+
+\begin{center}
+\includegraphics[max width=\textwidth]{2024_01_08_0e0dcffe4bc8c6049046g-20}
+\end{center}
+
+\section*{Approximation of the function by a sum of rectangle functions}
+\begin{center}
+\includegraphics[max width=\textwidth]{2024_01_08_0e0dcffe4bc8c6049046g-21(1)}
+\end{center}
+
+From below
+
+\begin{center}
+\includegraphics[max width=\textwidth]{2024_01_08_0e0dcffe4bc8c6049046g-21}
+\end{center}
+
+From above
+
+The function is Riemann integrable - its integral can be approximated to any desired accuracy using "lower" and "upper" sums of the area of rectangles
+
+\section*{Approximation of the function by a sum of rectangle functions}
+\begin{center}
+\includegraphics[max width=\textwidth]{2024_01_08_0e0dcffe4bc8c6049046g-22}
+\end{center}
+
+Approximation in $\ell_{1}$-norm:
+
+$$
+\begin{aligned}
+\int_{|x| \leq r}\left|f(x)-f_{n}(x)\right| d x & =\int_{|x| \leq r}\left(f(x)-f_{n}(x)\right) d x \\
+& =\int_{|x| \leq r} f(x) d x-\int_{|x| \leq r} f_{n}(x) d x \\
+& \left.=\int_{|x| \leq r} f(x)-\sum_{i} \text { Area(Rectangle }_{i}\right)
+\end{aligned}
+$$
+
+\section*{A rectangle function is equal to the sum of two step functions}
+\begin{center}
+\includegraphics[max width=\textwidth]{2024_01_08_0e0dcffe4bc8c6049046g-23}
+\end{center}
+
+$f(x)=h 1_{x \in[a, b]}$
+\includegraphics[max width=\textwidth, center]{2024_01_08_0e0dcffe4bc8c6049046g-23(2)}
+
+\begin{center}
+\includegraphics[max width=\textwidth]{2024_01_08_0e0dcffe4bc8c6049046g-23(1)}
+\end{center}
+
+$f(x)=g(x)+h(x)$
+
+\section*{Approximate a step function with a sigmoid}
+$$
+\tilde{\phi}(x)=\phi(w(x-b))
+$$
+
+By setting:
+
+\begin{itemize}
+  \item $b$ : where the transition happens
+  \item $w$ : makes the transition steeper
+\end{itemize}
+
+Derivative: $\tilde{\phi}^{\prime}(b)=w / 4$
+
+$\Rightarrow$ The width of the transition is $O(4 / w)$
+
+\begin{center}
+\includegraphics[max width=\textwidth]{2024_01_08_0e0dcffe4bc8c6049046g-24}
+\end{center}
+
+\section*{Approximation of the rectangle}
+$$
+h(\phi(w(x-a))-\phi(w(x-b)))
+$$
+
+\begin{center}
+\includegraphics[max width=\textwidth]{2024_01_08_0e0dcffe4bc8c6049046g-25}
+\end{center}
+
+\section*{Conclusion in the 1D case}
+\begin{enumerate}
+  \item Approximate the function in the Riemann sense by a sum of $k$ rectangles
+
+  \item Represent each rectangle using two nodes in the hidden layer of a neural network
+
+  \item Compute the sum of all nodes in the hidden layer (considering appropriate weights and signs) to get the final output
+
+\end{enumerate}
+
+$\Rightarrow \quad \mathrm{NN}$ with one hidden layer containing $2 k$ nodes for a Riemann sum with $k$ rectangles
+
+Remarks:
+
+\begin{itemize}
+  \item The same intuition applies to any sigmoid-like function
+  \item This is an intuitive explanation, not a quantitative one
+  \item The weights $w$ must be large
+\end{itemize}
+
+\begin{center}
+\includegraphics[max width=\textwidth]{2024_01_08_0e0dcffe4bc8c6049046g-26}
+\end{center}
+
+\section*{Larger dimension: $d=2$}
+Same idea:
+
+\begin{itemize}
+  \item Approximate the function by $2 \mathrm{D}$ rectangle functions
+  \item Approximate a 2D rectangle function by sigmoids
+\end{itemize}
+
+\begin{center}
+\includegraphics[max width=\textwidth]{2024_01_08_0e0dcffe4bc8c6049046g-27}
+\end{center}
+
+\section*{Two sigmoids can approximate an infinite rectangle function}
+$\left(x_{1}, x_{2}\right) \mapsto \phi\left(w\left(x_{1}-a_{1}\right)\right)-\phi\left(w\left(x_{1}-b_{1}\right)\right)$
+
+The rectangle:
+
+\begin{itemize}
+  \item ranges from $a_{1}$ to $b_{1}$ in the $x_{1}$ direction
+  \item is unbounded in the $x_{2}$ direction
+\includegraphics[max width=\textwidth, center]{2024_01_08_0e0dcffe4bc8c6049046g-28}
+\end{itemize}
+
+\section*{Two sigmoids can approximate an infinite rectangle function}
+$\left(x_{1}, x_{2}\right) \mapsto \phi\left(w\left(x_{2}-a_{2}\right)\right)-\phi\left(w\left(x_{2}-b_{2}\right)\right)$
+
+The rectangle:
+
+\begin{itemize}
+  \item ranges from $a_{2}$ to $b_{2}$ in the $x_{2}$ direction
+  \item is unbounded in the $x_{1}$ direction
+\includegraphics[max width=\textwidth, center]{2024_01_08_0e0dcffe4bc8c6049046g-29}
+\end{itemize}
+
+\section*{Four sigmoids approximate a cross}
+$\left(x_{1}, x_{2}\right) \mapsto \phi\left(w\left(x_{1}-a_{1}\right)\right)-\phi\left(w\left(x_{1}-b_{1}\right)\right)+\phi\left(w\left(x_{2}-a_{2}\right)\right)-\phi\left(w\left(x_{2}-b_{2}\right)\right)$
+
+$\Rightarrow$ This approximation is close to our objective, with the exception of the two infinite "arms"
+\includegraphics[max width=\textwidth, center]{2024_01_08_0e0dcffe4bc8c6049046g-30}
+
+How can we eliminate the crossed arms?
+
+\section*{Using the sigmoid to threshold unwanted infinite arms}
+Thresholding the function will eliminate the arms
+
+It is equivalent to composing it with $1_{y \geq c}$ for $c \in(1,2]$
+
+$\Rightarrow$ Approximate $1_{y \geq c}$ using a sigmoid with a large weight $w$ and an appropriate bias (e.g., $3 w / 2$ )
+\includegraphics[max width=\textwidth, center]{2024_01_08_0e0dcffe4bc8c6049046g-31}
+
+\section*{Point-wise approximations}
+Def: piecewise linear (PWL) function:
+
+$$
+q(x)=\sum_{i=1}^{m}\left(a_{i} x+b_{i}\right) 1_{r_{i-1} \leq x<r_{i}} \text { with } a_{i} r_{i}+b_{i}=a_{i+1} r_{i}+b_{i+1}
+$$
+
+$\ell_{\infty}$-approximation result (Shektman, 1982): Let $f$ be a continuous function on $[c, d]$. For all $\varepsilon>0$, it exists a piecewise linear function $q$ such that:
+
+$$
+\sup _{x \in[c, d]}|f(x)-q(x)| \leq \varepsilon
+$$
+
+$\Rightarrow$ How to approximate PWL functions with a NN?
+
+\begin{center}
+\includegraphics[max width=\textwidth]{2024_01_08_0e0dcffe4bc8c6049046g-32}
+\end{center}
+
+\section*{Understanding the role of bias and weight in ReLU functions}
+$$
+(a x+b)_{+}=\max \{0, a x+b\}
+$$
+
+\begin{center}
+\includegraphics[max width=\textwidth]{2024_01_08_0e0dcffe4bc8c6049046g-33(1)}
+\end{center}
+
+The bias $b$ determines the position of the kink
+
+\begin{center}
+\includegraphics[max width=\textwidth]{2024_01_08_0e0dcffe4bc8c6049046g-33}
+\end{center}
+
+The weight $a$ determines the slope
+
+\section*{Linear combinations of RELUs and PWL functions}
+$$
+\sum_{i=1}^{m} \tilde{a}_{i}\left(x-\tilde{b}_{i}\right)_{+} \text {is a piecewise linear function }
+$$
+
+How do we get a new segment with slope $a$ starting at $r>\max _{i}\left(\tilde{b}_{i}\right)$ ?
+
+Intuition: Get the kink at $r$ by setting $\tilde{b}_{i+1}=r$ and slope by additionally canceling existing slope i.e. $\tilde{a}_{i+1}=a-\sum_{i} \tilde{a}_{i}$
+\includegraphics[max width=\textwidth, center]{2024_01_08_0e0dcffe4bc8c6049046g-34}
+
+\section*{Formal: Piecewise linear functions can be written as combination of RELU}
+Claim 1: Any PWL $q$ can be rewritten as
+
+$$
+q(x)=\tilde{a}_{1} x+\tilde{b}_{1}+\sum_{i=2}^{m} \tilde{a}_{i}\left(x-\tilde{b}_{i}\right)_{+}
+$$
+
+where $\tilde{a}_{1}=a_{1}, \tilde{b}_{1}=b_{1}, a_{i}=\sum_{j=1}^{i} \tilde{a}_{i}$ and $\tilde{b}_{i}=r_{i-1}$
+
+Claim 2: $q$ can be implemented as a one-hidden-layer NN with RELU activation. Each term corresponds to one node:
+
+\begin{itemize}
+  \item Bias $-\tilde{b}_{i}$
+  \item Output weight $\tilde{a}_{i}$
+\end{itemize}
+
+The term $\tilde{a}_{1} x+\tilde{b}_{1}$ also corresponds to one node:
+
+\begin{itemize}
+  \item Bias $\tilde{b}_{1}$ : bias of the output node
+\end{itemize}
+
+\begin{center}
+\includegraphics[max width=\textwidth]{2024_01_08_0e0dcffe4bc8c6049046g-35}
+\end{center}
+
+\begin{itemize}
+  \item Term $\tilde{a}_{1} x=\tilde{a}_{1}(x)_{+}$since $x \in[0,1]$
+\end{itemize}
+
+\section*{Proof of the equivalent formulation}
+$$
+\begin{gathered}
+q(x)=\sum_{i=1}^{m}\left(a_{i} x+b_{i}\right) 1_{r_{i-1} \leq x<r_{i}} \quad r(x)=\tilde{a}_{1} x+\tilde{b}_{1}+\sum_{i=2}^{m} \tilde{a}_{i}\left(x-\tilde{b}_{i}\right)_{+} \\
+\tilde{a}_{1}=a_{1}, \tilde{b}_{1}=b_{1} \text { and } a_{i}=\sum_{j=1}^{i} \tilde{a}_{j} \text { and } \tilde{b}_{i}=r_{i-1}
+\end{gathered}
+$$
+
+\begin{itemize}
+  \item For $x \in\left[0, r_{1}\right]$
+\end{itemize}
+
+$$
+\left(\tilde{a}_{1}, \tilde{b}_{1}\right)=\left(a_{1}, b_{1}\right) \Longrightarrow q(x)=a_{1} x+b_{1}=\tilde{a}_{1} x+\tilde{b}_{1}=r(x) \text { because } \tilde{b}_{2}=r_{1}
+$$
+
+\begin{itemize}
+  \item For $x \in\left[r_{1}, r_{2}\right], r(x)=\tilde{a}_{1} x+\tilde{b}_{1}+\left(a_{2}-a_{1}\right)\left(x-r_{1}\right)_{+}$
+\end{itemize}
+
+$$
+=a_{1} x+b_{1}+\left(a_{2}-a_{1}\right)\left(x-r_{1}\right)=a_{2} x+b_{1}-\left(a_{2}-a_{1}\right) r_{1}
+$$
+
+$r^{\prime}(x)=a_{2}$ and $r\left(r_{1}\right)=q\left(r_{1}\right)$ as shown above
+
+$\Longrightarrow r(x)=q(x)$ for $x \in\left[r_{1}, r_{2}\right]$
+
+\section*{Proof by induction}
+Let's assume that $r(x)=q(x)$ for $x \in\left[0, r_{i-1}\right]$
+
+For $x \in\left[r_{i-1}, r_{i}\right]$
+
+$$
+\begin{aligned}
+r(x) & =\tilde{a}_{1} x+\tilde{b}_{1}+\sum_{j=2}^{m} \tilde{a}_{j}\left(x-\tilde{b}_{j}\right)_{+} \\
+& =\tilde{a}_{1} x+\tilde{b}_{1}+\sum_{j=2}^{i} \tilde{a}_{j}\left(x-\tilde{b}_{j}\right) \\
+& =\sum_{j=1}^{i} \tilde{a}_{j} x+\tilde{b}_{1}-\sum_{j=2}^{j} \tilde{a}_{j} \tilde{b}_{j}
+\end{aligned}
+$$
+
+Thus
+
+\begin{itemize}
+  \item $r^{\prime}(x)=\sum_{j=1}^{i} \tilde{a}_{j}=a_{i}$ good slope
+  \item $r\left(r_{i-1}\right)=q\left(r_{i-1}\right)$ good starting point
+\end{itemize}
+
+\begin{center}
+\includegraphics[max width=\textwidth]{2024_01_08_0e0dcffe4bc8c6049046g-37}
+\end{center}
+
+$$
+\Longrightarrow r(x)=q(x) \text { for } x \in\left[r_{i-1}, r_{1}\right]
+$$
+
+Why: two affine functions with the same starting point and the same slope are equal
+
+\section*{Recap}
+\begin{itemize}
+  \item Neural networks consist of linear layers stacked together with non-linearities
+
+  \item A neural network can be seen as a learned feature extractor + a linear predictor
+
+  \item Neural networks typically require large amounts of data and compute to learn good features
+
+  \item Neural networks have very high representational power (i.e., the universal approximation result) in contrast to simple models like linear regression
+
+\end{itemize}
+
+\end{document}

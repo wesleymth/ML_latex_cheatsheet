@@ -171,167 +171,119 @@ $\phi$ also serves as a convex surrogate for the $0-1$ loss
 \subsection*{Losses for Classification}
 Examples of margin-based losses $\left(\eta=y x^{\top} w\right)$ :
 
-\begin{itemize}
-  \item Quadratic loss: $\operatorname{MSE}(\eta)=(1-\eta)^{2}$
-  \item Logistic loss: $\operatorname{Logistic}(\eta)=\frac{\log (1+\exp (-\eta))}{\log (2)}$
-  \item Hinge loss: $\operatorname{Hinge}(\eta)=[1-\eta]_{+}$
-\end{itemize}
+- Quadratic loss: $\operatorname{MSE}(\eta)=(1-\eta)^{2}$ Penalizes any deviation from 1
 
-Common features: these losses are convex and provide an upper bound for the zero-one loss
+- Logistic loss: $\operatorname{Logistic}(\eta)=\frac{\log (1+\exp (-\eta))}{\log (2)}$ Asymmetric cost - a penalty is always incurred.
 
-Behavioral differences:
+- Hinge loss: $\operatorname{Hinge}(\eta)=[1-\eta]_{+}$ A penalty is applied if the prediction is incorrect or lacks confidence
 
-\begin{itemize}
-  \item MSE: Penalizes any deviation from 1
-  \item Logistic Loss: Asymmetric cost - a penalty is always incurred.
-\end{itemize}
+- Common features: these losses are convex and provide an upper bound for the zero-one loss
 
+- Behavioral differences:
 
-\begin{itemize}
-  \item Hinge Loss: A penalty is applied if the prediction is incorrect or lacks confidence
-\end{itemize}
 
 \subsection*{Summary}
-$$
+
+- ERM for the hinge loss with ridge regularization:
+
+$
 \min _{w} \frac{\lambda}{2}\|w\|^{2}+\frac{1}{N} \sum_{n=1}^{N}\left[1-y_{n} x_{n}^{\top} w\right]_{+}
-$$
+$
 
-ERM for the hinge loss with ridge regularization
+- Interpretation for separable data with small $\lambda$ :
 
+1) Choose the direction of $w$ such that $w^{\perp}$ acts as a separating hyperplane
 
-Interpretation for separable data with small $\lambda$ :
+2) Adjust the scale of $w$ to ensure that no point lies with the margin
 
-\begin{enumerate}
-  \item Choose the direction of $w$ such that $w^{\perp}$ acts as a separating hyperplane
-
-  \item Adjust the scale of $w$ to ensure that no point lies with the margin
-
-  \item Select the hyperplane with the largest margin
-
-\end{enumerate}
+3) Select the hyperplane with the largest margin
 
 
-\subsection*{Optimization: How to get $w$ ?}
-$$
+\subsection*{Optimization}
+$
 \min _{w} \frac{1}{N} \sum_{n=1}^{N}\left[1-y_{n} x_{n}^{\top} w\right]_{+}+\frac{\lambda}{2}\|w\|^{2}
-$$
+$
 
-Convex (but non-smooth) objective which can be minimized with:
+- How to get $w$ ?
 
-\begin{itemize}
-  \item Subgradient method
-  \item Stochastic Subgradient method
-\end{itemize}
+- Convex (but non-smooth) objective which can be minimized with: 1) Subgradient method, 2) Stochastic Subgradient method
 
 \subsection*{Convex duality}
-Assume you can define an auxiliary function $G(w, \alpha)$ such that
+- Assume you can define an auxiliary function $G(w, \alpha)$ such that
 
-$$
+$
 \min _{w} L(w)=\min _{w} \max _{\alpha} G(w, \alpha)
-$$
+$
 
-Primal problem: $\min \max G(w, \alpha)$
+- Primal problem: $\min _{w} \max _{\alpha} G(w, \alpha)$
 
-w $\quad \alpha$
-
-Dual problem: $\max \min G(w, \alpha)$
-
-$\alpha \quad w$
+- Dual problem: $\max _{\alpha} \min _{w} G(w, \alpha)$
 
 $\Rightarrow$ Sometimes, the dual problem is easier to solve than the primal problem.
 
-Questions:
-
-\begin{enumerate}
-  \item How do we identify a suitable $G(w, \alpha)$ ?
-
-  \item Under what conditions can the min and max be interchanged?
-
-  \item When is the dual problem more tractable than the primal problem?
-
-\end{enumerate}
-
-\subsection*{Q1: How do we find a suitable $G(w, \alpha)$ ?}
-$$
+\subsection*{How do we find a suitable $G(w, \alpha)$ ?}
+$
 [z]_{+}=\max (0, z)=\max _{\alpha \in[0,1]} \alpha z
-$$
+$
 
-Therefore $\left[1-y_{n} x_{n}^{\top} w\right]_{+}=\max _{\alpha_{n} \in[0,1]} \alpha_{n}\left(1-y_{n} x_{n}^{\top} w\right)$
+- $\left[1-y_{n} x_{n}^{\top} w\right]_{+}=\max _{\alpha_{n} \in[0,1]} \alpha_{n}\left(1-y_{n} x_{n}^{\top} w\right)$
 
-The SVM problem is equivalent to:
+- The SVM problem is equivalent to:
+$
+\min _{w} L(w)=\\\min _{w} \max _{\alpha \in[0,1]^{n}} \underbrace{\frac{1}{N} \sum_{n=1}^{N} \alpha_{n}\left(1-y_{n} x_{n}^{\top} w\right)+\frac{\lambda}{2}\|w\|_{2}^{2}}_{G(w, \alpha)}
+$
 
-$$
-\min _{w} L(w)=\min _{w} \max _{\alpha \in[0,1]^{n}} \underbrace{\frac{1}{N} \sum_{n=1}^{N} \alpha_{n}\left(1-y_{n} x_{n}^{\top} w\right)+\frac{\lambda}{2}\|w\|_{2}^{2}}_{G(w, \alpha)}
-$$
+- The function $\mathrm{G}$ is convex in $w$ and concave in $\alpha$
 
-The function $\mathrm{G}$ is convex in $w$ and concave in $\alpha$
+\subsection*{Can min and max be interchanged?}
 
-\subsection*{Q2: Can the min and max be interchanged?}
-Always true:
-
-$$
+$
 \max _{\alpha} \min _{w} G(w, \alpha) \leq \min _{w} \max _{\alpha} G(w, \alpha)
-$$
+$
 
-Equality if $G$ is convex in $w$, concave in $\alpha$ and the domains of $w$ and $\alpha$ are convex and compact:
+- Equality if $G$ is convex in $w$, concave in $\alpha$ and the domains of $w$ and $\alpha$ are convex and compact:
+$\max _{\alpha} \min _{w} G(w, \alpha) = \min _{w} \max _{\alpha} G(w, \alpha)$
 
-$\max \min G(w, \alpha)=\min \max G(w, \alpha)$
+- Proof:
+
+$\min_w G(\alpha, w) \leq G\left(\alpha, w^{\prime}\right) \forall w^{\prime}$
 
 
-\subsection*{Q2: Can the min and max be interchanged?}
-Always true:
+$\max_\alpha \min_w G(\alpha, w) \leq \max_\alpha G\left(\alpha, w^{\prime}\right) \forall w^{\prime}$
 
-$\max \min G(w, \alpha) \leq \min \max G(w, \alpha)$
 
-$\alpha \quad w$
-
-w $\quad \alpha$
-
-Proof:
-
-$\min G(\alpha, w) \leq G\left(\alpha, w^{\prime}\right)$ for any $w^{\prime}$
-
-$w$
-
-$\max \min G(\alpha, w) \leq \max G\left(\alpha, w^{\prime}\right)$ for any $w^{\prime}$
-
-$\alpha w$
-
-$\max \min G(\alpha, w) \leq \min \max G\left(\alpha, w^{\prime}\right)$
-
-$\alpha \quad w$
-
-$w^{\prime} \quad \alpha$
+$\max_\alpha \min_w G(\alpha, w) \leq \min_{w^\prime} \max_\alpha G\left(\alpha, w^{\prime}\right)$
 
 \subsection*{Application to SVM}
-For SVM, the condition is met, allowing us to interchange min and max:
+- For SVM, the condition is met, allowing us to interchange min and max:
+$
+\min _{w} L(w)=\\\max _{\alpha \in[0,1]^{n}} \min _{w} \frac{1}{N} \sum_{n=1}^{N} \alpha_{n}\left(1-y_{n} x_{n}^{\top} w\right)+\frac{\lambda}{2}\|w\|_{2}^{2}
+$
 
-$$
-\min _{w} L(w)=\max _{\alpha \in[0,1]^{n}} \min _{w} \frac{1}{N} \sum_{n=1}^{N} \alpha_{n}\left(1-y_{n} x_{n}^{\top} w\right)+\frac{\lambda}{2}\|w\|_{2}^{2}
-$$
+- Minimizer computation:
 
-Minimizer computation:
-
-$$
+$
 \mathbf{Y}=\operatorname{diag}(\mathbf{y})
-$$
+$
 
 $\nabla_{w} G(w, \alpha)=-\frac{1}{N} \sum_{n=1}^{N} \alpha_{n} y_{n} x_{n}+\lambda w=0 \Longrightarrow w(\alpha)=\frac{1}{\lambda N} \sum_{n=1}^{N} \alpha_{n} y_{n} x_{n}=\frac{1}{\lambda N} \mathbf{X}^{\top} \mathbf{Y} \alpha$
 
-Dual optimization problem:
+- Dual optimization problem:
 
-$$
+\scalebox{0.65}{
+$
 \begin{aligned}
 \min _{w} L(w) & =\max _{\alpha \in[0,1]^{n}} \frac{1}{N} \sum_{n=1}^{N} \alpha_{n}\left(1-\frac{1}{\lambda N} y_{n} x_{n}^{\top} \mathbf{X}^{\top} \mathbf{Y} \alpha\right)+\frac{1}{2 \lambda N^{2}}\left\|\mathbf{X}^{\top} \mathbf{Y} \alpha\right\|_{2}^{2} \\
 & =\max _{\alpha \in[0,1]^{n}} \frac{1^{\top} \alpha}{N}-\frac{1}{\lambda N^{2}} \alpha^{\top} \mathbf{Y} \mathbf{X} \mathbf{X}^{\top} \mathbf{Y} \alpha+\frac{1}{2 \lambda N^{2}}\left\|\mathbf{X}^{\top} \mathbf{Y} \alpha\right\|_{2}^{2} \\
 & =\max _{\alpha \in[0,1]^{n}} \frac{1^{\top} \alpha}{N}-\frac{1}{2 \lambda N^{2}} \alpha^{\top} \underbrace{\mathbf{Y} \mathbf{X} \mathbf{X}^{\top} \mathbf{Y}}_{\text {PSD matrix }} \alpha
 \end{aligned}
-$$
+$
+}
 
-\subsection*{Q3: Why?}
-$$
+\subsection*{Advantages?}
+$
 \max _{\alpha \in[0,1]^{n}} \alpha^{\top} 1-\frac{1}{2 \lambda N} \alpha^{\top} \underbrace{\mathbf{Y X} \mathbf{X}^{\top} \mathbf{Y}}_{\text {PSD matrix }} \alpha
-$$
+$
 
 \begin{enumerate}
   \item Differentiable Concave Problem: Efficient solutions can be achieved using
@@ -351,11 +303,13 @@ $$
 \end{enumerate}
 
 \subsection*{Interpretation of the dual formulation}
-For any $\left(x_{n}, y_{n}\right)$, there is a corresponding $\alpha_{n}$ given by
+- $\forall \left(x_{n}, y_{n}\right) \exists \alpha_{n}$ given by:
 
+\vspace{-10pt}
 $$
 \max _{\alpha_{n} \in[0,1]} \alpha_{n}\left(1-y_{n} x_{n}^{\top} w\right)
 $$
+
 
 \begin{itemize}
   \item If $x_{n}$ is on the correct side and outside the margin, $1-y_{n} x_{n}^{\top} w<0$, then $\alpha_{n}=0$
@@ -365,28 +319,14 @@ $$
 
 $\rightarrow$ The points for which $\alpha_{n}>0$ are referred to as support vectors
 
-$$
-\left(\alpha_{n}=0 \text { and } y_{n}=-1\right) \text { or }\left(\alpha_{n}=1 \text { and } y_{n}=1\right) \quad{ }_{w^{\top} x=-1} w^{\top} x=0
-$$
+\includegraphics*[width=0.7\columnwidth]{figures/svm_dual_formulation.jpeg}
 
-\subsection*{The SVM hyperplane is supported by}
- the support vectors$$
-\left(\alpha_{n}=0 \text { and } y_{n}=1\right) \text { or }\left(\alpha_{n}=1 \text { and } y_{n}=-1\right)
-$$
-
-$$
+- The SVM hyperplane is supported by the support vectors
+$
 w=\frac{1}{\lambda N} \sum_{n=1}^{N} \alpha_{n} y_{n} x_{n}
-$$
+$
 
 $\Rightarrow w$ does not depend on the observation $\left(x_{n}, y_{n}\right)$ if $\alpha_{n}=0$
-
-$$
-\left(\alpha_{n}=0 \text { and } y_{n}=-1\right) \text { or }\left(\alpha_{n}=1 \text { and } y_{n}=1\right)
-$$
-
-$$
-w^{\top} x=-1 \quad w^{\top} x=0
-$$
 
 \subsection*{Recap}
 \begin{itemize}
@@ -396,9 +336,9 @@ $$
 
 \end{itemize}
 
-$$
+$
 \min _{w} \frac{\lambda}{2}\|w\|^{2}+\frac{1}{N} \sum_{n=1}^{N}\left[1-y_{n} x_{n}^{\top} w\right]_{+}
-$$
+$
 
 \begin{itemize}
   \item Hinge loss can be optimized with (stochastic) sub-gradient method

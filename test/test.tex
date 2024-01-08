@@ -1,0 +1,40 @@
+\documentclass[10pt]{article}
+\usepackage{amsmath}
+\usepackage[a4paper, margin=0.1in, landscape]{geometry}
+\usepackage{multicol}
+\usepackage{xcolor}
+\usepackage{lipsum}
+
+
+% \expandafter\def\expandafter\normalsize\expandafter{%
+%     \normalsize%
+%     \setlength\abovedisplayskip{0pt}%
+%     \setlength\belowdisplayskip{0pt}%
+%     \setlength\abovedisplayshortskip{0pt}%
+%     \setlength\belowdisplayshortskip{0pt}%
+% }
+\usepackage{mathtools}
+
+\newlength{\myeqskip}  
+\setlength{\myeqskip}{0pt}
+\AtBeginDocument{%
+    \setlength\abovedisplayskip{\myeqskip}%
+    \setlength\belowdisplayskip{\myeqskip}%
+    \setlength\abovedisplayshortskip{\myeqskip-\baselineskip}%
+    \setlength\belowdisplayshortskip{\myeqskip}
+}
+
+\begin{document}
+
+\begin{multicols*}{4}
+
+\section*{Equation Example}
+\lipsum[1]
+$$
+E = mc^2, F = ma
+$$
+\lipsum[2]
+
+\end{multicols*}
+
+\end{document}
