@@ -1,0 +1,54 @@
+\section*{Unsupervised learning}
+
+- In unsupervised learning, our data consists only of features (or inputs) $\mathbf{x}_{1}, \mathbf{x}_{2}, \ldots, \mathbf{x}_{N}$, vectors in $\mathbb{R}^{D}$, and there are no outputs $y_{n}$ available.
+
+- Unsupervised learning seems to play an important role in how living beings learn. Variants of it seem to be more common in the brain than supervised learning.
+
+- Two main directions in unsupervised learning are
+
+\begin{itemize}
+  \item representation learning
+  \item density estimation \& generative models
+\end{itemize}
+
+\subsection*{Examples for Representation Learning}
+- Given ratings of movies and viewers, we use matrix factorization to extract useful features (see e.g. Netflix Prize). Maybe not unsupervised?
+
+- Learning word-representations using matrix-factorizations, word2vec (Mikolov et al. 2013).
+
+- Given voting patterns of regions across Switzerland, we use PCA to extract useful features (Etter et al. 2014).
+
+- PCA Example 2: Genes mirror geography
+
+- Dendrogram from agglomerative hierarchical clustering with average linkage to the human tumor microarray data.
+
+- Clustering more than two million biomedical publications (Kevin Boyack et.al. 2011)
+
+\subsection*{Unsupervised Representation Learning \& Generation}
+\subsection*{How does it work?}
+Define a unsupervised or self-supervised loss function, for
+
+\begin{itemize}
+  \item Compression \& Reconstruction (e.g. Auto-Encoder)
+
+  \item Consistency \& Contrastive Learning (e.g. Noise-contrastive estimation)
+
+  \item Generation (e.g. Auto-Encoder, Gaussian Mixture Model)
+\end{itemize}
+
+\subsection*{Examples:}
+$(\mathrm{G}=$ can be used as a generative model $)$
+
+\begin{itemize}
+  \item Auto-Encoders (G): Invertible networks, learned compression, normalizing flows
+  \item Representation Learning: e.g. images, text, time-series, video. Combining unsupervised representation learning (pre-training) with supervised learning
+
+  \item Language Models \& Sequence Models (G): text generation, or sequence continuation, BERT, video, audio \& timeseries (auto-regressive, contrastive, ...)
+
+  \item Generative Adversarial Networks (GAN) (G) see also predictability minimization
+  
+  \item Contrastive image-language pretraining (CLIP): learns a joint representation space for images and text using contrastive learning
+
+  \item Diffusion models (G) new state-of-the-art in image generation; these models can be adapted to generate images from text prompts (e.g., DALL-E 2, Stable Diffusion, Midjourney)
+
+\end{itemize}

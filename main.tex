@@ -28,55 +28,100 @@
 %     \titleformat*{\subsubsection}{\normalfont\normalsize\bfseries\color{section_color}}%
 % }
 \definecolor{default_section_color}{rgb}{0,0,0} % Default color
+
+\definecolor{color1}{rgb}{0.8,0.2,0.2}   % Red
+\definecolor{color2}{rgb}{0.2,0.2,0.8}   % Blue
+\definecolor{color3}{rgb}{0.2,0.6,0.6}   % Cyan
+\definecolor{color4}{rgb}{0.8,0,0.8}     % Magenta
+\definecolor{color5}{rgb}{1,0.5,0}        % Orange
+\definecolor{color6}{rgb}{0.5,0,0.5}      % Purple
+\definecolor{color7}{rgb}{0,0.5,0.5}      % Teal
+\definecolor{color8}{rgb}{0.6,0.3,0.1}    % Brown
+\definecolor{color9}{rgb}{0.4,0.4,0.4}    % Dark Gray
+\definecolor{color10}{rgb}{0,0.8,0}       % Green
+% \definecolor{color11}{rgb}{0.8,0.8,0}     % Yellow
+\definecolor{color12}{rgb}{0,0.7,0.7}     % Sky Blue
+\definecolor{color13}{rgb}{0.7,0,0.7}     % Violet
+\definecolor{color14}{rgb}{0.7,0.7,0}     % Olive
+\definecolor{color15}{rgb}{0.4,0,0}       % Maroon
+\definecolor{color16}{rgb}{0.5,0.5,0.1}   % Olive Drab
+\definecolor{color17}{rgb}{0.5,0,0.2}     % Dark Brown
+\definecolor{color18}{rgb}{0,0.4,0.2}     % Forest Green
+\definecolor{color19}{rgb}{0.6,0.4,0.2}   % Sienna
+\definecolor{color20}{rgb}{0.3,0.7,0.7}   % Light Blue
+\definecolor{color21}{rgb}{0.8,0.6,0.1}   % Gold
+\definecolor{color22}{rgb}{0.7,0.4,0.4}   % Indian Red
+\definecolor{color23}{rgb}{0.2,0.8,0.2}   % Lime Green
+\definecolor{color24}{rgb}{0.8,0.4,0.7}   % Pink
+\definecolor{color25}{rgb}{0.5,0.5,0.8}   % Light Slate Blue
+\definecolor{color26}{rgb}{0.5,0.7,0.3}   % Medium Sea Green
+\definecolor{color27}{rgb}{0.4,0.8,0.6}   % Medium Aquamarine
+\definecolor{color28}{rgb}{0.3,0.3,0.7}   % Medium Slate Blue
+\definecolor{color29}{rgb}{0.8,0.3,0.6}   % Medium Purple
+\definecolor{color30}{rgb}{0.4,0.4,0.8}   % Slate Blue
 \newcounter{colornumber}
-\setcounter{colornumber}{1}
+\setcounter{colornumber}{0}
 \newcommand{\sectionnewcolor}{%
     \ifcase\thecolornumber%
-        \colorlet{section_color}{red}%
+        \colorlet{section_color}{color1}%
     \or
-        \colorlet{section_color}{green}%
+        \colorlet{section_color}{color2}%
     \or
-        \colorlet{section_color}{blue}%
+        \colorlet{section_color}{color3}%
     \or
-        \colorlet{section_color}{cyan}%
+        \colorlet{section_color}{color4}%
     \or
-        \colorlet{section_color}{magenta}%
+        \colorlet{section_color}{color5}%
     \or
-        \colorlet{section_color}{yellow}%
+        \colorlet{section_color}{color6}%
     \or
-        \colorlet{section_color}{orange}%
+        \colorlet{section_color}{color7}%
     \or
-        \colorlet{section_color}{purple}%
+        \colorlet{section_color}{color8}%
     \or
-        \colorlet{section_color}{teal}%
+        \colorlet{section_color}{color9}%
     \or
-        \colorlet{section_color}{lime}%
+        \colorlet{section_color}{color10}%
+    % \or
+    %     \colorlet{section_color}{color11}%
     \or
-        \colorlet{section_color}{pink}%
+        \colorlet{section_color}{color12}%
     \or
-        \colorlet{section_color}{brown}%
+        \colorlet{section_color}{color13}%
     \or
-        \colorlet{section_color}{green}%
+        \colorlet{section_color}{color14}%
     \or
-        \colorlet{section_color}{blue}%
+        \colorlet{section_color}{color15}%
     \or
-        \colorlet{section_color}{cyan}%
+        \colorlet{section_color}{color16}%
     \or
-        \colorlet{section_color}{magenta}%
+        \colorlet{section_color}{color17}%
     \or
-        \colorlet{section_color}{yellow}%
+        \colorlet{section_color}{color18}%
     \or
-        \colorlet{section_color}{orange}%
+        \colorlet{section_color}{color19}%
     \or
-        \colorlet{section_color}{purple}%
+        \colorlet{section_color}{color20}%
     \or
-        \colorlet{section_color}{teal}%
+        \colorlet{section_color}{color21}%
     \or
-        \colorlet{section_color}{lime}%
+        \colorlet{section_color}{color22}%
     \or
-        \colorlet{section_color}{pink}%
+        \colorlet{section_color}{color23}%
     \or
-        \colorlet{section_color}{brown}%
+        \colorlet{section_color}{color24}%
+    \or
+        \colorlet{section_color}{color25}%
+    \or
+        \colorlet{section_color}{color26}%
+    \or
+        \colorlet{section_color}{color27}%
+    \or
+        \colorlet{section_color}{color28}%
+    \or
+        \colorlet{section_color}{color29}%
+    \or
+        \colorlet{section_color}{color30}%
     \else
         \colorlet{section_color}{default_section_color}%
     \fi
@@ -86,6 +131,7 @@
     \titleformat*{\subsubsection}{\normalfont\normalsize\bfseries\color{section_color}}%
     \stepcounter{colornumber}%
 }
+
 
 \newcommand{\sectiondivider}{%
     \vspace{4pt}%
@@ -168,6 +214,10 @@
 \sectiondivider
 
 \sectionnewcolor
+\input{8b_nn_advanced.tex}
+\sectiondivider
+
+\sectionnewcolor
 \input{9a_transformers.tex}
 \sectiondivider
 
@@ -176,7 +226,15 @@
 \sectiondivider
 
 \sectionnewcolor
-\input{10c.tex}
+\input{10a_ethics_fairness.tex}
+\sectiondivider
+
+\sectionnewcolor
+\input{10b_unsupervised.tex}
+\sectiondivider
+
+\sectionnewcolor
+\input{10c_kmeans.tex}
 \sectiondivider
 
 \sectionnewcolor

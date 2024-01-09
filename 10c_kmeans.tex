@@ -1,0 +1,82 @@
+
+\section*{Clustering}
+- Clusters are groups of points whose inter-point distances are small compared to the distances outside the cluster.
+
+- Find "prototype" points $\boldsymbol{\mu}_{1}, \boldsymbol{\mu}_{2}, \ldots, \boldsymbol{\mu}_{K}$ and cluster assignments $z_{n} \in\{1,2, \ldots, K\}$ for all $n=1,2, \ldots, N$ data vectors $\mathbf{x}_{n} \in \mathbb{R}^{D}$.
+
+\subsection*{$\mathrm{K}$-means clustering}
+Assume $K$ is known.
+
+$
+\min _{\mathbf{z}, \boldsymbol{\mu}} \mathcal{L}(\mathbf{z}, \boldsymbol{\mu})=\sum_{n=1}^{N} \sum_{k=1}^{K} z_{n k}\left\|\mathbf{x}_{n}-\boldsymbol{\mu}_{k}\right\|_{2}^{2}
+$
+
+s.t. $\boldsymbol{\mu}_{k} \in \mathbb{R}^{D}, z_{n k} \in\{0,1\}, \sum_{k=1}^{K} z_{n k}=1$,
+
+where $\mathbf{z}_{n}=\left[z_{n 1}, z_{n 2}, \ldots, z_{n K}\right]^{\top}$
+
+$
+\begin{aligned}
+\mathbf{z} & =\left[\mathbf{z}_{1}, \mathbf{z}_{2}, \ldots, \mathbf{z}_{N}\right]^{\top} \\
+\boldsymbol{\mu} & =\left[\boldsymbol{\mu}_{1}, \boldsymbol{\mu}_{2}, \ldots, \boldsymbol{\mu}_{K}\right]^{\top}
+\end{aligned}
+$
+
+\subsection*{K-means Algorithm}
+
+Initialize $\boldsymbol{\mu}_{k} \forall k$, then iterate:
+
+\begin{enumerate}
+  \item For all $n$, compute $\mathbf{z}_{n}$ given $\boldsymbol{\mu}$.
+  
+  $z_{n k}=\left\{\begin{array}{l}1 \text { if } k=\arg \min _{j=1,2, \ldots K}\left\|\mathbf{x}_{n}-\boldsymbol{\mu}_{j}\right\|_{2}^{2} \\ 0 \text { otherwise }\end{array}\right.\\\rightarrow O(NKD)$
+
+  \item For all $k$, compute $\boldsymbol{\mu}_{k}$ given $\mathbf{z}$.Take derivative w.r.t. $\boldsymbol{\mu}_{k}$ to get:
+  
+  $
+  \boldsymbol{\mu}_{k}=\frac{\sum_{n=1}^{N} z_{n k} \mathbf{x}_{n}}{\sum_{n=1}^{N} z_{n k}}
+  \rightarrow O(NKD)$
+
+\end{enumerate}
+
+
+\subsection*{Convergence}
+Convergence to a local optimum is assured since each step decreases the cost (see Bishop, Exercise 9.1).
+
+\subsection*{Coordinate descent}
+$\mathrm{K}$-means is a coordinate descent algorithm, where, to find $\min _{\boldsymbol{z}, \boldsymbol{\mu}} \mathcal{L}(\mathbf{z}, \boldsymbol{\mu})$, we start with some $\boldsymbol{\mu}^{(0)}$ and repeat the following:
+
+$\mathbf{z}^{(t+1)}:=\arg \min _{\boldsymbol{z}} \mathcal{L}\left(\mathbf{z}, \boldsymbol{\mu}^{(t)}\right)$
+
+$\boldsymbol{\mu}^{(t+1)}:=\arg \min _{\boldsymbol{\mu}} \mathcal{L}\left(\mathbf{z}^{(t+1)}, \boldsymbol{\mu}\right)$
+
+\subsection*{Data Compression for images}
+
+- aka vector quantization.
+
+\subsection*{Probabilistic model for K-means}
+
+$
+\log\prod_{n=1}^{N}p(x_{n}|\mu,z)=\log\prod_{n=1}^{N} \mathcal{N}(x_{n}|\mu_{k'},I_{0})
+$
+
+$\begin{aligned}&=\log\prod_{n=1}^{N}\prod_{k=1}^{K}\mathcal{N}(x_n|\mu_k,I_0)^{z_{nk}}\\&=\log\prod_{n=1}^{N}\prod_{k=1}^{K}c\cdot e^{-\frac 12\left||x_n-\mu_{nk}|\right|^2\cdot z_{nk}}\\&=-\sum_{n=1}^{N}\sum_{k=1}^{K}\frac 12||x_n-\mu_k||^2 z_{nk}+c^{\prime}\\&=-\mathcal{L}(\mu,z)\end{aligned}$
+
+\subsection*{K-means as a Matrix Factorization}
+
+$\begin{aligned} \min _{\mathbf{z}, \boldsymbol{\mu}} \mathcal{L}(\mathbf{z}, \boldsymbol{\mu}) & =\sum_{n=1}^{N} \sum_{k=1}^{K} z_{n k}\left\|\mathbf{x}_{n}-\boldsymbol{\mu}_{k}\right\|_{2}^{2} \\ & =\left\|\mathbf{X}^{\top}-\mathbf{M} \mathbf{Z}^{\top}\right\|_{\text {Frob }}^{2}\end{aligned}$
+
+s.t. $\boldsymbol{\mu}_{k} \in \mathbb{R}^{D}$,
+$
+z_{n k} \in\{0,1\}, \sum_{k=1}^{K} z_{n k}=1
+$
+
+\subsection*{Issues with K-means}
+\begin{enumerate}
+  \item Computation can be heavy for large $N, D$ and $K$.
+
+  \item Clusters are forced to be spherical (e.g. cannot be elliptical unlike GMM).
+
+  \item Each example can belong to only one cluster ("hard" cluster assignments).
+
+\end{enumerate}
