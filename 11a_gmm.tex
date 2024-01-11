@@ -1,0 +1,62 @@
+
+\section*{Gaussian Mixture Models}
+1) K-means forces spherical clusters, not elliptical.
+
+2) In K-means, each example can only belong to one cluster
+
+$\rightarrow$ Solved Gaussian Mixture Models.
+
+\subsection*{Clustering with Gaussians}
+(1) resolved by using full covariance matrices $\boldsymbol{\Sigma}_{k}$ instead of isotropic covariances.
+
+$p(\mathbf{X} \mid \boldsymbol{\mu}, \boldsymbol{\Sigma}, \mathbf{z})=\prod_{n=1}^{N} \prod_{k=1}^{K}\left[\mathcal{N}\left(\mathbf{x}_{n} \mid \boldsymbol{\mu}_{k}, \boldsymbol{\Sigma}_{k}\right)\right]^{z_{n k}}$
+
+$\mu \in \mathbb{R}^{D\cdot K}$
+$\Sigma \in \mathbb{R}^{D^2\cdot K}$
+$\mu \in \mathbb{R}^{K}$
+
+\subsection*{Soft-clustering}
+(2) resolved by defining $z_{n}$ to be a random variable, $z_{n} \in$ $\{1,2, \ldots, K\}$ that follows a multinomial distribution.
+
+$z_{nk}=\begin{cases}1\text{ if assigned to k}\\0\end{cases}$ , 
+$p\left(z_{n}=k\right)=\pi_{k}$ \\where $\pi_{k}>0, \forall k$ and $\sum_{k=1}^{K} \pi_{k}=1$
+
+This leads to soft-clustering as opposed to having "hard" assignments.
+
+
+\subsection*{GMM definition}
+
+$
+p(\mathbf{X}, \mathbf{z} \mid \boldsymbol{\mu}, \boldsymbol{\Sigma}, \boldsymbol{\pi}) 
+= \prod_{n=1}^{N} p(\mathbf{x}_{n} \mid z_{n}, \boldsymbol{\mu}, \boldsymbol{\Sigma}) p(z_{n} \mid \boldsymbol{\pi}) 
+\\= \prod_{n=1}^{N} \prod_{k=1}^{K}[\mathcal{N}(\mathbf{x}_{n} \mid \boldsymbol{\mu}_{k}, \boldsymbol{\Sigma}_{k})]^{z_{n k}} \prod_{k=1}^{K}[\pi_{k}]^{z_{n k}}
+$
+
+
+$\mathbf{x}_{n}$ := observed data vectors, $z_{n}$ := latent unobserved variables, unknown parameters $\boldsymbol{\theta}:=$ $\left\{\boldsymbol{\mu}_{1}, \ldots, \boldsymbol{\mu}_{K}, \boldsymbol{\Sigma}_{1}, \ldots, \boldsymbol{\Sigma}_{K}, \boldsymbol{\pi}\right\}$
+
+- Based on Bayes Rule (conditional probability) 
+
+\subsection*{Marginal likelihood}
+- GMM is a latent variable model with $z_{n}$ being the unobserved (latent) variables. An advantage of treating $z_{n}$ as latent variables instead of parameters is that we can marginalize them out to get a cost function that does not depend on $z_{n}$, i.e. as if $z_{n}$ never existed.
+
+- We get the following marginal likelihood by marginalizing $z_{n}$ out from the likelihood:
+
+$p\left(\mathbf{x}_{n} \mid \boldsymbol{\theta}\right)=\sum_{k=1}^{K} \pi_{k} \mathcal{N}\left(\mathbf{x}_{n} \mid \boldsymbol{\mu}_{k}, \boldsymbol{\Sigma}_{k}\right)$
+
+
+- Deriving cost functions this way is good for statistical efficiency. Without a latent variable model, the number of parameters grows at rate $\mathcal{O}(N)$. After marginalization, the growth is reduced to $\mathcal{O}\left(D^{2} K\right)$ (assuming $D, K \ll N)$.
+
+\subsection*{Maximum likelihood}
+- To get a maximum (marginal) likelihood estimate of $\boldsymbol{\theta}$, we maximize:
+
+$
+\max _{\boldsymbol{\theta}} \sum_{n=1}^{N} \log \sum_{k=1}^{K} \pi_{k} \mathcal{N}\left(\mathbf{x}_{n} \mid \boldsymbol{\mu}_{k}, \boldsymbol{\Sigma}_{k}\right)
+$
+
+- Non-convex cost
+
+- Non-unique optima (permutations/renaming of the clusters)
+
+- Unbounded: $\Sigma_k={\sigma_k}\overrightarrow{1}$ , $\sigma_k \in \mathbb{R}$
+

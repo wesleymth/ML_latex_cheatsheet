@@ -37,7 +37,7 @@
 \definecolor{color6}{rgb}{0.5,0,0.5}      % Purple
 \definecolor{color7}{rgb}{0,0.5,0.5}      % Teal
 \definecolor{color8}{rgb}{0.6,0.3,0.1}    % Brown
-\definecolor{color9}{rgb}{0.4,0.4,0.4}    % Dark Gray
+% \definecolor{color9}{rgb}{0.4,0.4,0.4}    % Dark Gray
 \definecolor{color10}{rgb}{0,0.8,0}       % Green
 % \definecolor{color11}{rgb}{0.8,0.8,0}     % Yellow
 \definecolor{color12}{rgb}{0,0.7,0.7}     % Sky Blue
@@ -78,8 +78,8 @@
         \colorlet{section_color}{color7}%
     \or
         \colorlet{section_color}{color8}%
-    \or
-        \colorlet{section_color}{color9}%
+    % \or
+    %     \colorlet{section_color}{color9}%
     \or
         \colorlet{section_color}{color10}%
     % \or
@@ -238,11 +238,11 @@
 \sectiondivider
 
 \sectionnewcolor
-\input{11a.tex}
+\input{11a_gmm.tex}
 \sectiondivider
 
 \sectionnewcolor
-\input{11b.tex}
+\input{11b_em_algo.tex}
 \sectiondivider
 
 \sectionnewcolor
@@ -252,6 +252,16 @@
 \sectionnewcolor
 \input{12b_text.tex}
 \sectiondivider
+
+\sectionnewcolor
+\input{13a_self_supervised.tex}
+\sectiondivider
+
+
+\sectionnewcolor
+\input{13b_generative_models.tex}
+\sectiondivider
+
 
 % \sectionnewcolor
 % \input{99_experiments.tex}
