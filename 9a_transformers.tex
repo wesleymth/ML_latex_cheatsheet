@@ -57,6 +57,13 @@ $z_{i}=\sum_{j=1}^{T_{i}}p_{i j}v_{j}$ i.e. $Z=P V$
 
 - Key tokens : $K\in\mathbb{R}^{T_{in}\times D_{K}}$
 
+\begin{wrapfigure}{r}{0.4\columnwidth}
+  % \centering
+  \includegraphics[width=0.4\columnwidth]{figures/self_attention.png}
+%   \caption{}
+%   \label{fig:cfm_pca2D_wrapped}
+\end{wrapfigure}
+
 - Determine weight $p_{i,j}$ based on how simmilar $q_i$ and $k_j$ are.
 
 - Use inner product to obtain raw similarity scores.
@@ -67,13 +74,6 @@ $z_{i}=\sum_{j=1}^{T_{i}}p_{i j}v_{j}$ i.e. $Z=P V$
 at initialization and faster convergence
 
 \subsection*{Self-Attention}
-
-\begin{wrapfigure}{r}{0.4\columnwidth}
-  % \centering
-  \includegraphics[width=0.4\columnwidth]{figures/self_attention.png}
-%   \caption{}
-%   \label{fig:cfm_pca2D_wrapped}
-\end{wrapfigure}
 
 - $V,K,Q$ are all derived from the same input token
 sequence $X\in\mathbb{R}^{T\times D}$

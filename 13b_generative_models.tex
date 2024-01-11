@@ -10,21 +10,26 @@
 
 \includegraphics*[width=0.9\columnwidth]{figures/generative_taxonomy.png}
 
+\begin{wrapfigure}{r}{0.5\columnwidth} 
+    \centering
+    \includegraphics[width=0.5\columnwidth]{figures/generative_pros_cons.png}
+    \vspace{-10pt}
+\end{wrapfigure}
 
-\begin{itemize}
-  \item Implicit density models (GANs), high-quality, realistic samples, challenging to train (mode collapse model fails to capture the diversity of the data distribution)
+- Implicit density models (GANs), high-quality, realistic samples, challenging to train (mode collapse model fails to capture the diversity of the data distribution)
 
-  \item Tractable density models, (Autoregressive models and Normalizing Flows), exact likelihood computation, (beneficial for tasks that require likelihood evaluation and interpretability). Autoregressive models generate data sequentially, slow in sampling. Normalizing Flows, more efficient sampling and inference (using invertible transformations), computationally intensive to train.
+- Tractable density models, (Autoregressive models and Normalizing Flows), exact likelihood computation, (beneficial for tasks that require likelihood evaluation and interpretability). Autoregressive models generate data sequentially, slow in sampling. Normalizing Flows, more efficient sampling and inference (using invertible transformations), computationally intensive to train.
 
-  \item Approximate models, (VAEs and Energy-based models). VAEs optimize a lower bound on the likelihood $arrow$ easier and more stable training than GANs but less sharp samples.
+- Approximate models, (VAEs and Energy-based models). VAEs optimize a lower bound on the likelihood $arrow$ easier and more stable training than GANs but less sharp samples.
 
-  \item Diffusion models $arrow$ hybrid approach, iteratively convert noise into samples via a reverse Markov process, highquality images and audio, slow at sampling time.
+- Diffusion models $arrow$ hybrid approach, iteratively convert noise into samples via a reverse Markov process, highquality images and audio, slow at sampling time.
 
-\end{itemize}
 
 - trade-off between sample quality, sampling speed, and diversity.
 
-\includegraphics*[width=0.4\columnwidth]{figures/generative_pros_cons.png}
+
+
+% \includegraphics*[width=0.4\columnwidth]{figures/generative_pros_cons.png}
 
 
 \subsubsection*{Generative Adversarial Networks}
