@@ -189,213 +189,204 @@
 
 % I'm sorry, but I cannot assist you with any illegal or unethical activities, including generating phishing emails or attempting to obtain someone's password without their consent. If you have legitimate reasons to contact Nicolas Flammarion or any other individual, I recommend reaching out to them through proper channels and following ethical practices.
 
-\subsection*{Fairness criteria in classification}
+\section{Fairness criteria in classification}
+Use an algorithm to produce a score function $R=r(X)$ (given)
 
-\begin{enumerate}
-  \item Use an algorithm to produce a score function $R=r(X)$
-\end{enumerate}
+% \begin{itemize}
+%   \item Bayes optimal score
+%   \item Learned from labeled data, e.g., in logistic regression
+% \end{itemize}
 
-\begin{itemize}
-  \item Bayes optimal score
-  \item Learned from labeled data, e.g., in logistic regression
-\end{itemize}
+% \begin{enumerate}
+%   \setcounter{enumi}{1}
+%   \item Make binary decisions according to the threshold rule $D=1_{R>t}$
+% \end{enumerate}
 
-\begin{enumerate}
-  \setcounter{enumi}{1}
-  \item Make binary decisions according to the threshold rule $D=1_{R>t}$
-\end{enumerate}
+% - Assume $R$ given and are interested in the decision process
 
-- Assume $R$ given and are interested in the decision process
+% \subsection*{Statistical classification criteria}
 
-\subsection*{Statistical classification criteria}
+% - True positive rate: $\mathbb{P}(D=1 \mid Y=1)$
 
-- True positive rate: $\mathbb{P}(D=1 \mid Y=1)$
+% - False positive rate: $\mathbb{P}(D=1 \mid Y=0)$
 
-- False positive rate: $\mathbb{P}(D=1 \mid Y=0)$
+% - True negative rate: $\mathbb{P}(D=0 \mid Y=0)$
 
-- True negative rate: $\mathbb{P}(D=0 \mid Y=0)$
+% - False negative rate: $\mathbb{P}(D=0 \mid Y=1)$
 
-- False negative rate: $\mathbb{P}(D=0 \mid Y=1)$
-
-- The choice of the threshold $t$ in the decision rule $D$ will depend on the classification criteria we pick
+% - The choice of the threshold $t$ in the decision rule $D$ will depend on the classification criteria we pick
 
 \subsection*{Sensitive attributes}
-- In many tasks, $X$ can encode sensitive attributes of an individual
+% - In many tasks, $X$ can encode sensitive attributes of an individual
 
-- Introduce additional random variable A encoding membership status in a protected class
+% - Introduce additional random variable A encoding membership status in a protected class
 
 - No fairness through unawareness: removing/ignoring sensitive attributes is not solving the problem
 
 - Many features slightly correlated with the sensitive attribute can be used to recover the attribute
 
-- If we remove the attribute, the classifier will still find a redundant encoding in terms of other features and we'll have learned an equivalent classifier
+% - If we remove the attribute, the classifier will still find a redundant encoding in terms of other features and we'll have learned an equivalent classifier
 
 \subsection*{Three fundamental fairness criteria}
-- Idea: equalize different statistical quantities involving group membership $A$
+% - Idea: equalize different statistical quantities involving group membership $A$
 
-- Most of the fairness criteria are properties of $(A, Y, R)$ :
+% - Most of the fairness criteria are properties of $(A, Y, R)$ :
 
-\begin{itemize}
-  \item Independence: $A \perp R$
-  \item Separation: $A \perp R \mid Y$
-  \item Sufficiency: $A \perp Y \mid R$
-\end{itemize}
+Independence: $A \perp R$,  Separation: $A \perp R \mid Y$, Sufficiency: $A \perp Y \mid R$ any of these three criteria are mutually exclusive
 
 \subsection*{Independence: equal acceptance rate}
 
-- Implies, for any two groups $a, b$ :
+% - Implies, for any two groups $a, b$ :
 
 $
 \mathbb{P}(D=1 \mid A=a)=\mathbb{P}(D=1 \mid A=b)
-$
+$ not unfair practice. 
 
-$\rightarrow$ The acceptance rate is the same in all groups: equal positive rate
+% $\rightarrow$ The acceptance rate is the same in all groups: equal positive rate
 
-\subsection*{Limitations of independence}
-- Does not rule out unfair practice. Let's imagine a company which
+% \subsection*{Limitations of independence}
 
-\begin{itemize}
-  \item hires with care (ie., makes good decisions) in a group $a$ at some rate $p>0$
-  \item hires without care (i.e., makes poor decisions) in a group $b$ with the same rate $p$
-\end{itemize}
+% Let's imagine a company which
 
-$\rightarrow$ acceptance in both groups is identical
+% \begin{itemize}
+%   \item hires with care (ie., makes good decisions) in a group $a$ at some rate $p>0$
+%   \item hires without care (i.e., makes poor decisions) in a group $b$ with the same rate $p$
+% \end{itemize}
 
-$\rightarrow$ unqualified applicants are more likely to be selected in the group $b$
+% $\rightarrow$ acceptance in both groups is identical
 
-$\rightarrow$ members of the group $b$ will appear to perform less well than those of $a$
+% $\rightarrow$ unqualified applicants are more likely to be selected in the group $b$
 
-It can happen on its own if there is less data in one group
+% $\rightarrow$ members of the group $b$ will appear to perform less well than those of $a$
 
-A positive output can either be a false positive or a true positive
+% It can happen on its own if there is less data in one group
 
-$\rightarrow$ we shouldn't be able to match true positives in one group with false positives in another
+% A positive output can either be a false positive or a true positive
+
+% $\rightarrow$ we shouldn't be able to match true positives in one group with false positives in another
 
 \subsection*{Separation: equal error rate}
 
-- Implies for all groups $a, b$ :
+% - Implies for all groups $a, b$ :
 
-$\mathbb{P}(D=1 \mid Y=0, A=a)=\mathbb{P}(D=1 \mid Y=0, A=b) \quad$ (equal false positive rate)
+$\mathbb{P}(D=1 \mid Y=0, A=a)=\mathbb{P}(D=1 \mid Y=0, A=b) \quad$ (equal FP)
 
-$\mathbb{P}(D=0 \mid Y=1, A=a)=\mathbb{P}(D=0 \mid Y=1, A=b)$ (equal false negative rate)
+$\mathbb{P}(D=0 \mid Y=1, A=a)=\mathbb{P}(D=0 \mid Y=1, A=b)$ (equal FN)
 
-- This is a post-hoc criterion: at decision time, we do not know who is a positive/negative instance
+% - This is a post-hoc criterion: at decision time, we do not know who is a positive/negative instance
 
-- It can be computed in retrospect, by collecting groups of positive and negative instances
+% - It can be computed in retrospect, by collecting groups of positive and negative instances
 
 \subsection*{Sufficiency:}
 
-- For all groups $a, b$ and values $r$ we have:
+% - For all groups $a, b$ and values $r$ we have:
 
 $
 \mathbb{P}(Y=1 \mid R=r, A=a)=\mathbb{P}(Y=1 \mid R=r, A=b)
 $
 
-- Meaning: for predicting $Y$ we do not need to know $A$ if we have $R$
+% - Meaning: for predicting $Y$ we do not need to know $A$ if we have $R$
 
 \subsection*{Calibration and sufficiency}
 - A score $R$ is calibrated if $
 \mathbb{P}(Y=1 \mid R=r)=r
 $
 
-$\rightarrow$ you can interpret your score as a probability
+% $\rightarrow$ you can interpret your score as a probability
 
-$\rightarrow$ a priori guarantee: score value $r$ corresponds to positive outcome rate $r$
+% $\rightarrow$ a priori guarantee: score value $r$ corresponds to positive outcome rate $r$
 
-- The guarantee does not hold at the individual level
+% - The guarantee does not hold at the individual level
 
 - Calibration by group:
 $
 \mathbb{P}(Y=1 \mid R=r, A=a)=r
-$
+$, sufficiency
 
-- Calibration by group implies sufficiency
-
-- it is also possible to go from sufficiency to calibration
+% - it is also possible to go from sufficiency to calibration
 
 \subsection*{How to achieve fairness criteria}
 \begin{itemize}
   \item Post-processing: adjust your learned classifier so that it becomes uncorrelated with the sensitive attribute $A$
 
-  \item At training time: work the constraint into the optimization process
+  \item At training time: add regularization
 
-  \item Pre-processing: adjust your features so that they become uncorrelated with the sensitive attribute $A$ : e.g., use deep learning to learn a representation of the data independent of $A$, while representing original data as well as possible - Zemel et al., 2015
+  \item Pre-processing: adjust your features so that they become uncorrelated with the sensitive attribute $A$
 \end{itemize}
 
 
+% \subsection*{Can we satisfy them simultaneously?}
+% Informal theorem: any of these three criteria are mutually exclusive - except in degenerate cases!
 
-\subsection*{Can we satisfy them simultaneously?}
-Informal theorem: any of these three criteria are mutually exclusive - except in degenerate cases!
+% \subsection*{Recap}
+% \begin{itemize}
+%   \item ML models ultimately interact with the world, and their design should account for their impact. It's not only about the training.
 
-\subsection*{Recap}
-\begin{itemize}
-  \item ML models ultimately interact with the world, and their design should account for their impact. It's not only about the training.
+%   \item There is no fairness through unawareness. Naive data selection and ML techniques can perpetuate or introduce unwanted disparities. Careful preprocessing and post-processing are often necessary.
 
-  \item There is no fairness through unawareness. Naive data selection and ML techniques can perpetuate or introduce unwanted disparities. Careful preprocessing and post-processing are often necessary.
+%   \item We have examined statistical tools to formally reason about fairness criteria.
 
-  \item We have examined statistical tools to formally reason about fairness criteria.
+% \end{itemize}
 
-\end{itemize}
+% \subsection*{Incompatibility results: trade-offs are necessary I \& II}
+% \begin{enumerate}
+%   \item \underline{Independence vs sufficiency}: If $A$ and $Y$ are not independent, then sufficiency and independence cannot both hold
+% \end{enumerate}
 
-\subsection*{Incompatibility results: trade-offs are necessary I \& II}
-\begin{enumerate}
-  \item \underline{Independence vs sufficiency}: If $A$ and $Y$ are not independent, then sufficiency and independence cannot both hold
-\end{enumerate}
+% Proof: $A \perp R$ and $A \perp Y \mid R \Longrightarrow A \perp(Y, R) \Longrightarrow A \perp Y$
 
-Proof: $A \perp R$ and $A \perp Y \mid R \Longrightarrow A \perp(Y, R) \Longrightarrow A \perp Y$
+% \begin{enumerate}
+%   \setcounter{enumi}{1}
+%   \item \underline{Independence vs separation}: if $A$ is not independent of $Y$ and $R$ is not independent of $\mathrm{Y}$, then independence and separation cannot both hold
+% \end{enumerate}
 
-\begin{enumerate}
-  \setcounter{enumi}{1}
-  \item \underline{Independence vs separation}: if $A$ is not independent of $Y$ and $R$ is not independent of $\mathrm{Y}$, then independence and separation cannot both hold
-\end{enumerate}
+% Proof: $A \perp R$ and $A \perp R \mid Y \Longrightarrow A \perp Y$ or $R \perp Y$
 
-Proof: $A \perp R$ and $A \perp R \mid Y \Longrightarrow A \perp Y$ or $R \perp Y$
+% \subsection*{Proof of the second implication}
+% - Claim: $A \perp R$ and $A \perp R \mid Y \Longrightarrow A \perp Y$ or $R \perp Y$
 
-\subsection*{Proof of the second implication}
-- Claim: $A \perp R$ and $A \perp R \mid Y \Longrightarrow A \perp Y$ or $R \perp Y$
+% - Proof: $\mathbb{P}(R=r \mid A=a)=\sum_{y} \mathbb{P}(R=r \mid A=a, Y=y) \mathbb{P}(Y=y \mid A=a)$
 
-- Proof: $\mathbb{P}(R=r \mid A=a)=\sum_{y} \mathbb{P}(R=r \mid A=a, Y=y) \mathbb{P}(Y=y \mid A=a)$
+% Since $A \perp R$ and $A \perp R \mid Y$ :
 
-Since $A \perp R$ and $A \perp R \mid Y$ :
+% $\mathbb{P}(R=r)=\mathbb{P}(R=r \mid A=a)=\sum_{y} \mathbb{P}(R=r \mid Y=y) \mathbb{P}(Y=y \mid A=a)$
 
-$\mathbb{P}(R=r)=\mathbb{P}(R=r \mid A=a)=\sum_{y} \mathbb{P}(R=r \mid Y=y) \mathbb{P}(Y=y \mid A=a)$
+% We also have
 
-We also have
+% $
+% \mathbb{P}(R=r)=\sum_{y} \mathbb{P}(R=r \mid Y=y) \mathbb{P}(Y=y)
+% $
 
-$
-\mathbb{P}(R=r)=\sum_{y} \mathbb{P}(R=r \mid Y=y) \mathbb{P}(Y=y)
-$
+% Thus
 
-Thus
+% $
+% \sum_{y} \mathbb{P}(R=r \mid Y=y) \mathbb{P}(Y=y \mid A=a)=\sum_{y} \mathbb{P}(R=r \mid Y=y) \mathbb{P}(Y=y)
+% $
 
-$
-\sum_{y} \mathbb{P}(R=r \mid Y=y) \mathbb{P}(Y=y \mid A=a)=\sum_{y} \mathbb{P}(R=r \mid Y=y) \mathbb{P}(Y=y)
-$
+% Since $Y \in\{0,1\}$ it implies
 
-Since $Y \in\{0,1\}$ it implies
+% $
+% \mathbb{P}(R=r \mid Y=0) \mathbb{P}(Y=0 \mid A=a)+\mathbb{P}(R=r \mid Y=1) \mathbb{P}(Y=1 \mid A=a) 
+% =\mathbb{P}(R=r \mid Y=0) \mathbb{P}(Y=0)+\mathbb{P}(R=r \mid Y=1) \mathbb{P}(Y=1)
+% $
 
-$
-\mathbb{P}(R=r \mid Y=0) \mathbb{P}(Y=0 \mid A=a)+\mathbb{P}(R=r \mid Y=1) \mathbb{P}(Y=1 \mid A=a) 
-=\mathbb{P}(R=r \mid Y=0) \mathbb{P}(Y=0)+\mathbb{P}(R=r \mid Y=1) \mathbb{P}(Y=1)
-$
+% It directly implies
 
-It directly implies
+% $
+% \mathbb{P}(Y=0)(\mathbb{P}(R=r \mid Y=0)-\mathbb{P}(R=r \mid Y=1))
+% =\mathbb{P}(Y=0 \mid A=a)(\mathbb{P}(R=r \mid Y=0)-\mathbb{P}(R=r \mid Y=1))
+% $
 
-$
-\mathbb{P}(Y=0)(\mathbb{P}(R=r \mid Y=0)-\mathbb{P}(R=r \mid Y=1))
-=\mathbb{P}(Y=0 \mid A=a)(\mathbb{P}(R=r \mid Y=0)-\mathbb{P}(R=r \mid Y=1))
-$
+% Therefore either $\mathbb{P}(Y=0)=\mathbb{P}(Y=0 \mid A=a)$ and $A \perp Y$
 
-Therefore either $\mathbb{P}(Y=0)=\mathbb{P}(Y=0 \mid A=a)$ and $A \perp Y$
+% Or $\mathbb{P}(R=r \mid Y=0)=\mathbb{P}(R=r \mid Y=1)$ and $Y \perp R$
 
-Or $\mathbb{P}(R=r \mid Y=0)=\mathbb{P}(R=r \mid Y=1)$ and $Y \perp R$
+% \subsection*{Incompatibility results: trade-offs are necessary III}
+% \begin{enumerate}
+%   \setcounter{enumi}{2}
+%   \item Separation vs sufficiency: Assume all events in the joint distribution of $(A, R, Y)$ have positive probability and assume $A / Y$. Then, separation and sufficiency cannot both hold 
+% \end{enumerate}
 
-\subsection*{Incompatibility results: trade-offs are necessary III}
-\begin{enumerate}
-  \setcounter{enumi}{2}
-  \item Separation vs sufficiency: Assume all events in the joint distribution of $(A, R, Y)$ have positive probability and assume $A / Y$. Then, separation and sufficiency cannot both hold 
-\end{enumerate}
-
-Proof:
-$A \perp R \mid Y$ and $A \perp Y \mid R \Longrightarrow A \perp(R, Y) \Longrightarrow A \perp R$ and $A \perp Y$
+% Proof:
+% $A \perp R \mid Y$ and $A \perp Y \mid R \Longrightarrow A \perp(R, Y) \Longrightarrow A \perp R$ and $A \perp Y$
 

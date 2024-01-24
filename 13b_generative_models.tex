@@ -1,20 +1,18 @@
-\section*{Generative Models}
+\section{Generative Models}
 
-- Given data sample $x$ 
+% - Given data sample $x$ 
 
-- Discriminative model predict $y arrow$ conditional distribution $p(y \mid x)$. 
+- Discriminative model predict $y \rightarrow$ conditional distribution $p(y \mid x)$. Generative models $\rightarrow$ distribution $p(x)$ defined over the datapoints $x$. Generative models  categories: explicit (explicitly model the probability distribution) or implicit (generate samples according to $p$).
 
-- Generative models $arrow$ distribution $p(x)$ defined over the datapoints $x$. Generative models  categories: explicit (explicitly model the probability distribution) or implicit (generate samples according to $p$).
+% - Taxonomy: 
 
-- Taxonomy: 
+% \includegraphics*[width=0.9\columnwidth]{figures/generative_taxonomy.png}
 
-\includegraphics*[width=0.9\columnwidth]{figures/generative_taxonomy.png}
-
-\begin{wrapfigure}{r}{0.5\columnwidth} 
-    \centering
-    \includegraphics[width=0.5\columnwidth]{figures/generative_pros_cons.png}
-    \vspace{-10pt}
-\end{wrapfigure}
+% \begin{wrapfigure}{r}{0.5\columnwidth} 
+%     \centering
+%     \includegraphics[width=0.5\columnwidth]{figures/generative_pros_cons.png}
+%     \vspace{-10pt}
+% \end{wrapfigure}
 
 - Implicit density models (GANs), high-quality, realistic samples, challenging to train (mode collapse model fails to capture the diversity of the data distribution)
 
@@ -32,37 +30,29 @@
 % \includegraphics*[width=0.4\columnwidth]{figures/generative_pros_cons.png}
 
 
-\subsubsection*{Generative Adversarial Networks}
-\includegraphics*[width=0.9\columnwidth]{figures/generative_GAN.png}
+\subsubsection*{Generative Adversarial Networks GANs}
+% \includegraphics*[width=0.9\columnwidth]{figures/generative_GAN.png}
 
-- two models: a generator $G$ with paramters $\boldsymbol{\theta}$ and a discriminator $D$ with parameters $\boldsymbol{\varphi}$. 
+- generator $G$, params:$\boldsymbol{\theta}$ and discriminator $D$ params:$\boldsymbol{\varphi}$. 
 
-- G learns to generate samples from the data distribution $p_{d}$, while D learns to distinguish between real and fake samples. 
+% - G learns to generate samples from the data distribution $p_{d}$, while D learns to distinguish between real and fake samples. 
 
-- Therefore, contrary to singleobjective minimization $f: \mathcal{X} arrow \mathbb{R}$, the optimization of a GAN is formulated as a differentiable two-player game where the generator $G$, and the discriminator $D$, aim at minimizing their own cost function $\mathcal{L}^{\boldsymbol{\theta}}$ and $\mathcal{L}^{\varphi}$, respectively, as follows:
+% - optimization of a GAN is formulated as a differentiable two-player game where the generator $G$, and the discriminator $D$, aim at minimizing their own cost function $\mathcal{L}^{\boldsymbol{\theta}}$ and $\mathcal{L}^{\varphi}$, respectively, as follows:
 
 $\boldsymbol{\theta}^{\star} \in \underset{\boldsymbol{\theta} \in \Theta}{\arg \min } \mathcal{L}^{\boldsymbol{\theta}}(\boldsymbol{\theta}, \boldsymbol{\varphi}^{\star}) \quad \boldsymbol{\varphi}^{\star} \in \underset{\boldsymbol{\varphi} \in \Phi}{\arg \min } \mathcal{L}^{\boldsymbol{\varphi}}(\boldsymbol{\theta}^{\star}, \boldsymbol{\varphi})$
 
-
-- When $\mathcal{L}^{\boldsymbol{\theta}}=-\mathcal{L}^{\varphi}$ the game is called a zero-sum game and (2Player-Game) is a minmax problem.
+- $\mathcal{L}^{\boldsymbol{\theta}}=-\mathcal{L}^{\varphi}$ zero-sum game and is a minmax problem.
 
 \begin{enumerate}
   \item The discriminator "distinguishes" real vs. fake samples:
 \end{enumerate}
 
-$p_{z}$ known "noise" distribution, e.g. $\mathcal{N}(0,1)$
-
-$p_{d}$ the real data distribution
-
+$p_{z}$ "noise" distr., e.g. $\mathcal{N}(0,1)$, 
+$p_{d}$ real data distr.,
 $D: x \mapsto y \in[0,1]$, where $y$ is an estimated probability that $x \sim p_{d}$
 
-\begin{enumerate}
-  \setcounter{enumi}{1}
-  \item The generator aims at fooling the discriminator that its samples are real:
-\end{enumerate}
-
+2. The generator aims at fooling the discriminator that its samples are real:
 $G: z \mapsto x$, such that if $z \sim p_{z}$, then hopefully $x \sim p_{d}$
-
 $p_{g}$ the "fake" data distribution
 
 \begin{enumerate}
@@ -75,21 +65,18 @@ $p_{g}$ the "fake" data distribution
 
 
 
-\begin{itemize}
-  \item Loss for $D$ : distinguish between $x \sim p_{g}$ and $x \sim p_{d}$ (binary classification):
-\end{itemize}
+% \begin{itemize}
+%   \item Loss for $D$ : distinguish between $x \sim p_{g}$ and $x \sim p_{d}$ (binary classification):
+% \end{itemize}
 
 $\mathscr{L}_{D}(G, D)=\max _{D} \underset{x \sim p_{d}}{\mathbb{E}}[\log D(x)]+\underset{z \sim p_{z}}{\mathbb{E}}[\log (1-D(G(z)))]$
 
-\begin{itemize}
-  \item Loss for $G$ : fool $D$ that $G(z) \sim p_{d}$ :
-\end{itemize}
+% \begin{itemize}
+%   \item Loss for $G$ : fool $D$ that $G(z) \sim p_{d}$ :
+% \end{itemize}
 
 $
-\begin{aligned}
-\mathscr{L}_{G}(G, D) & =\min _{G} \underset{z \sim p_{z}}{\mathbb{E}}[\log (1-D(G(z)))] \\
-& :=(\text { in practice }) \max _{G} \underset{z \sim p_{z}}{\mathbb{E}}[\log (D(G(z)))]
-\end{aligned}
+\mathscr{L}_{G}(G, D) =\min _{G} \underset{z \sim p_{z}}{\mathbb{E}}[\log (1-D(G(z)))]
 $
 
 \begin{enumerate}
@@ -99,51 +86,55 @@ $
 
 \subsubsection*{Alternating-GAN algorithm}
 
-\begin{wrapfigure}{r}{0.5\columnwidth} 
-    \centering
-    \includegraphics[width=0.5\columnwidth]{figures/generative_alter_GAN.png}
-    \vspace{-10pt}
-\end{wrapfigure}
+% \begin{wrapfigure}{r}{0.5\columnwidth} 
+%     \centering
+%     \includegraphics[width=0.5\columnwidth]{figures/generative_alter_GAN.png}
+%     \vspace{-10pt}
+% \end{wrapfigure}
 
 - $G$ : deep neural network $G(\mathbf{z} ; \boldsymbol{\theta})$ with parameters $\boldsymbol{\theta}$
 
 - $D$ : deep neural network $D(\mathbf{x} ; \boldsymbol{\varphi})$ with parameters $\varphi$
 
-- In most GAN implementations $G$ and $D$ have different losses $\mathcal{L}^{\theta}$ and $\mathcal{L}^{\varphi a}$, resp.
+- $G$ and $D$ have different losses $\mathcal{L}^{\theta}$ and $\mathcal{L}^{\varphi a}$, resp.
 
-% \includegraphics*[width=\columnwidth]{figures/generative_alter_GAN.png}
+
+\begin{wrapfigure}{r}{0.3\columnwidth} 
+  \centering
+  \includegraphics*[width=0.5\columnwidth]{figures/generative_alter_GAN.png}
+\end{wrapfigure}
+
+
 
 % For simplicity, in Alg. 1 we used gradient descent, however in practice GANs are often optimized using Adam [Kingma and Ba, 2015], and developing well performing minimax optimization methods is an active research area.
 % \footnotetext{${ }^{a}$ Although we minimize both the loses, this notation generalizes the zero-sum game, as the latter holds when $\mathcal{L}^{\theta}=-\mathcal{L}^{\varphi}:=\mathcal{L}$.
 % }
 
-\subsubsection*{Conditional GAN - (CGAN)}
-\includegraphics*[width=0.9\columnwidth]{figures/generative_CGAN.png}
+% \subsubsection*{Conditional GAN - (CGAN)}
+% \includegraphics*[width=0.9\columnwidth]{figures/generative_CGAN.png}
 
-- Applications requiring conditional probability distribution (e.g. "in-painting", segmentation, predicting the next frame of a video etc.).
+% - Applications requiring conditional probability distribution (e.g. "in-painting", segmentation, predicting the next frame of a video etc.).
 
-- In CGANs both the Generator and the Discriminator are conditioned during training by some additional information, typically the class labels (but could also be images e.g. auto-generated edges of an image, conditioning on non-occluded portion-so as to generate the occluded part of the image etc).
+- CGANs G, D are conditioned during training by some additional information (one-hot)
 
-- When conditioning on the class labels, typically one-hot vector representation of the class labels is used (empirically shown to perform better).
+% \subsubsection*{GAN architectures for images}
 
-\subsubsection*{GAN architectures for images}
+% % \includegraphics*[width=1\columnwidth]{figures/generative_GAN_architecture.png}
 
-\includegraphics*[width=1\columnwidth]{figures/generative_GAN_architecture.png}
+% - Deep Convolutional GANs - DCGAN. Notably, 
 
-- Deep Convolutional GANs - DCGAN. Notably, 
+% - G uses transposed convolutional layer (a.k.a. fractionally strided convolutions), also informally called "Deconvolution layers" (wrongfully). 
 
-- G uses transposed convolutional layer (a.k.a. fractionally strided convolutions), also informally called "Deconvolution layers" (wrongfully). 
-
-- Simplest way to explain these is that they "swap" the forward and the backward passes of a convolution layer: the forward transposed convolution operation can be thought of as the gradient of some convolution with respect to its input, which is usually how transposed convolutions are also implemented in practice.
+% - Simplest way to explain these is that they "swap" the forward and the backward passes of a convolution layer: the forward transposed convolution operation can be thought of as the gradient of some convolution with respect to its input, which is usually how transposed convolutions are also implemented in practice.
 
 
 \subsubsection*{Diffusion models}
 
-\includegraphics*[width=1\columnwidth]{figures/generative_diffusion.jpg}
+% \includegraphics*[width=1\columnwidth]{figures/generative_diffusion.jpg}
 
-- implementation in AI image generators like DALL-E 3, Stable Diffusion, and Midjourney. 
+% - implementation in AI image generators like DALL-E 3, Stable Diffusion, and Midjourney. 
 
-- Unlike GANs, work by progressively adding noise to input data and training one single model to estimate the added noise and recover the data.
+% - Unlike GANs, work by progressively adding noise to input data and training one single model to estimate the added noise and recover the data.
 
 
 - Consider a Markov chain with $X_{0} \sim p_{0}$ and a forward transition s.t. $X_{t+1} \sim p(\cdot \mid X_{t})$ then we call \textbf{forward decomposition}:
@@ -203,14 +194,10 @@ $\theta^{\star}=\underset{\theta}{\arg \min } \mathcal{L}(\theta):=\frac{1}{2} \
 
 - Problem still intractable: we do not have access to the marginal $p(x_{t})$ at each step but we can manipulate it:
 
-\scalebox{0.7}{
 $
-\begin{aligned}
-\mathcal{L}(\theta) & =\mathrm{C}_{1}+\frac{1}{2} \mathbb{E}_{X_{t}}[\|s_{\theta}(X_{t})\|^{2}]-\mathbb{E}_{X_{t}}[\nabla \log p(X_{t})^{\top} s_{\theta}(X_{t})] \\
-& =\mathrm{C}_{1}+\frac{1}{2} \mathbb{E}_{X_{t}}[\|s_{\theta}(X_{t})\|^{2}]-\int \nabla \log p(X_{t})^{\top} s_{\theta}(X_{t}) p(X_{t}) \mathrm{d} x_{t}
-\end{aligned}
+\mathcal{L}(\theta) =\mathrm{C}_{1}+\frac{1}{2} \mathbb{E}_{X_{t}}[\|s_{\theta}(X_{t})\|^{2}]-\mathbb{E}_{X_{t}}[\nabla \log p(X_{t})^{\top} s_{\theta}(X_{t})]
+=\mathrm{C}_{1}+\frac{1}{2} \mathbb{E}_{X_{t}}[\|s_{\theta}(X_{t})\|^{2}]-\int \nabla \log p(X_{t})^{\top} s_{\theta}(X_{t}) p(X_{t}) \mathrm{d} x_{t}
 $
-}
 
 % $\mathcal{L}(\theta) = \mathrm{C}_{1} + \frac{1}{2} \mathbb{E}_{X_{t}}[\|s_{\theta}(X_{t})\|^2] - \mathbb{E}_{X_{t}}[\nabla \log p(X_{t})^{\top} s_{\theta}(X_{t})] = \mathrm{C}_{1} + \frac{1}{2} \mathbb{E}_{X_{t}}[\|s_{\theta}(X_{t})\|^2] - \int \nabla \log p(X_{t})^{\top} s_{\theta}(X_{t}) p(X_{t}) \mathrm{d} x_{t}$
 
@@ -223,16 +210,12 @@ $
 
 Substituding in the DSM-loss:
 
-\scalebox{0.7}{
 $
-\begin{aligned}
-\mathcal{L}(\theta) & =\mathrm{C}_{1}+\frac{1}{2} \mathbb{E}_{X_{t}}[\|s_{\theta}(X_{t})\|^{2}]-\mathbb{E}_{X_{0}} \mathbb{E}_{X_{t} \mid X_{0}}[\nabla \log p(X_{t} \mid X_{0})^{\top} s_{\theta}(X_{t})] \\
-& =\mathrm{C}_{1}+\frac{1}{2} \mathbb{E}_{X_{0}} \mathbb{E}_{X_{t} \mid X_{0}}[\|s_{\theta}(X_{t})-\nabla \log p(X_{t} \mid X_{0})\|^{2}] \\
-& -\frac{1}{2} \underbrace{\mathbb{E}_{X_{0}} \mathbb{E}_{X_{t} \mid X_{0}}[\|\nabla \log p(X_{t} \mid X_{0})\|^{2}]}_{\text {const. }} \\
-& =\mathrm{C}_{2}+\frac{1}{2} \mathbb{E}_{X_{0}} \mathbb{E}_{X_{t} \mid X_{0}}[\|s_{\theta}(X_{t})-\nabla \log p(X_{t} \mid X_{0})\|^{2}]
-\end{aligned}
+\mathcal{L}(\theta) =\mathrm{C}_{1}+\frac{1}{2} \mathbb{E}_{X_{t}}[\|s_{\theta}(X_{t})\|^{2}]-\mathbb{E}_{X_{0}} \mathbb{E}_{X_{t} \mid X_{0}}[\nabla \log p(X_{t} \mid X_{0})^{\top} s_{\theta}(X_{t})]
+=\mathrm{C}_{1}+\frac{1}{2} \mathbb{E}_{X_{0}} \mathbb{E}_{X_{t} \mid X_{0}}[\|s_{\theta}(X_{t})-\nabla \log p(X_{t} \mid X_{0})\|^{2}]
+-\frac{1}{2} \underbrace{\mathbb{E}_{X_{0}} \mathbb{E}_{X_{t} \mid X_{0}}[\|\nabla \log p(X_{t} \mid X_{0})\|^{2}]}_{\text {const. }}
+=\mathrm{C}_{2}+\frac{1}{2} \mathbb{E}_{X_{0}} \mathbb{E}_{X_{t} \mid X_{0}}[\|s_{\theta}(X_{t})-\nabla \log p(X_{t} \mid X_{0})\|^{2}]
 $
-}
 
 - In practice we estimate all the scores simultaneously i.e. $s_{\theta^{\star}}(t, X_{t})$ such that:
 
@@ -263,19 +246,19 @@ $
 X_{t}=(2-\alpha) X_{t+1}+(1-\alpha^{2}) s_{\theta^{\star}}(t+1, X_{t+1})+\sqrt{1-\alpha^{2}} \xi_{t+1} \quad \xi_{t+1} \sim \mathcal{N}(0, \mathbb{I}_{d})
 $
 
-\subsubsection*{Implementation}
+% \subsubsection*{Implementation}
 
-\includegraphics*[width=\columnwidth]{figures/generative_diffusion_architecture.jpg}
+% % \includegraphics*[width=\columnwidth]{figures/generative_diffusion_architecture.jpg}
 
-- Diffusion models often use a U-net architecture with ResNet blocks and self attention layers to represent the score function $\hat{\xi}_{\theta}(t, X_{t})$.
+% - Diffusion models often use a U-net architecture with ResNet blocks and self attention layers to represent the score function $\hat{\xi}_{\theta}(t, X_{t})$.
 
-- The time step can be represented with sinusoidal positional encodings as done for transformers or with random Fourirer features. 
+% - The time step can be represented with sinusoidal positional encodings as done for transformers or with random Fourirer features. 
 
-- The time features are then fed to the residual blocks using either spatial addition or adaptive group normalization layers.
+% - The time features are then fed to the residual blocks using either spatial addition or adaptive group normalization layers.
 
 \subsubsection*{Training and Sampling}
 
-\includegraphics*[width=\columnwidth]{figures/generative_diffusion_training_sampling.png}
+\includegraphics[width=\columnwidth]{figures/generative_diffusion_training_sampling.png}
 
 % \subsubsection*{Algorithm 2 Training}
 % Input: Data distribution $p_{0}, \alpha$
@@ -316,27 +299,23 @@ $
 
 % end for
 
-\subsubsection*{Exponential moving average}
-- The training of the U-net via Denoising Score Matching can be very unstable. 
+% \subsubsection*{Exponential moving average}
+% - The training of the U-net via Denoising Score Matching can be very unstable. 
 
-- To regularize it, usually an exponential moving average of the weights is used along the training:
+% - To regularize it, usually an exponential moving average of the weights is used along the training:
 
-$
-\bar{\theta}_{n+1}=(1-\beta) \bar{\theta}_{n}+\beta \theta_{n}
-$
+% $
+% \bar{\theta}_{n+1}=(1-\beta) \bar{\theta}_{n}+\beta \theta_{n}
+% $
 
-where $\beta$ regulates the rate of forgetting of the initial conditions.
+% where $\beta$ regulates the rate of forgetting of the initial conditions.
 
 \subsubsection*{Conditional training}
 
-- for diffusion models, conditioning is done by adding an additional input to the score function such that a conditional score is learned:
-
 $\theta^{\star}=\underset{\theta}{\arg \min } \frac{1}{2} \sum_{k=1}^{T} \mathbb{E}_{X_{0}, Y} \mathbb{E}_{X_{t} \mid X_{0}}[\|s_{\theta}(t, X_{t}^{Y} ; Y)-\nabla \log p(X_{t}^{Y} \mid X_{0}^{Y})\|^{2}]$
 
-- conditioning is fed into the network in a similar way than the time features
-
-\subsubsection*{Applications of GANs and Diffusion Models}
-Image generation and editing, art creation, data augmentation, adversarial examples, drug discovery, protein structure prediction, anomaly detection, weather forecasting, video generation, voice synthesis and modification, restoration of old photographs and artworks, fashion design, architectural visualization, gaming, virtual reality and augmented reality, language translation and interpretation, financial modeling.
+% \subsubsection*{Applications of GANs and Diffusion Models}
+% Image generation and editing, art creation, data augmentation, adversarial examples, drug discovery, protein structure prediction, anomaly detection, weather forecasting, video generation, voice synthesis and modification, restoration of old photographs and artworks, fashion design, architectural visualization, gaming, virtual reality and augmented reality, language translation and interpretation, financial modeling.
 
 % GANs and diffusion models have also been used for other data modalities: For raw-waveform audio synthesis, examples include WaveGAN [Donahue et al., 2019] and MelGAN [Kumar et al., 2019], among others. For generating realistic tabular data, see e.g. [Kotelnikov et al., 2022].
 

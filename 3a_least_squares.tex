@@ -1,114 +1,99 @@
 
-\section*{Least Squares}
-- Linear regression + MSE $\rightarrow$ compute the optimum of the cost function analytically by solving a linear system of $D$ equations (normal equations)
+\section{Least Squares (Linear regression + MSE)}
+% - Linear regression + MSE $\rightarrow$ compute the optimum of the cost function analytically by solving a linear system of $D$ equations (normal equations)
 
-- Derive the normal equations, proove convexity, optimality conditions for convex functions ($
-\nabla \mathcal{L}\left(\mathbf{w}^{\star}\right)=\mathbf{0} .
-$)
+% - Derive the normal equations, proove convexity, optimality conditions for convex functions ($
+% \nabla \mathcal{L}(\mathbf{w}^{\star})=\mathbf{0} .
+% $)
 
-\subsection*{Normal Equations}
-$\mathcal{L}(\mathbf{w})=\frac{1}{2 N} \sum_{n=1}^{N}\left(y_{n}-\mathbf{x}_{n}^{\top} \mathbf{w}\right)^{2}\\=\frac{1}{2 N}(\mathbf{y}-\mathbf{X} \mathbf{w})^{\top}(\mathbf{y}-\mathbf{X} \mathbf{w})$,
+% \subsection*{Normal Equations}
+$\mathcal{L}(\mathbf{w})=\frac{1}{2 N} \sum_{n=1}^{N}(y_{n}-\mathbf{x}_{n}^{\top} \mathbf{w})^{2}=\frac{1}{2 N}(\mathbf{y}-\mathbf{X} \mathbf{w})^{\top}(\mathbf{y}-\mathbf{X} \mathbf{w})$,
 
 % where
 
-% $\mathbf{y}=\left[\begin{array}{c}y_{1} \\ y_{2} \\ \vdots \\ y_{N}\end{array}\right], \mathbf{X}=\left[\begin{array}{cccc}x_{11} & x_{12} & \ldots & x_{1 D} \\ x_{21} & x_{22} & \ldots & x_{2 D} \\ \vdots & \vdots & \ddots & \vdots \\ x_{N 1} & x_{N 2} & \ldots & x_{N D}\end{array}\right]$
+% $\mathbf{y}=[\begin{array}{c}y_{1} \\ y_{2} \\ \vdots \\ y_{N}\end{array}], \mathbf{X}=[\begin{array}{cccc}x_{11}  x_{12}  \ldots  x_{1 D} \\ x_{21}  x_{22}  \ldots  x_{2 D} \\ \vdots  \vdots  \ddots  \vdots \\ x_{N 1}  x_{N 2}  \ldots  x_{N D}\end{array}]$
 
-- Proof of convexity:
+- \underline{Proof of convexity}:
 
-1) Simplest way: observe that $\mathcal{L}$ is naturally represented as the sum (with positive coefficients) of the simple terms $\left(y_{n}-\mathbf{x}_{n}^{\top} \mathbf{w}\right)^{2}$. Further, each of these simple terms is the composition of a linear function with a convex function (the square function). Therefore, each of these simple terms is convex and hence the sum is convex.
+1) Composition of a linear function with a convex function (the square function).
 
-2) Directly verify the definition, that for any $\lambda \in[0,1]$ and $\mathbf{w}, \mathbf{w}^{\prime}$
-
-\text{\footnotesize
-$\mathcal{L}\left(\lambda \mathbf{w}+(1-\lambda) \mathbf{w}^{\prime}\right)-\left(\lambda \mathcal{L}(\mathbf{w})+(1-\lambda) \mathcal{L}\left(\mathbf{w}^{\prime}\right)\right) \leq 0$.
-}
+2) Verify definition, for any $\lambda \in[0,1]$ and $\mathbf{w}, \mathbf{w}^{\prime}$:
+$\mathcal{L}(\lambda \mathbf{w}+(1-\lambda) \mathbf{w}^{\prime})-(\lambda \mathcal{L}(\mathbf{w})+(1-\lambda) \mathcal{L}(\mathbf{w}^{\prime})) \leq 0$.
 
 $\mathrm{LHS}=$
-$-\frac{1}{2 N} \lambda(1-\lambda)\left\|\mathbf{X}\left(\mathbf{w}-\mathbf{w}^{\prime}\right)\right\|_{2}^{2} < 0$,
+$-\frac{1}{2 N} \lambda(1-\lambda)\|\mathbf{X}(\mathbf{w}-\mathbf{w}^{\prime})\|_{2}^{2} < 0$
 
 
-3) We can compute the second derivative (the Hessian) and show that it is positive semidefinite (all its eigenvalues are non-negative). 
+3) Hessian positive semidefinite (all its eigenvalues are non-negative). 
 
-$\begin{aligned}
-    \mathbf{H}(\mathbf{w})& =\frac{1}{2N}\nabla^2\left(\left(\mathbf{y}-\mathbf{X}\mathbf{w}\right)^\top\left(\mathbf{y}-\mathbf{X}\mathbf{w}\right)\right)  \\
-    &=\frac{1}{2N}\nabla\left(-2(\mathbf{y}-\mathbf{X}\mathbf{w})\mathbf{X}^\top\right) \\
-    &=\frac{-2}{2N}\nabla(\mathbf{X}^\top(\mathbf{y}-\mathbf{X}\mathbf{w})) \\
-    &=\frac{-1}N\mathbf{X}^\top\nabla(\mathbf{y}-\mathbf{X}\mathbf{w}) \\
-    &=\frac{-1}N\mathbf{X}^\top(\nabla\mathbf{y}-\nabla(\mathbf{X}\mathbf{w})) \\
-    &=\frac{-1}N\mathbf{X}^\top(\mathbf{0}-\mathbf{X}) \\
-    &=\frac1N\mathbf{X}^\top\mathbf{X}
-\end{aligned}$
+$
+\mathbf{H}(\mathbf{w}) =\frac{1}{2N}\nabla^2((\mathbf{y}-\mathbf{X}\mathbf{w})^\top(\mathbf{y}-\mathbf{X}\mathbf{w})) 
+% =\frac{1}{2N}\nabla(-2(\mathbf{y}-\mathbf{X}\mathbf{w})\mathbf{X}^\top)
+% =\frac{-2}{2N}\nabla(\mathbf{X}^\top(\mathbf{y}-\mathbf{X}\mathbf{w})) 
+% =\frac{-1}N\mathbf{X}^\top\nabla(\mathbf{y}-\mathbf{X}\mathbf{w})
+% =\frac{-1}N\mathbf{X}^\top(\nabla\mathbf{y}-\nabla(\mathbf{X}\mathbf{w}))
+% =\frac{-1}N\mathbf{X}^\top(\mathbf{0}-\mathbf{X})
+=\frac1N\mathbf{X}^\top\mathbf{X}
+$
 
 Singular value decomposition (SVD):
 $
 \mathbf{X}=\mathbf{US}\mathbf{V}^\top 
 $
 U and V are orthogonal matrices, and S is a diagonal matrix with the singular values $\sigma_i$ on the diagonal.
+% $
+% \mathbf{H}(\mathbf{w})=\frac1N\mathbf{X}^\top\mathbf{X}=\frac1N\mathbf{V}\mathbf{S}^2\mathbf{V}^\top 
+% $
+% where $\mathbf{S}^2$ is a diagonal matrix with the squares of the singular values. 
 
-$
-\mathbf{H}(\mathbf{w})=\frac1N\mathbf{X}^\top\mathbf{X}=\frac1N\mathbf{V}\mathbf{S}^2\mathbf{V}^\top 
-$
+% Let $\mathbf{v}$ be a non-zero vector:
+% $
+% \mathbf{v}^\top\mathbf{H}(\mathbf{w})\mathbf{v} =\frac1N\mathbf{v}^\top\mathbf{V}\mathbf{S}^2\mathbf{V}^\top\mathbf{v} 
+% =\frac1N(\mathbf{V}^\top\mathbf{v})^\top\mathbf{S}^2(\mathbf{V}^\top\mathbf{v})
+% =\frac1N\|\mathbf{S}(\mathbf{V}^\top\mathbf{v})\|^2 \geq 0
+% $
 
-where $\mathbf{S}^2$ is a diagonal matrix with the squares of the singular values. 
-
-Let $\mathbf{v}$ be a non-zero vector,
-
-$
-\begin{aligned}
-\mathbf{v}^\top\mathbf{H}(\mathbf{w})\mathbf{v}& =\frac1N\mathbf{v}^\top\mathbf{V}\mathbf{S}^2\mathbf{V}^\top\mathbf{v} \\
-&=\frac1N(\mathbf{V}^\top\mathbf{v})^\top\mathbf{S}^2(\mathbf{V}^\top\mathbf{v}) \\
-&=\frac1N\|\mathbf{S}(\mathbf{V}^\top\mathbf{v})\|^2 \geq 0
-\end{aligned}
-$
-
-$\mathbf{S}$ diagonal matrix with non-negative entries, $\mathbf{V}^\top\mathbf{v}$ vector.
+% $\mathbf{S}$ diagonal matrix with non-negative entries, $\mathbf{V}^\top\mathbf{v}$ vector.
 
 
 - Now find its minimum
-
 $
-\nabla \mathcal{L}(\mathbf{w})=-\frac{1}{N} \mathbf{X}^{\top}(\mathbf{y}-\mathbf{X} \mathbf{w}) = \mathbf{0}\\
-\Rightarrow\mathbf{X}^{\top} \underbrace{(\mathbf{y}-\mathbf{X} \mathbf{w})}_{\text {error }}=\mathbf{0}
+\nabla \mathcal{L}(\mathbf{w})=-\frac{1}{N} \mathbf{X}^{\top}(\mathbf{y}-\mathbf{X} \mathbf{w}) = \mathbf{0}
 $
 
-\subsection*{Geometric Interpretation}
+% \subsection*{Geometric Interpretation}
 
-% \begin{center}
-    \includegraphics*[width=0.7\columnwidth]{figures/geom_ls.png}
-% \end{center}
+% % \begin{center}
+%     \includegraphics*[width=0.7\columnwidth]{figures/geom_ls.png}
+% % \end{center}
 
 
-\subsection*{Closed form}
-- $\mathbf{X}^{\top} \mathbf{X} \in \mathbb{R}^{D \times D}$ is called the Gram matrix. 
-
-- If invertible, we can get a closed-form expression for the minimum:
-
+\subsection*{Closed form (if Gram matrix $\mathbf{X}^{\top} \mathbf{X} \in \mathbb{R}^{D \times D}$ is invertible)}
 $
-\mathbf{w}^{\star}=\left(\mathbf{X}^{\top} \mathbf{X}\right)^{-1} \mathbf{X}^{\top} \mathbf{y}
+\mathbf{w}^{\star}=(\mathbf{X}^{\top} \mathbf{X})^{-1} \mathbf{X}^{\top} \mathbf{y}
 $
 
 \subsection*{Invertibility and Uniqueness}
 - $\mathbf{X}^{\top} \mathbf{X} \in \mathbb{R}^{D \times D}$ invertible iff $\operatorname{rank}(\mathbf{X})=D$.
 
-- Proof: assume $\operatorname{rank}(\mathbf{X})<D$. Then there exists a non-zero vector $\mathbf{u}$ so that $\mathbf{X u}=\mathbf{0}$. It follows that $\mathbf{X}^{\top} \mathbf{X u}=\mathbf{0}$, and so $\operatorname{rank}\left(\mathbf{X}^{\top} \mathbf{X}\right)<D$. Therefore, $\mathbf{X}^{\top} \mathbf{X}$ is not invertible.
+- Proof: assume $\operatorname{rank}(\mathbf{X})<D \Rightarrow \exists\mathbf{u} \neq \mathbf{0}$ s.t. $\mathbf{X u}=\mathbf{0} \Rightarrow\mathbf{X}^{\top} \mathbf{X u}=\mathbf{0}\Rightarrow\operatorname{rank}(\mathbf{X}^{\top} \mathbf{X})<D\Rightarrow\mathbf{X}^{\top} \mathbf{X}$ is not invertible.
 
-Conversely, assume that $\mathbf{X}^{\top} \mathbf{X}$ is not invertible. Hence, there exists a non-zero vector $\mathbf{v}$ so that $\mathbf{X}^{\top} \mathbf{X v}=\mathbf{0}$. It follows that
+% Conversely, assume that $\mathbf{X}^{\top} \mathbf{X}$ is not invertible. Hence, there exists a non-zero vector $\mathbf{v}$ so that $\mathbf{X}^{\top} \mathbf{X v}=\mathbf{0}$. It follows that
+% $
+% \mathbf{0}=\mathbf{v}^{\top} \mathbf{X}^{\top} \mathbf{X} \mathbf{v}=(\mathbf{X} \mathbf{v})^{\top}(\mathbf{X} \mathbf{v})=\|\mathbf{X} \mathbf{v}\|^{2}
+% $
 
-$$
-\mathbf{0}=\mathbf{v}^{\top} \mathbf{X}^{\top} \mathbf{X} \mathbf{v}=(\mathbf{X} \mathbf{v})^{\top}(\mathbf{X} \mathbf{v})=\|\mathbf{X} \mathbf{v}\|^{2}
-$$
-
-This implies that $\mathbf{X v}=\mathbf{0}$, i.e., $\operatorname{rank}(\mathbf{X})<D$.
+% This implies that $\mathbf{X v}=\mathbf{0}$, i.e., $\operatorname{rank}(\mathbf{X})<D$.
 
 \subsection*{Rank Deficiency and Ill-Conditioning}
 - In practice, $\mathbf{X}$ is often rank deficient.
 
-- If $D>N$, we always have $\operatorname{rank}(\mathbf{X})<D$ (since row rank $=$ col. rank)
+- If $D>N$, we always have $\operatorname{rank}(\mathbf{X})<D$ (row rank $=$ col. rank)
 
-- If $D \leq N$, but some of the columns $\mathbf{x}_{:}$are (nearly) collinear, then the matrix is illconditioned, leading to numerical issues when solving the linear system.
+- If $D \leq N$, but some of the columns $\mathbf{x}_{:}$are (nearly) collinear, then the matrix is illconditioned $\rightarrow$ numerical issues
 
-- Using a linear system solver, one can solve this problem.
+% - Using a linear system solver, one can solve this problem.
 
-\subsection*{Closed-form solution for MAE}
-Can you derive closed-form solution for 1-parameter model when using MAE cost function?
+% \subsection*{Closed-form solution for MAE}
+% Can you derive closed-form solution for 1-parameter model when using MAE cost function?
 

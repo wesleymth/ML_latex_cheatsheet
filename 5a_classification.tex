@@ -1,132 +1,122 @@
-\section*{Classification}
-- Linear Decision boundaries: Assume we restrict ourselves to linear decision boundaries (hyperplane):
+\section{Classification}
+% - Linear Decision boundaries: Assume we restrict ourselves to linear decision boundaries (hyperplane)
+% $\Rightarrow$ Prediction: $f(x)=\operatorname{sign}\left(x^{\top} w\right)$
 
-$\Rightarrow$ Prediction: $f(x)=\operatorname{sign}\left(x^{\top} w\right)$
-
-- Assume the data are linearly separable, i.e., a separating hyperplane exists
-
-
-\subsection*{Margin}
-- Key concept: The margin is the distance from the hyperplane to the closest point
+% - Assume the data are linearly separable, i.e., separating hyperplane exists
 
 
-$\Rightarrow$ Take the one with the largest margin!
+% \subsection*{Margin}
+% - The margin is the distance from the hyperplane to the closest point
 
-- Max-margin separating hyperplane: 
-Choose the hyperplane which maximizes the margin
-Why: If we slightly change the training set, the number of misclassifications will stay low
+% - Max-margin separating hyperplane: 
+% Choose the hyperplane which maximizes the margin
+% Why: If we slightly change the training set, the number of misclassifications will stay low
 
-$\Rightarrow$ It will lead us to support vector machine (SVM) and logistic regression
+% % $\Rightarrow$ It will lead us to support vector machine (SVM) and logistic regression
 
 
-\subsection*{Formalizing Binary Classification}
+% \subsection*{Formalizing Binary Classification}
 
-- Setting: $(X, Y) \sim \mathscr{D}$ with ranges $\mathscr{X}, \mathscr{Y}=\{-1,1\}$
+% - Setting: $(X, Y) \sim \mathscr{D}$ with ranges $\mathscr{X}, \mathscr{Y}=\{-1,1\}$
 
 - Loss function: (0-1 Loss) $\ell\left(y, y^{\prime}\right)=1_{y \neq y^{\prime}}= \begin{cases}1 & \text { if } y \neq y^{\prime} \\ 0 & \text { if } y=y^{\prime}\end{cases}$
 
 - True risk for the classification:
-
 $
 L_{\mathscr{D}}(f)=\mathbb{E}_{\mathscr{D}}\left[1_{Y \neq f(X)}\right]=\mathbb{P}_{\mathscr{D}}[Y \neq f(X)]
-$ (resp. classification error = probability of making an error)
+$
 
-- Goal: minimize $L_{\mathscr{D}}(f)$
+- minimize $L_{\mathscr{D}}(f)$
 
-\subsection*{Bayes classifier}
+\subsection*{Bayes classifier $f$, $f_{*}=\arg \min L_{\mathscr{D}}(f)$}
 
-- Def: The classifier $f_{*}=\arg \min L_{\mathscr{D}}(f)$ is called the Bayes classifier $f$
+% - $f_{*}=\arg \min L_{\mathscr{D}}(f)$ $\leftarrow$ Bayes classifier $f$
 
-- Claim:
+- \underline{Claim}:
 $
 f_{*}(x)=\arg \max _{y \in\{-1,1\}} \mathbb{P}(Y=y \mid X=x)
 $
 
-- Note: Bayes classifier is an unattainable gold standard, as we never know the underlying data distribution $\mathscr{D}$ in practice
+% - Bayes classifier is an unattainable gold standard, as we never know the underlying data distribution $\mathscr{D}$ in practice
 
 \subsection*{Proof of the Bayes classifier}
-- Claim 1: $\forall x \in \mathscr{X}, f_{*}(x) \in \arg \min _{y \in \mathscr{Y}} \mathbb{P}(Y \neq y \mid X=x) \Longrightarrow f_{*} \in \arg \min _{f: \mathscr{X} \rightarrow \mathscr{Y}} L_{\mathscr{D}}(f)$
+- \underline{Claim} 1: $\forall x \in \mathscr{X}, f_{*}(x) \in \arg \min _{y \in \mathscr{Y}} \mathbb{P}(Y \neq y \mid X=x) \Longrightarrow f_{*} \in \arg \min _{f: \mathscr{X} \rightarrow \mathscr{Y}} L_{\mathscr{D}}(f)$
+% $
+% % L_{\mathscr{D}}(f)=\mathbb{E}_{X, Y}\left[1_{Y \neq f(X)}\right] =\mathbb{E}_{X}\left[\mathbb{E}_{Y \mid X}\left[1_{Y \neq f(X)} \mid X\right]\right] 
+% % =\mathbb{E}_{X}[\mathbb{P}(Y \neq f(X) \mid X)] 
+% % \geq \mathbb{E}_{X}\left[\min _{y \in \mathscr{Y}} \mathbb{P}(Y \neq y \mid X)\right] 
+% % =\mathbb{E}_{X}\left[\mathbb{P}\left(Y \neq f_{*}(X) \mid X\right)\right]=\mathbb{E}_{X, Y}\left[1_{Y \neq f_{*}(X)}\right]=L_{\mathscr{D}}\left(f_{*}\right)
+% $
 
-$
-L_{\mathscr{D}}(f)=\mathbb{E}_{X, Y}\left[1_{Y \neq f(X)}\right] =\mathbb{E}_{X}\left[\mathbb{E}_{Y \mid X}\left[1_{Y \neq f(X)} \mid X\right]\right] \\
-=\mathbb{E}_{X}[\mathbb{P}(Y \neq f(X) \mid X)] \\
-\geq \mathbb{E}_{X}\left[\min _{y \in \mathscr{Y}} \mathbb{P}(Y \neq y \mid X)\right] \\
-=\mathbb{E}_{X}\left[\mathbb{P}\left(Y \neq f_{*}(X) \mid X\right)\right]=\mathbb{E}_{X, Y}\left[1_{Y \neq f_{*}(X)}\right]=L_{\mathscr{D}}\left(f_{*}\right)
-$
+- \underline{Claim} 2: $f_{*}(x)=\arg \min _{y \in \mathscr{Y}} \mathbb{P}(Y \neq y \mid X=x)$
 
-- Claim 2: $f_{*}(x)=\arg \min _{y \in \mathscr{Y}} \mathbb{P}(Y \neq y \mid X=x)$
+% $
+% f_{*}(x)=\arg \max _{y \in \mathscr{Y}} \mathbb{P}(Y=y \mid X=x)=\arg \min _{y \in \mathscr{Y}} \mathbb{P}(Y \neq y \mid X=x)
+% $
 
-$
-f_{*}(x)=\arg \max _{y \in \mathscr{Y}} \mathbb{P}(Y=y \mid X=x)=\arg \min _{y \in \mathscr{Y}} \mathbb{P}(Y \neq y \mid X=x)
-$
+% \subsection*{Two classes of classification algorithms}
+% - \underline{Non-parametric}: approximate the conditional distribution $\mathbb{P}(Y=y \mid X=x)$ via local averaging $\Rightarrow$ KNN
 
-\subsection*{Two classes of classification algorithms}
-- Non-parametric: approximate the conditional distribution $\mathbb{P}(Y=y \mid X=x)$ via local averaging $\Rightarrow$ KNN
-
-- Parametric: approximate true distribution $\mathscr{D}$ via training data $\Rightarrow$ Minimize the empirical risk on training data (ERM)
+% - \underline{Parametric}: approximate true distribution $\mathscr{D}$ via training data $\Rightarrow$ Minimize the empirical risk on training data (ERM)
 
 \subsection*{Classification by empirical risk minimization}
-- How: minimize the empirical risk instead of the true risk:
-
 $
 \min _{f: X \rightarrow Y} L_{\operatorname{train}}(f):=\frac{1}{N} \sum_{n=1}^{N} 1_{f\left(x_{n}\right) \neq y_{n}}=\frac{1}{N} \sum_{n=1}^{N} 1_{y_{n} f\left(x_{n}\right) \leq 0}
 $
 
-- Problem: $L_{\text {train }}$ is not convex:
+- PROBLEM: $L_{\text {train }}$ is not convex because:
 
-The set of classifiers is not convex because $\mathcal{Y}$ is discrete
-
-The indicator function 1 is not convex because it is not continuous
-
-\subsection*{Convex relaxation of the classification risk}
-
-- Instead of learning $f: \mathscr{X} \rightarrow \mathscr{Y}$, learn $g: \mathscr{X} \rightarrow \mathbb{R}$ in a convex subset of continuous functions $\mathscr{G}$, and predict with $f(x)=\operatorname{sign}(g(x))$. The problem becomes
-
-$
-\min _{g \in \mathscr{G}} \frac{1}{N} \sum_{n=1}^{N} 1_{y_{n} g\left(x_{n}\right) \leq 0}
-$
-
-- Replace the indicator function by a convex $\phi: \mathbb{R} \rightarrow \mathbb{R}$ and minimize
-
-$
-\min _{g \in \mathscr{G}} \frac{1}{N} \sum_{n=1}^{N} \phi\left(y_{n} g\left(x_{n}\right)\right)
-$
-
-$\phi$ is a function of the functional margin $y_{n} g\left(x_{n}\right)$
-
-$\Rightarrow$ This is a convex problem!
+The set of classifiers is not convex because $\mathcal{Y}$ 
+is discrete
 
 \begin{wrapfigure}{r}{0.5\columnwidth} 
     \includegraphics*[width=0.5\columnwidth]{figures/classification_losses2.jpg}
 \end{wrapfigure}
 
-Remark: possible to bound the zero-one risk $L(f)$ by the $\phi$ risk
+The indicator function 1 is not convex because it is not continuous
+
+% \subsection*{Convex relaxation of the classification risk}
 
 
-\subsection*{Losses for Classification}
 
-- Logistic loss $\rightarrow$ logistic regression
+% - Instead of learning $f: \mathscr{X} \rightarrow \mathscr{Y}$, learn $g: \mathscr{X} \rightarrow \mathbb{R}$ in a convex subset of continuous functions $\mathscr{G}$, and predict with $f(x)=\operatorname{sign}(g(x))$. The problem becomes
+% $
+% \min _{g \in \mathscr{G}} \frac{1}{N} \sum_{n=1}^{N} 1_{y_{n} g\left(x_{n}\right) \leq 0}
+% $
 
-- Hinge loss $\rightarrow$ max margin classification
+% - Replace the indicator function by a convex $\phi: \mathbb{R} \rightarrow \mathbb{R}$ and minimize
+% $
+% \min _{g \in \mathscr{G}} \frac{1}{N} \sum_{n=1}^{N} \phi\left(y_{n} g\left(x_{n}\right)\right)
+% $, 
+% $\phi$ is a function of the functional margin $y_{n} g\left(x_{n}\right)$, 
+% $\Rightarrow$ This is a convex problem!
 
 
-\subsection*{Good regressor $\Rightarrow$ good classifier}
-- Consider $\mathscr{Y}=\{0,1\}$, for all regression functions $\eta: \mathscr{X} \rightarrow \mathbb{R}$ we can define a classifier as
+% - possible to bound the zero-one risk $L(f)$ by the $\phi$ risk
 
-$
-\begin{aligned}
-\mathscr{X} & \rightarrow\{0,1\} \\
-f_{\eta}: x & \mapsto 1_{\eta(x) \geq 1 / 2}
-\end{aligned}
-$
+% \subsection*{Losses for Classification}
 
-- Claim:
+% - Logistic loss $\rightarrow$ logistic regression
 
-$
-L_{\mathscr{D}}^{\text {classif }}\left(f_{\eta}\right)-L_{\mathscr{D}}^{\text {classif }}\left(f^{*}\right) \leq 2 \sqrt{L_{\mathscr{D}}^{\ell_{2}}(\eta)-L_{\mathscr{D}}^{\ell_{2}}\left(\eta^{*}\right)}
-$
+% - Hinge loss $\rightarrow$ max margin classification
 
-Where $L_{\mathscr{D}}^{\text {classif }}\left(f_{\eta}\right)=\mathbb{E}_{\mathscr{D}}\left[1_{f(X) \neq Y}\right], L_{\mathscr{D}}^{\ell_{2}}(f)=\mathbb{E}_{\mathscr{D}}\left[(Y-f(X))^{2}\right]$ and $\eta_{*}=\arg \min _{\eta} L_{\mathscr{D}}^{\ell_{2}}(\eta)$
 
-$\Rightarrow$ If $\eta$ is good for regression then $f_{\eta}$ is good for classification too (converse is not true)
+% \subsection*{Good regressor $\Rightarrow$ good classifier}
+% - Consider $\mathscr{Y}=\{0,1\}$, for all regression functions $\eta: \mathscr{X} \rightarrow \mathbb{R}$ we can define a classifier as
+% $
+% \mathscr{X} \rightarrow\{0,1\}
+% $,
+% $
+% f_{\eta}: x \mapsto 1_{\eta(x) \geq 1 / 2}
+% $
+
+% - \underline{Claim}:
+
+% $
+% L_{\mathscr{D}}^{\text {classif }}\left(f_{\eta}\right)-L_{\mathscr{D}}^{\text {classif }}\left(f^{*}\right) \leq 2 \sqrt{L_{\mathscr{D}}^{\ell_{2}}(\eta)-L_{\mathscr{D}}^{\ell_{2}}\left(\eta^{*}\right)}
+% $
+
+% Where $L_{\mathscr{D}}^{\text {classif }}\left(f_{\eta}\right)=\mathbb{E}_{\mathscr{D}}\left[1_{f(X) \neq Y}\right], L_{\mathscr{D}}^{\ell_{2}}(f)=\mathbb{E}_{\mathscr{D}}\left[(Y-f(X))^{2}\right]$ and $\eta_{*}=\arg \min _{\eta} L_{\mathscr{D}}^{\ell_{2}}(\eta)$
+
+% $\Rightarrow$ If $\eta$ is good for regression then $f_{\eta}$ is good for classification too (converse is not true)
 

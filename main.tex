@@ -134,9 +134,9 @@
 
 
 \newcommand{\sectiondivider}{%
-    \vspace{4pt}%
+    \vspace{2pt}%
     \hrule%
-    \vspace{4pt}%
+    \vspace{2pt}%
 }
 
 % Change text spacing
@@ -152,13 +152,13 @@
 
 \usepackage{manfnt} % for writing a cube: \mbox{\mancube}
 
-% \usepackage{scrextend} % To change the fontsize
-% \changefontsizes{7pt}
-
+\usepackage{anyfontsize}
+\usepackage{scrextend} % To change the fontsize
+\changefontsizes{4pt}
 
 \begin{document}
 
-\begin{multicols*}{4}
+\begin{multicols*}{5}
 
 \sectionnewcolor
 \input{1_regression.tex}
@@ -232,9 +232,9 @@
 \input{10a_ethics_fairness.tex}
 \sectiondivider
 
-\sectionnewcolor
-\input{10b_unsupervised.tex}
-\sectiondivider
+% \sectionnewcolor
+% \input{10b_unsupervised.tex}
+% \sectiondivider
 
 \sectionnewcolor
 \input{10c_kmeans.tex}
@@ -266,9 +266,9 @@
 \sectiondivider
 
 
-\sectionnewcolor
-\input{14_extra.tex}
-\sectiondivider
+% \sectionnewcolor
+% \input{14_extra.tex}
+% \sectiondivider
 
 \end{multicols*}
 

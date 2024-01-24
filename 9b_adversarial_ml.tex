@@ -1,10 +1,10 @@
-\section*{Adversarial ML}
+\section{Adversarial ML}
 
-- We don't understand how NN models generalize and react to shifts in the distribution of data (i.e., distribution shifts)
+% - We don't understand how NN models generalize and react to shifts in the distribution of data (i.e., distribution shifts)
 
-- Classification problem: $(X,Y)\sim{\mathcal{D}},\;Y$ with range $\{-1,1\}$
+% - Classification problem: $(X,Y)\sim{\mathcal{D}},\;Y$ with range $\{-1,1\}$
 
-- Standard risk: average zero-one loss over $X$: $R(f)=\mathbb{E}_{\mathcal{D}}\left[1_{f(X)\neq Y}\right]=\mathbb{P}_{\mathcal{D}}\left[f(X)\neq Y\right]$ i.e. minimise proba of wrong prediction.
+- Standard risk: average zero-one loss over $X$: $R(f)=\mathbb{E}_{\mathcal{D}}\left[1_{f(X)\neq Y}\right]=\mathbb{P}_{\mathcal{D}}\left[f(X)\neq Y\right]$ i.e. minimise proba of wrong pred.
 
 
 - Adversarial risk: average zero-one loss over small, worst-case perturbations of $X$: $R_{\varepsilon}(f)={{{\mathbb{E}}}}_{\mathcal{D}}\left[\operatorname*{max}_{\hat{x},\|\hat{x}-X\|\leq\varepsilon}1_{f(\hat{x})\neq Y}\right]$
@@ -12,7 +12,7 @@
 \subsection*{Generating adversarial examples}
 
 - Task: given an input $(x, y)$ and a model $f : \mathcal{X}\rightarrow \{-1,1\}$ find an input $\hat{x}$ s.t.: 
-a) $\|{\hat{x}}-x\|\leq\varepsilon$ b) the model $f$ makes a mistake on it.
+a) $\|{\hat{x}}-x\|\leq\varepsilon$ b) the model $f$ makes a mistake
 
 - Trivial case: x already missclassified $\rightarrow$ no action required
 
@@ -24,11 +24,11 @@ a) $\|{\hat{x}}-x\|\leq\varepsilon$ b) the model $f$ makes a mistake on it.
 
 - Replace the difficult problem involving the indicator with a smooth problem $\operatorname*{max}_{\hat{x},\|\hat{x}-X\|\leq\varepsilon}1_{f(\hat{x})\neq Y} \rightarrow \operatorname*{max}_{\hat{x},\|\hat{x}-X\|\leq\varepsilon}\ell(yg(\hat{x}))$
 
-\begin{wrapfigure}{r}{0.5\columnwidth} 
-    \centering
-    \includegraphics[width=0.5\columnwidth]{figures/classification_losses.png}
-\end{wrapfigure}
-- decreasing, margin-based (i.e., dependent on $y * g(x)$) classification losses
+% \begin{wrapfigure}{r}{0.5\columnwidth} 
+%     \centering
+%     \includegraphics[width=0.5\columnwidth]{figures/classification_losses.png}
+% \end{wrapfigure}
+- decreasing, margin-based (i.e., dependent on $y * g(x)$) clf loss
 
 \subsection*{White-Box attacks}
 
@@ -40,21 +40,22 @@ a) $\|{\hat{x}}-x\|\leq\varepsilon$ b) the model $f$ makes a mistake on it.
 
 - Interpretation $f(x)=\mathrm{{sign}}(g(x))$: If $y=1$ we want to decrease $g(x)$ and follow $-\nabla_{x}g(x)$. If $y=-1$ we want to decrease $g(x)$ and follow $\nabla_{x}g(x)$
 
-- By using $\ell$ and not directly $yg(\hat{x})$ it will extend to multi-class classification and robust training.
+- Use  $\ell$ not $yg(\hat{x})$: extend to multi-class clf and robust training.
 
 - linearize the loss $\tilde{\ell}(x):={\ell}(y g(x))$
 
-$\operatorname*{max}_{\|{\hat{x}}-x\|\leq\varepsilon}{\tilde{\ell}}(x)\\\approx\operatorname*{max}_{\|{\hat{x}}-x\|\leq\varepsilon}{\tilde{\ell}}(x)+\nabla_{x}{\tilde{\ell}}(x)^{T}({\hat{x}}-x) \\={\tilde{\ell}}(x)+\operatorname*{max}_{\|{\hat{x}}-x\|\leq\varepsilon}{\nabla}_{x}{\tilde{\ell}}(x)^{T}({\hat{x}}-x) \\={\tilde{\ell}}(x)+\operatorname*{max}_{\|\delta\|\leq\varepsilon}{\nabla}_{x}{\tilde{\ell}}(x)^{T}{\delta}$
+$\operatorname*{max}_{\|{\hat{x}}-x\|\leq\varepsilon}{\tilde{\ell}}(x)\approx\operatorname*{max}_{\|{\hat{x}}-x\|\leq\varepsilon}{\tilde{\ell}}(x)+\nabla_{x}{\tilde{\ell}}(x)^{T}({\hat{x}}-x) ={\tilde{\ell}}(x)+\operatorname*{max}_{\|{\hat{x}}-x\|\leq\varepsilon}{\nabla}_{x}{\tilde{\ell}}(x)^{T}({\hat{x}}-x) ={\tilde{\ell}}(x)+\operatorname*{max}_{\|\delta\|\leq\varepsilon}{\nabla}_{x}{\tilde{\ell}}(x)^{T}{\delta}$
 
-- We need to maximize the inner product under a norm constraint, i.e. find the optimal local update
+- Max inner product under a norm constraint,
+%  i.e. find the optimal local update
 
-- This is a simple problem for which we can get a closed-form solution depending on the norm used to measure the perturbation size $||\delta||$
+- Simple problem for which we can get a closed-form solution depending on the norm used to measure the perturb size $||\delta||$
 
 \subsubsection*{One-step attack}
 
-- Solution for the $\ell_2$ norm:
+% - Solution for the $\ell_2$ norm:
 
-$\delta_{2}^{\star}=\varepsilon\cdot\frac{\nabla_{x}\tilde{\ell}(x)}{||\nabla_{x}\tilde{\ell}(x)||_{2}}=-\;\varepsilon y*\frac{\nabla_{x}g(x)}{||\nabla_{x}g(x)||_{2}} \Rightarrow \\ \hat{x}=x-\varepsilon y\cdot\frac{\nabla_{x}g(x)}{\|\nabla_{x}g(x)\|_{2}}$
+$\delta_{2}^{\star}=\varepsilon\cdot\frac{\nabla_{x}\tilde{\ell}(x)}{||\nabla_{x}\tilde{\ell}(x)||_{2}}=-\;\varepsilon y*\frac{\nabla_{x}g(x)}{||\nabla_{x}g(x)||_{2}} \Rightarrow \hat{x}=x-\varepsilon y\cdot\frac{\nabla_{x}g(x)}{\|\nabla_{x}g(x)\|_{2}}$
 
 - Solution for the $\ell_{\infty}$ norm called \textbf{Fast Gradient Sign Method}:
 
@@ -68,32 +69,28 @@ $\delta_{\infty}^{\star}=\varepsilon\cdot\mathrm{sign}(\nabla_{x}\tilde{\ell}(x)
 - Projected Gradient Descent (PGD attack)
 
 - $\ell_2$ norm:
-
-$\delta^{t+1}=\Pi_{B_{2}(e)} [\delta^{t}+\alpha\cdot\frac{\nabla\tilde{\ell}(x+\delta^{t})}{\|\nabla\tilde{\ell}(x+\delta^{t})\|_{2}}]$
-
+$\delta^{t+1}=\Pi_{B_{2}(e)} [\delta^{t}+\alpha\cdot\frac{\nabla\tilde{\ell}(x+\delta^{t})}{\|\nabla\tilde{\ell}(x+\delta^{t})\|_{2}}]$,
 $\Pi_{B_{2}(\varepsilon)}(\delta)=\left\{\begin{array}{l l}{\varepsilon\cdot\delta/\|\delta\|_{2},\quad{\mathrm{if~}}\|\delta\|_{2}\geq\varepsilon}\\ {\delta \mathrm{~otherwise}}\end{array}\right.$
 
 - $\ell_\infty$ norm:
-
-$\delta^{t+1}=\Pi_{B_{\infty}(\varepsilon)}\left[\delta^{t}+\alpha\cdot\mathrm{sign}(\nabla\tilde{\ell}(x+\delta^{t}))\right],$
-
+$\delta^{t+1}=\Pi_{B_{\infty}(\varepsilon)}\left[\delta^{t}+\alpha\cdot\mathrm{sign}(\nabla\tilde{\ell}(x+\delta^{t}))\right]$,
 $\Pi_{B_{\infty}(\varepsilon)}(\delta)_i=\left\{\begin{array}{l l}{\varepsilon\cdot\mathrm{sign}(\delta_{i}),\ \ \ \mathrm{if}\ |\delta_{i}|\geq\varepsilon}\\ {\delta_i \mathrm{~otherwise}}\end{array}\right.$
 
-- the gradients are computed by backprop w.r.t. inputs, not parameters!
+- the gradients with backprop w.r.t. inputs, not parameters!
 
-\includegraphics[width=\columnwidth]{figures/lp_norms.png}
+% \includegraphics[width=\columnwidth]{figures/lp_norms.png}
 
-\subsection*{Black-box attacks}
+\subsection*{Black-box attacks $g(x)$ unknown}
 
-- We don't know $g(x)$
+- Obtaining a surrogate model, costly + no guarantee of success
 
-- Obtaining a surrogate model can be costly and there is no guarantee of success
-
-- Query-based methods often require a lot of queries (10k-100k), easy to restrict access for the attacker!
+- Query-based methods often require a lot of queries (10k-100k), 
+% easy to restrict access for the attacker!
 
 \subsubsection*{Query-based gradient estimation}
 
-- Score-based: we can query the continuous model scores $g(x)\in \mathbb{R}$. We can approximate the gradient by using the finite difference formula:
+- Score-based: we can query the continuous model scores $g(x)\in \mathbb{R}$. 
+% We can approximate the gradient by using the finite difference formula:
 
 $\nabla_{x}g(x)\approx\sum_{i=1}^{d}\frac{g(x+\alpha e_{i})-g(x)}{\alpha}e_{i}$
 
@@ -130,69 +127,69 @@ $\operatorname*{min}_{\theta}{\frac{1}{N}}\sum_{n=1}^{N} \operatorname*{max}_{\h
 
 \subsubsection*{Disadvantages}
 
-- Increased computational time: proportional to the number of PGD steps
+- Increased comp time: prop to the number of PGD steps
 
-- Robustness-accuracy tradeoff: using too large $\varepsilon$ leads to worse standard accuracy
+- Robustness-accuracy tradeoff: too large $\varepsilon$ = worse accuracy
 
-\subsubsection*{Adversarial Example}
-% \begin{wrapfigure}{r}{0.5\columnwidth} 
-%     \centering
-%     \includegraphics[width=0.5\columnwidth]{figures/adversarial_example.png}
-% \end{wrapfigure}
+% \subsubsection*{Adversarial Example}
+% % \begin{wrapfigure}{r}{0.5\columnwidth} 
+% %     \centering
+% %     \includegraphics[width=0.5\columnwidth]{figures/adversarial_example.png}
+% % \end{wrapfigure}
 
-$x\in\mathbb{R}^{d},y\sim{{Bernoulli}}(\{-1,1\}),Z_{i}\sim{\mathcal{N}}(0,1)$
+% $x\in\mathbb{R}^{d},y\sim{{Bernoulli}}(\{-1,1\}),Z_{i}\sim{\mathcal{N}}(0,1)$
 
-- Robust features: $x_{1}=y+Z_{1}$
+% - Robust features: $x_{1}=y+Z_{1}$
 
-- Non-robust features: $x_{i}=y{\sqrt{\frac{\log d}{d-1}}}+Z_{i}, \; \forall i \in \{-1, 1\}$
+% - Non-robust features: $x_{i}=y{\sqrt{\frac{\log d}{d-1}}}+Z_{i}, \; \forall i \in \{-1, 1\}$
 
-- $d\to\infty \Rightarrow \ \uparrow$ adversarial risk and $\downarrow$ standard risk 
+% - $d\to\infty \Rightarrow \ \uparrow$ adversarial risk and $\downarrow$ standard risk 
 
-- using the robust feature $x_1$:
+% - using the robust feature $x_1$:
 
-MLE: $\arg\operatorname*{max}_{\hat{y}\in\{\pm1\}}p(\hat{y}\;\vert\;x_{1})
-=\\\operatorname*{arg}\operatorname*{max}_{{\hat{y}}\in\{\pm1\}}{\frac{p(x_{1}\mid{\hat{y}})p({\hat{y}})}{p(x_{1})}}
-=\operatorname*{arg}\operatorname*{max}_{{\hat{y}}\in\{\pm1\}}{p(x_{1}\mid{\hat{y}})}$ 
-assuming $p(y=1)=p(y=-1)$
+% MLE: $\arg\operatorname*{max}_{\hat{y}\in\{\pm1\}}p(\hat{y}\;\vert\;x_{1})
+% =\\\operatorname*{arg}\operatorname*{max}_{{\hat{y}}\in\{\pm1\}}{\frac{p(x_{1}\mid{\hat{y}})p({\hat{y}})}{p(x_{1})}}
+% =\operatorname*{arg}\operatorname*{max}_{{\hat{y}}\in\{\pm1\}}{p(x_{1}\mid{\hat{y}})}$ 
+% assuming $p(y=1)=p(y=-1)$
 
-- Standard Risk: $\int_{0}^{\infty}{\frac{1}{\sqrt{2\pi}}}e^{-0.5(x+1)^{2}}d x\approx0.16$ good but not perfect!
+% - Standard Risk: $\int_{0}^{\infty}{\frac{1}{\sqrt{2\pi}}}e^{-0.5(x+1)^{2}}d x\approx0.16$ good but not perfect!
 
-- using both robust and non-robust features:
+% - using both robust and non-robust features:
 
-MLE for all features $x_{i}=y a_{i}+Z_{i}$
+% MLE for all features $x_{i}=y a_{i}+Z_{i}$
 
-$\arg\operatorname*{max}_{{\hat{y}}\in\{\pm1\}}p({\hat{y}}\mid x)$
+% $\arg\operatorname*{max}_{{\hat{y}}\in\{\pm1\}}p({\hat{y}}\mid x)$
 
-$=\arg\operatorname*{max}_{{\hat{y}}\in\{\pm1\}}\prod_{i=1}^{d}p(x_{i}\mid{\hat{y}})$
+% $=\arg\operatorname*{max}_{{\hat{y}}\in\{\pm1\}}\prod_{i=1}^{d}p(x_{i}\mid{\hat{y}})$
 
-$=\arg\operatorname*{max}_{{\hat{y}}\in\{\pm1\}}\sum_{i=1}^{d}\log p(x_{i}\mid{\hat{y}})$
+% $=\arg\operatorname*{max}_{{\hat{y}}\in\{\pm1\}}\sum_{i=1}^{d}\log p(x_{i}\mid{\hat{y}})$
 
-$=\arg\operatorname*{max}_{{\hat{y}}\in\{\pm1\}}\sum_{i=1}^{d}\log \frac{1}{\sqrt{2\pi}}e^{-\frac{1}{2}(x_{i}-\hat{y}a_{i})^{2}}$
+% $=\arg\operatorname*{max}_{{\hat{y}}\in\{\pm1\}}\sum_{i=1}^{d}\log \frac{1}{\sqrt{2\pi}}e^{-\frac{1}{2}(x_{i}-\hat{y}a_{i})^{2}}$
 
-$=\arg\operatorname*{min}_{{\hat{y}}\in\{\pm1\}}\sum_{i=1}^{d}(x_{i}-\hat{y}a_{i})^{2}$
+% $=\arg\operatorname*{min}_{{\hat{y}}\in\{\pm1\}}\sum_{i=1}^{d}(x_{i}-\hat{y}a_{i})^{2}$
 
-$=\arg\operatorname*{min}_{{\hat{y}}\in\{\pm1\}}\sum_{i=1}^{d}(x_{i}^{2}-2x_{i}\hat{y}a_{i}+\hat{y}^{2}a_{i}^{2})$
+% $=\arg\operatorname*{min}_{{\hat{y}}\in\{\pm1\}}\sum_{i=1}^{d}(x_{i}^{2}-2x_{i}\hat{y}a_{i}+\hat{y}^{2}a_{i}^{2})$
 
-$=\arg\operatorname*{max}_{\hat{y}\in\{\pm1\}}{\hat{y}}\sum_{i=1}^{d}x_{i}a_{i}$
+% $=\arg\operatorname*{max}_{\hat{y}\in\{\pm1\}}{\hat{y}}\sum_{i=1}^{d}x_{i}a_{i}$
 
-${\hat{y}}\sum_{i=1}^{d}x_{i}a_{i}=\hat{y}y(\sum_{i=1}^{d}a_{i}^{2})+\hat{y}\sum_{i=1}^{d}a_{i}Z_{i}=\hat{y}y(1+\log(d))+\hat{y}Z$ where $Z:=\textstyle\sum_{i=1}^{d}a_{i}Z_{i}\sim{\mathcal{N}}(0,1+\log d)$
+% ${\hat{y}}\sum_{i=1}^{d}x_{i}a_{i}=\hat{y}y(\sum_{i=1}^{d}a_{i}^{2})+\hat{y}\sum_{i=1}^{d}a_{i}Z_{i}=\hat{y}y(1+\log(d))+\hat{y}Z$ where $Z:=\textstyle\sum_{i=1}^{d}a_{i}Z_{i}\sim{\mathcal{N}}(0,1+\log d)$
 
-Scaling by $1/(1+\log d)$ the MLE results in:
+% Scaling by $1/(1+\log d)$ the MLE results in:
 
-$y{\hat{y}}+{\hat{y}}Z\operatorname{with}Z\sim{\mathcal{N}}(0,1/(1+\log d))$
+% $y{\hat{y}}+{\hat{y}}Z\operatorname{with}Z\sim{\mathcal{N}}(0,1/(1+\log d))$
 
-$d\rightarrow\infty,{\hat{y}}Z\rightarrow0 \Rightarrow$ standard risk $R(f) \rightarrow 0$ 
+% $d\rightarrow\infty,{\hat{y}}Z\rightarrow0 \Rightarrow$ standard risk $R(f) \rightarrow 0$ 
 
-- using the non-robust features improves standard risk!
+% - using the non-robust features improves standard risk!
 
-- Adversarial risk:
+% - Adversarial risk:
 
-The adversary can use tiny $\ell_\infty$ perturbations:
+% The adversary can use tiny $\ell_\infty$ perturbations:
 
-$\varepsilon=2\sqrt{\frac{\log d}{d-1}}\,(\to0\,\mathrm{when})\,d\to\infty)$
+% $\varepsilon=2\sqrt{\frac{\log d}{d-1}}\,(\to0\,\mathrm{when})\,d\to\infty)$
 
-${\hat{x}}_{1}=\left(1-2\sqrt{\frac{\log d}{d-1}}\right)y+Z_{1}$, almost unaffected
+% ${\hat{x}}_{1}=\left(1-2\sqrt{\frac{\log d}{d-1}}\right)y+Z_{1}$, almost unaffected
 
-$\hat{x}_{i}=-\sqrt{\frac{\log d}{d-1}}y+Z_{i}$, completely flipped
+% $\hat{x}_{i}=-\sqrt{\frac{\log d}{d-1}}y+Z_{i}$, completely flipped
 
-$R_{\varepsilon}(f) \approx 1 \Rightarrow$ tradeoff between accuracy and robustness.
+% $R_{\varepsilon}(f) \approx 1 \Rightarrow$ tradeoff between accuracy and robustness.

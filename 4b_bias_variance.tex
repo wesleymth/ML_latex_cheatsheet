@@ -1,148 +1,133 @@
-\section*{Bias Variance Decomposition}
-- Simple models have large bias but low variance
+\section{Bias Variance Decomposition}
+% - Simple models have large bias but low variance
 
-- Complex models have low bias but high variance
+% - Complex models have low bias but high variance
 
-- We need to balance bias \& variance correctly
+% - We need to balance bias \variance correctly
 
 - Data model: output perturbed by some noise
-
-$y=f(x)+\varepsilon $
-
+$y=f(x)+\varepsilon $,
 $\varepsilon\sim\mathscr{D}_\varepsilon \approx$ i.i.d. independent of x $\mathbb{E}[\varepsilon]=0$
 
-- We consider the square loss and will provide a decomposition of the true error
+% - We consider the square loss and will provide a decomposition of the true error
 
-\subsection*{Error Decomposition}
-
-- We are interested in how the expected error of $f_{S}$:
-$
+\subsection*{Error Decomposition $
 \mathbb{E}_{(x, y) \sim D}\left[\left(y-f_{S}(x)\right)^{2}\right]
-$
+$}
 
-- The decomposition will hold true at every single point $x$. Therefore, to simplify, we consider the expected error of $f_{S}$ for a fixed element $x_{0}$ :
+% - We are interested in how the expected error of $f_{S}$:
+% $
+% \mathbb{E}_{(x, y) \sim D}\left[\left(y-f_{S}(x)\right)^{2}\right]
+% $
+% behaves as a function of the train set and model class complexity
 
+- Consider the expected error of $f_{S}$ for a fixed element $x_{0}$ :
 $
 L\left(f_{S}\right)=\mathbb{E}_{\varepsilon \sim \mathscr{D}_{\varepsilon}}\left[\left(f\left(x_{0}\right)+\varepsilon-f_{S}\left(x_{0}\right)\right)^{2}\right]
-$
+$, 
+(RV from train set S)
 
-- This is a random variable. The randomness comes for the train set $S$
+% - This is a random variable, randomness comes for the train set $S$
 
-- We run the experiment many times, and we are interested in the average and the variance of the predictions $\left(f_{S_{1}}, \cdots, f_{S_{k}}\right)$ over these multiple runs
+- Run experiment many times $\rightarrow$ average and the variance of the predictions $\left(f_{S_{1}}, \cdots, f_{S_{k}}\right)$ over these multiple runs
 
 \subsection*{A decomposition in three terms}
-We are interested in the expectation of the true risk over the training set $S$
+Interested in the expectation of the true risk over training set $S$
 
-$\mathbb{E}_{S \sim \mathscr{D}}[L(f_{S})] \\= \mathbb{E}_{S \sim \mathscr{D}}[\mathbb{E}_{\varepsilon \sim D_{\varepsilon}}[(f(x_{0})+\varepsilon-f_{S}(x_{0}))^{2}]] \\= \mathbb{E}_{S \sim \mathscr{D}, \varepsilon \sim \mathscr{D}_{\varepsilon}}[(f(x_{0})+\varepsilon-f_{S}(x_{0}))^{2}]$
-
-
-$
-\begin{aligned}
-& =\mathbb{E}_{\varepsilon \sim \mathscr{D}_{\varepsilon}}\left[\varepsilon^{2}\right] \\
-&+2 \mathbb{E}_{S \sim \mathscr{D}, \varepsilon \sim \mathscr{D}_{\varepsilon}}\left[\varepsilon\left(f\left(x_{0}\right)-f_{S}\left(x_{0}\right)\right)\right] \\
-&+\mathbb{E}_{S \sim \mathscr{D}}\left[\left(f\left(x_{0}\right)-f_{S}\left(x_{0}\right)\right)^{2}\right]
-\end{aligned}
+$\mathbb{E}_{S \sim \mathscr{D}}[L(f_{S})] = \mathbb{E}_{S \sim \mathscr{D}}[\mathbb{E}_{\varepsilon \sim D_{\varepsilon}}[(f(x_{0})+\varepsilon-f_{S}(x_{0}))^{2}]] \\= \mathbb{E}_{S \sim \mathscr{D}, \varepsilon \sim \mathscr{D}_{\varepsilon}}[(f(x_{0})+\varepsilon-f_{S}(x_{0}))^{2}]=\mathbb{E}_{\varepsilon \sim \mathscr{D}_{\varepsilon}}\left[\varepsilon^{2}\right] +2 \mathbb{E}_{S \sim \mathscr{D}, \varepsilon \sim \mathscr{D}_{\varepsilon}}\left[\varepsilon\left(f\left(x_{0}\right)-f_{S}\left(x_{0}\right)\right)\right] +\mathbb{E}_{S \sim \mathscr{D}}\left[\left(f\left(x_{0}\right)-f_{S}\left(x_{0}\right)\right)^{2}\right]
 $
 
 Using that $\mathbb{E}_{\varepsilon \sim \mathscr{D}}[\varepsilon]=0$ and $\varepsilon \perp\perp S$ :
 
-\begin{itemize}
-  \item $\mathbb{E}_{\varepsilon \sim \mathscr{D}_{\varepsilon}}\left[\varepsilon^{2}\right]=\operatorname{Var}_{\varepsilon \sim \mathscr{D}_{\varepsilon}}[\varepsilon]$
-  \item $\mathbb{E}_{S \sim \mathscr{D}, \varepsilon \sim \mathscr{D}_{\varepsilon}}\left[\varepsilon\left(f\left(x_{0}\right)-f_{S}\left(x_{0}\right)\right)\right]=\mathbb{E}_{\varepsilon \sim \mathscr{D} \varepsilon}[\varepsilon] \times \mathbb{E}_{S \sim \mathscr{D}}\left[f\left(x_{0}\right)-f_{S}\left(x_{0}\right)\right]=0$
-\end{itemize}
+$\bullet\mathbb{E}_{\varepsilon \sim \mathscr{D}_{\varepsilon}}\left[\varepsilon^{2}\right]=\operatorname{Var}_{\varepsilon \sim \mathscr{D}_{\varepsilon}}[\varepsilon]$
+$\bullet\mathbb{E}_{S \sim \mathscr{D}, \varepsilon \sim \mathscr{D}_{\varepsilon}}\left[\varepsilon\left(f\left(x_{0}\right)-f_{S}\left(x_{0}\right)\right)\right]=\mathbb{E}_{\varepsilon \sim \mathscr{D} \varepsilon}[\varepsilon] \times \mathbb{E}_{S \sim \mathscr{D}}\left[f\left(x_{0}\right)-f_{S}\left(x_{0}\right)\right]=0$
 
 $\Longrightarrow$
-
 $\mathbb{E}_{S \sim \mathscr{D}, \varepsilon \sim \mathscr{D}_{\varepsilon}}\left[\left(f\left(x_{0}\right)+\varepsilon-f_{S}\left(x_{0}\right)\right)^{2}\right]=\operatorname{Var}_{\varepsilon \sim D_{\varepsilon}}[\varepsilon]+\mathbb{E}_{S \sim \mathscr{D}}\left[\left(f\left(x_{0}\right)-f_{S}\left(x_{0}\right)\right)^{2}\right]$
 
 Trick: we add and subtract the constant term $\mathbb{E}_{S^{\prime} \sim D}\left[f_{S^{\prime}}\left(x_{0}\right)\right]$, where $S^{\prime}$ is a second training set independent from $S$
 
-\scalebox{0.50}{
-    $
-\begin{aligned}
-\mathbb{E}_{S \sim \mathscr{D}}\left[\left(f\left(x_{0}\right)-f_{S}\left(x_{0}\right)\right)^{2}\right]= & \mathbb{E}_{S \sim \mathscr{D}}\left[\left(f\left(x_{0}\right)-\mathbb{E}_{S^{\prime} \sim \mathscr{D}}\left[f_{S^{\prime}}\left(x_{0}\right)\right]+\mathbb{E}_{S^{\prime} \sim \mathscr{D}}\left[f_{S^{\prime}}\left(x_{0}\right)\right]-f_{S}\left(x_{0}\right)\right)^{2}\right] \\
-= & \mathbb{E}_{S \sim \mathscr{D}}\left[\left(f\left(x_{0}\right)-\mathbb{E}_{S^{\prime} \sim \mathcal{D}}\left[f_{S^{\prime}}\left(x_{0}\right)\right]\right)^{2}+\left(\mathbb{E}_{S^{\prime} \sim \mathscr{D}}\left[f_{S^{\prime}}\left(x_{0}\right)\right]-f_{S}\left(x_{0}\right)\right)^{2}\right. \\
-& \left.+2\left(f\left(x_{0}\right)-\mathbb{E}_{S^{\prime} \sim \mathscr{D}}\left[f_{S^{\prime}}\left(x_{0}\right)\right]\right)\left(\mathbb{E}_{S^{\prime} \sim \mathscr{D}}\left[f_{S^{\prime}}\left(x_{0}\right)\right]-f_{S}\left(x_{0}\right)\right)\right]
-\end{aligned}
+
 $
-}
+\mathbb{E}_{S \sim \mathscr{D}}\left[\left(f\left(x_{0}\right)-f_{S}\left(x_{0}\right)\right)^{2}\right]= \mathbb{E}_{S \sim \mathscr{D}}\left[\left(f\left(x_{0}\right)-\mathbb{E}_{S^{\prime} \sim \mathscr{D}}\left[f_{S^{\prime}}\left(x_{0}\right)\right]+\mathbb{E}_{S^{\prime} \sim \mathscr{D}}\left[f_{S^{\prime}}\left(x_{0}\right)\right]-f_{S}\left(x_{0}\right)\right)^{2}\right] \\
+= \mathbb{E}_{S \sim \mathscr{D}}\left[\left(f\left(x_{0}\right)-\mathbb{E}_{S^{\prime} \sim \mathcal{D}}\left[f_{S^{\prime}}\left(x_{0}\right)\right]\right)^{2}+\left(\mathbb{E}_{S^{\prime} \sim \mathscr{D}}\left[f_{S^{\prime}}\left(x_{0}\right)\right]-f_{S}\left(x_{0}\right)\right)^{2}\right. \\
+\left.+2\left(f\left(x_{0}\right)-\mathbb{E}_{S^{\prime} \sim \mathscr{D}}\left[f_{S^{\prime}}\left(x_{0}\right)\right]\right)\left(\mathbb{E}_{S^{\prime} \sim \mathscr{D}}\left[f_{S^{\prime}}\left(x_{0}\right)\right]-f_{S}\left(x_{0}\right)\right)\right]
+$
+
 
 
 Cross-term:
 
-\scalebox{0.6}{
-$
-\begin{aligned}
-& \mathbb{E}_{S \sim \mathscr{D}} {\left[\left(f\left(x_{0}\right)-\mathbb{E}_{S^{\prime} \sim \mathscr{D}}\left[f_{S^{\prime}}\left(x_{0}\right)\right]\right) \cdot\left(\mathbb{E}_{S^{\prime} \sim \mathscr{D}}\left[f_{S^{\prime}}\left(x_{0}\right)\right]-f_{S}\left(x_{0}\right)\right)\right] } \\
-& \quad=\left(f\left(x_{0}\right)-\mathbb{E}_{S^{\prime} \sim \mathscr{D}}\left[f_{S^{\prime}}\left(x_{0}\right)\right]\right) \cdot \mathbb{E}_{S \sim \mathscr{D}}\left[\left(\mathbb{E}_{S^{\prime} \sim \mathscr{D}}\left[f_{S^{\prime}}\left(x_{0}\right)\right]-f_{S}\left(x_{0}\right)\right)\right] \\
-& \quad=\left(f\left(x_{0}\right)-\mathbb{E}_{S^{\prime} \sim \mathscr{D}}\left[f_{S^{\prime}}\left(x_{0}\right)\right]\right) \cdot\left(\mathbb{E}_{S^{\prime} \sim \mathcal{D}}\left[f_{S^{\prime}}\left(x_{0}\right)\right]-\mathbb{E}_{S \sim \mathscr{D}}\left[f_{S}\left(x_{0}\right)\right]\right)=0 .
-\end{aligned}
-$
-}
 
+$
+\mathbb{E}_{S \sim \mathscr{D}} {\left[\left(f\left(x_{0}\right)-\mathbb{E}_{S^{\prime} \sim \mathscr{D}}\left[f_{S^{\prime}}\left(x_{0}\right)\right]\right) \cdot\left(\mathbb{E}_{S^{\prime} \sim \mathscr{D}}\left[f_{S^{\prime}}\left(x_{0}\right)\right]-f_{S}\left(x_{0}\right)\right)\right] } \\
+\quad=\left(f\left(x_{0}\right)-\mathbb{E}_{S^{\prime} \sim \mathscr{D}}\left[f_{S^{\prime}}\left(x_{0}\right)\right]\right) \cdot \mathbb{E}_{S \sim \mathscr{D}}\left[\left(\mathbb{E}_{S^{\prime} \sim \mathscr{D}}\left[f_{S^{\prime}}\left(x_{0}\right)\right]-f_{S}\left(x_{0}\right)\right)\right] \\
+\quad=\left(f\left(x_{0}\right)-\mathbb{E}_{S^{\prime} \sim \mathscr{D}}\left[f_{S^{\prime}}\left(x_{0}\right)\right]\right) \cdot\left(\mathbb{E}_{S^{\prime} \sim \mathcal{D}}\left[f_{S^{\prime}}\left(x_{0}\right)\right]-\mathbb{E}_{S \sim \mathscr{D}}\left[f_{S}\left(x_{0}\right)\right]\right)=0
+$
 $
 \Longrightarrow
 \mathbb{E}_{S \sim \mathscr{D}}\left[\left(f\left(x_{0}\right)-f_{S}\left(x_{0}\right)\right)^{2}\right]
-\\=\left(f\left(x_{0}\right)-\mathbb{E}_{S^{\prime} \sim \mathscr{D}}\left[f_{S^{\prime}}\left(x_{0}\right)\right]\right)^{2}
-\\ \qquad + \mathbb{E}_{S \sim \mathscr{D}}\left[\left(\mathbb{E}_{S^{\prime} \sim \mathscr{D}}\left[f_{S^{\prime}}\left(x_{0}\right)\right]-f_{S}\left(x_{0}\right)\right)^{2}\right]
+=\left(f\left(x_{0}\right)-\mathbb{E}_{S^{\prime} \sim \mathscr{D}}\left[f_{S^{\prime}}\left(x_{0}\right)\right]\right)^{2}
++ \mathbb{E}_{S \sim \mathscr{D}}\left[\left(\mathbb{E}_{S^{\prime} \sim \mathscr{D}}\left[f_{S^{\prime}}\left(x_{0}\right)\right]-f_{S}\left(x_{0}\right)\right)^{2}\right]
 $
 
 \subsection*{Bias-Variance Decomposition}
 - We obtain the following decomposition into three positive terms:
 
 $\mathbb{E}_{S \sim \mathscr{D}, \varepsilon \sim \mathscr{D}_{\varepsilon}}\left[\left(f\left(x_{0}\right)+\varepsilon-f_{S}\left(x_{0}\right)\right)^{2}\right]
-\\=\operatorname{Var}_{\varepsilon \sim \mathscr{D}_{\varepsilon}}[\varepsilon] \leftarrow \text { Noise variance }$ 
-
+=\operatorname{Var}_{\varepsilon \sim \mathscr{D}_{\varepsilon}}[\varepsilon]$
 $
-\begin{aligned}
-&+\left(f\left(x_{0}\right)-\mathbb{E}_{S^{\prime} \sim \mathscr{D}}\left[f_{S^{\prime}}\left(x_{0}\right)\right]\right)^{2} \leftarrow \text { Bias } 
-\\
-& +\mathbb{E}_{S \sim \mathscr{D}}\left[\left(f_{S}\left(x_{0}\right)-\mathbb{E}_{S^{\prime} \sim \mathscr{D}}\left[f_{S^{\prime}}\left(x_{0}\right)\right]\right)^{2}\right] \leftarrow \text { Var. } 
-\end{aligned}
++\left(f\left(x_{0}\right)-\mathbb{E}_{S^{\prime} \sim \mathscr{D}}\left[f_{S^{\prime}}\left(x_{0}\right)\right]\right)^{2} 
+$
+$
++\mathbb{E}_{S \sim \mathscr{D}}\left[\left(f_{S}\left(x_{0}\right)-\mathbb{E}_{S^{\prime} \sim \mathscr{D}}\left[f_{S^{\prime}}\left(x_{0}\right)\right]\right)^{2}\right]
+$
+$
+= \text { Noise variance } + \text { Bias } +  \text { Var. } 
 $
 
-- each of which always provides a lower bound of the true error
+% - each of which always provides a lower bound of the true error
 
-- $\Rightarrow$ To minimize the true error, we must choose a method that achieves low bias and low variance simultaneously
+% $\Rightarrow$ To minimize the true error, we must choose a method that achieves low bias and low variance simultaneously
 
-\subsection*{Noise: $\operatorname{Var}_{\varepsilon \sim \mathscr{D}_{\varepsilon}}[\varepsilon]$}
+% \subsection*{Noise: $\operatorname{Var}_{\varepsilon \sim \mathscr{D}_{\varepsilon}}[\varepsilon]$}
 
-- a strict lower bound on the achievable error
+% - a strict lower bound on the achievable error
 
-\begin{itemize}
-  \item It is not possible to go below the noise level
+% \begin{itemize}
+%   \item It is not possible to go below the noise level
 
-  \item Even if we know the true model $f$, we still suffer from the noise: $L(f)=\mathbb{E}\left[\varepsilon^{2}\right]$
+%   \item Even if we know the true model $f$, we still suffer from the noise: $L(f)=\mathbb{E}\left[\varepsilon^{2}\right]$
 
-  \item It is not possible to predict the noise from the data since they are independent
+%   \item It is not possible to predict the noise from the data since they are independent
 
-\end{itemize}
+% \end{itemize}
 
-\subsection*{Bias: $\left(f\left(x_{0}\right)-\mathbb{E}_{S \sim \mathscr{D}}\left[f_{S}\left(x_{0}\right)\right]\right)^{2}$}
+% \subsection*{Bias: $\left(f\left(x_{0}\right)-\mathbb{E}_{S \sim \mathscr{D}}\left[f_{S}\left(x_{0}\right)\right]\right)^{2}$}
 
-\begin{itemize}
-  \item Squared of the difference between the actual value $f\left(x_{0}\right)$ and the expected prediction
+% \begin{itemize}
+%   \item Squared of the difference between the actual value $f\left(x_{0}\right)$ and the expected prediction
 
-  \item It measures how far off in general the models' predictions are from the correct value
+%   \item It measures how far off in general the models' predictions are from the correct value
 
-  \item If model complexity is low, bias is typically high
+%   \item If model complexity is low, bias is typically high
 
-  \item If model complexity is high, bias is typically low
+%   \item If model complexity is high, bias is typically low
 
-\end{itemize}
+% \end{itemize}
 
-\subsection*{Variance: $\mathbb{E}_{S \sim \mathscr{D}}\left[\left(f_{S}\left(x_{0}\right)-\mathbb{E}_{S \sim D}\left[f_{S}\left(x_{0}\right)\right]\right)^{2}\right]$}
+% \subsection*{Variance: $\mathbb{E}_{S \sim \mathscr{D}}\left[\left(f_{S}\left(x_{0}\right)-\mathbb{E}_{S \sim D}\left[f_{S}\left(x_{0}\right)\right]\right)^{2}\right]$}
 
-\begin{itemize}
-  \item Variance of the prediction function
-  \item It measures the variability of predictions at a given point across different training set realizations
-  \item If we consider complex models, small variations in the training set can lead to significant changes in the predictions
-\end{itemize}
+% \begin{itemize}
+%   \item Variance of the prediction function
+%   \item It measures the variability of predictions at a given point across different training set realizations
+%   \item If we consider complex models, small variations in the training set can lead to significant changes in the predictions
+% \end{itemize}
 
 \subsection*{Bias Variance tradeoff}
 
-\includegraphics*[width=0.7\columnwidth]{figures/bias_variance.jpg}
+% \includegraphics*[width=0.7\columnwidth]{figures/bias_variance.jpg}
 
-\subsection*{Double descent curve}
+% \subsection*{Double descent curve}
 
-\includegraphics*[width=0.7\columnwidth]{figures/double_descent_curve.jpg}
+% \includegraphics*[width=0.7\columnwidth]{figures/double_descent_curve.jpg}

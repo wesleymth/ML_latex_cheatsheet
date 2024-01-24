@@ -1,233 +1,209 @@
-\section*{Model Selection}
+\section{Model Selection}
 
-\subsection*{Probabilistic Setup}
+% \subsection*{Probabilistic Setup}
 
-- Unknown distribution $\mathscr{D}$ with range $\mathscr{X} \times \mathscr{Y}$
+% - Unknown distribution $\mathscr{D}$ with range $\mathscr{X} \times \mathscr{Y}$. Dataset $S$ of indep. samples from $\mathscr{D}$:
+% $
+% S=\{(x_{n}, y_{n})\}_{n=1}^{N} \sim \mathscr{D} \text { i.i.d. }
+% $
 
-- We see a dataset $S$ of independent samples from $\mathscr{D}$ :
-$
-S=\left\{\left(x_{n}, y_{n}\right)\right\}_{n=1}^{N} \sim \mathscr{D} \quad \text { i.i.d. }
-$
-
-Learning Algorithm: $\mathscr{A}(S) = f_S$
+% Learning Algorithm: $\mathscr{A}(S) = f_S$
 
 \subsection*{Generalization Error}
 
-- How accurate is $f$ at predicting?
+% - How accurate is $f$ at predicting?
 
-- We compute the expected error over all samples drawn from distribution $\mathscr{D}$ :
-
+- Expected error over all samples drawn from distribution $\mathscr{D}$ :
 $
 L_{\mathscr{D}}(f)=\mathbb{E}_{(x, y) \sim \mathscr{D}}[\ell(y, f(x))]
 $
 
-where $\ell(\cdot, \cdot)$ is the loss function
+% where $\ell(\cdot, \cdot)$ is the loss function
 
-The quantity $L_{\mathscr{D}}(f)$ has many names: $\left\{\begin{array}{l}\text { True } \\ \text { Expected } \\ \text { Generalization }\end{array}\left\{\begin{array}{l}\text { Risk } \\ \text { Error } \\ \text { Loss }\end{array}\right.\right.$
+% The quantity $L_{\mathscr{D}}(f)$ has many names: $\{\begin{array}{l}\text { True } \\ \text { Expected } \\ \text { Generalization }\end{array}\{\begin{array}{l}\text { Risk } \\ \text { Error } \\ \text { Loss }\end{array}..$
 
 
-- Problem: $mathscr{D}$ is unknown!
+% - Problem: $\mathscr{D}$ is unknown!
 
 \subsection*{Empirical Error}
-- approximate the true error by averaging the loss function over the dataset
-
+- approximate the true error by averaging the loss function over the dataset: 
 $
-L_{S}(f)=\frac{1}{|S|} \sum_{\left(x_{n}, y_{n}\right) \in S} \ell\left(y_{n}, f\left(x_{n}\right)\right)
-$
+L_{S}(f)=\frac{1}{|S|} \sum_{(x_{n}, y_{n}) \in S} \ell(y_{n}, f(x_{n}))
+$,
+(RV)
 
-Also called: empirical risk/error/loss
+% Also called: empirical risk/error/loss
 
-- The samples are random thus $L_{S}(f)$ is a random variable It is an unbiased estimator of the true error
+% - The samples are random thus $L_{S}(f)$ is a random variable 
+
+- unbiased estimator of the true error
 
 - Law of large number: $L_{S}(f) \underset{|S| \rightarrow \infty}{\rightarrow} L_{\mathscr{D}}(f)$ but fluctuations!
 
-- Generalization gap: $\left|L_{\mathscr{D}}(f)-L_{S}(f)\right|$
+% \subsection*{Training error (empirical error with training data)}
 
-\subsection*{Training error}
+% % - what we are minimizing
 
-- what we are minimizing
+% % - the prediction function $f_{S}$ is itself a function of the data $S$
 
-- the prediction function $f_{S}$ is itself a function of the data $S$
+% % - trained on the same data it is applied to, the empirical error is called the training error:
+% $
+% L_{S}(f_{S})=\frac{1}{|S|} \sum_{(x_{n}, y_{n}) \in S} \ell(y_{n}, f_{S}(x_{n}))
+% $
 
-- trained on the same data it is applied to, the empirical error is called the training error:
+% % - might not be representative of the error we see on "fresh" samples
 
-$
-L_{S}\left(f_{S}\right)=\frac{1}{|S|} \sum_{\left(x_{n}, y_{n}\right) \in S} \ell\left(y_{n}, f_{S}\left(x_{n}\right)\right)
-$
+% % - $L_{S}(f_{S})$ might not be close to $L_{\mathscr{D}}(f_{S})$ i.e. overfitting
 
-- might not be representative of the error we see on "fresh" samples
+\subsection*{Generalization gap $|L_{\mathscr{D}}(f)-L_{S}(f)|$}
 
-- $L_{S}\left(f_{S}\right)$ might not be close to $L_{\mathscr{D}}\left(f_{S}\right)$ i.e. overfitting
+% - How far is the test from the true error?
 
-\subsection*{Generalization gap}
-
-- How far is the test from the true error?
-
-- Claim: given a model $f$ and a test set $S_{\text {test }} \sim \mathscr{D}$ i.i.d. (not used to learn $f$ ) and a loss $\ell(\cdot, \cdot) \in[a, b]$:
+- \underline{Claim}: given a model $f$ and a test set $S_{\text {test }} \sim \mathscr{D}$ i.i.d. (not used to learn $f$ ) and a loss $\ell(\cdot, \cdot) \in[a, b]$:
 
 $
-\mathbb{P}\left[|\underbrace{L_{\mathscr{D}}(f)-L_{S_{\text {test }}}(f)}_{\text {Generalization Gap }}| \geq \sqrt{\frac{(b-a)^{2} \ln (2 / \delta)}{2\left|S_{\text {test }}\right|}}\right] \leq \delta
+\mathbb{P}[|L_{\mathscr{D}}(f)-L_{S_{\text {test }}}(f)| \geq \sqrt{\frac{(b-a)^{2} \ln (2 / \delta)}{2|S_{\text {test }}|}}] \leq \delta
 $
 
-- The error decreases as $\mathcal{O}\left(1 / \sqrt{\left|S_{\text {test }}\right|}\right)$ with the number of test points High probability bound: $\delta$ is only in the $\ln$
+- Error $\downarrow$ as $\mathcal{O}(1 / \sqrt{|S_{\text {test }}|})$ with nb. of test points 
 
-$\rightarrow$ The more data points we have, the more confident we are that the empirical loss we measure is close to the true loss
+- High probability bound: $\delta$ is only in the $\ln$
 
-- Given a dataset $S$
+% - $\uparrow$ data points $\Rightarrow$ $\uparrow$ confidence : empirical close to true loss
 
-\begin{enumerate}
-  \item Split: $S=S_{\text {train }} \cup S_{\text {test }}$
+% - Given a dataset $S$: (1) Split: $S=S_{\text {train }} \cup S_{\text {test }}$ (2) Train: $\mathscr{A}(S_{\text {train }})=f_{S_{\text {train }}}$ 
 
-  \item Train: $\mathscr{A}\left(S_{\text {train }}\right)=f_{S_{\text {train }}}$
+% (3) Validate:
+% $
+% \mathbb{P}(L_{\mathscr{D}}(f_{S_{\text {train }}}) \geq L_{S_{\text {test }}}(f_{S_{\text {train }}})+\sqrt{\frac{(a-b)^{2} \ln (2 / \delta)}{2|S_{\text {test }}|}}) \leq \delta
+% $
 
-  \item Validate: \scalebox{0.6}{
-    $
-    \mathbb{P}\left(L_{\mathscr{D}}\left(f_{S_{\text {train }}}\right) \geq L_{S_{\text {test }}}\left(f_{S_{\text {train }}}\right)+\sqrt{\frac{(a-b)^{2} \ln (2 / \delta)}{2\left|S_{\text {test }}\right|}}\right) \leq \delta
-    $
-    }
-
-\end{enumerate}
-
-
-$\Rightarrow$ We can obtain a probabilistic upper bound on the expected risk
+% $\Rightarrow$ We can obtain a probabilistic upper bound on the expected risk
 
 \subsection*{The proof relies only on concentration inequalities}
-- $\left(x_{n}, y_{n}\right) \in S_{\text {test }}$ are chosen independently, the associated losses $\Theta_{n}=\ell\left(y_{n}, f\left(x_{n}\right)\right) \in[a, b]$ given a fixed $\operatorname{model} f$, are also i.i.d. random variables
+- $(x_{n}, y_{n}) \in S_{\text {test }}$ are chosen independently, the associated losses $\Theta_{n}=\ell(y_{n}, f(x_{n})) \in[a, b]$ given a fixed $\operatorname{model} f$, are also i.i.d. random variables
 
-- Empirical loss: \\$\frac{1}{N} \sum_{n=1}^{N} \Theta_{n}=\frac{1}{N} \sum_{n=1}^{N} \ell\left(y_{n}, f\left(x_{n}\right)\right)=L_{S_{\text {test }}}(f)$
+- Empirical loss: $\frac{1}{N} \sum_{n=1}^{N} \Theta_{n}=\frac{1}{N} \sum_{n=1}^{N} \ell(y_{n}, f(x_{n}))=L_{S_{\text {test }}}(f)$
 
-- True loss: $\quad \mathbb{E}\left[\Theta_{n}\right]=\mathbb{E}\left[\ell\left(y_{n}, f\left(x_{n}\right)\right)\right]=L_{\mathscr{D}}(f)$
+- True loss: $\quad \mathbb{E}[\Theta_{n}]=\mathbb{E}[\ell(y_{n}, f(x_{n}))]=L_{\mathscr{D}}(f)$
 
-- What is the chance that the empirical loss $L_{S_{\text {test }}}(f)$ deviates from the true loss by more than a given constant? $\rightarrow$ concentration inequalities
+% - What is the chance that the empirical loss $L_{S_{\text {test }}}(f)$ deviates from the true loss by more than a given constant? $\rightarrow$ adressed by concentration inequalities
 
 \subsection*{Hoeffding inequality: a simple concentration bound}
-- Claim: Let $\Theta_{1}, \ldots, \Theta_{N}$ be a sequence of i.i.d. random variables with mean $\mathbb{E}[\Theta]$ and range $[a, b]$. Then, for any $\varepsilon>0$
+- \underline{Claim}: Let $\Theta_{1}, \ldots, \Theta_{N}$ be a sequence of i.i.d. random variables with mean $\mathbb{E}[\Theta]$ and range $[a, b]$. Then, for any $\varepsilon>0$
 
 $
-\mathbb{P}\left[\left|\frac{1}{N} \sum_{n=1}^{N} \Theta_{n}-\mathbb{E}[\Theta]\right| \geq \varepsilon\right] \leq 2 e^{-2 N \varepsilon^{2} /(b-a)^{2}}
+\mathbb{P}[|\frac{1}{N} \sum_{n=1}^{N} \Theta_{n}-\mathbb{E}[\Theta]| \geq \varepsilon] \leq 2 e^{-2 N \varepsilon^{2} /(b-a)^{2}}
 $
 
 - Concentration bound: the empirical mean is concentrated around its mean
 
-A. Use it with $\Theta_{n}=\ell\left(y_{n}, f\left(x_{n}\right)\right)$
+A. Use it with $\Theta_{n}=\ell(y_{n}, f(x_{n}))$
+B. Equating $\delta=2 e^{-2|S_{\text {test }}| \varepsilon^{2} /(b-a)^{2}}$ we get $\varepsilon=\sqrt{\frac{(b-a)^{2} \ln (2 / \delta)}{2|S_{\text {test }}|}}$
 
-B. Equating $\delta=2 e^{-2\left|S_{\text {test }}\right| \varepsilon^{2} /(b-a)^{2}}$ we get \\$\varepsilon=\sqrt{\frac{(b-a)^{2} \ln (2 / \delta)}{2\left|S_{\text {test }}\right|}}$
+% - Does model selection work? $L_{S_{\text {test }}}(f_{S_{\text {train }}, \lambda_{k}}) \approx L_{\mathscr{D}}(f_{S_{\text {train }}, \lambda_{k}})$ ?
 
-- Does model selection work? $L_{S_{\text {test }}}\left(f_{S_{\text {train }}, \lambda_{k}}\right) \approx L_{\mathscr{D}}\left(f_{S_{\text {train }}, \lambda_{k}}\right)$ ?
-
-\subsection*{How far is each of the $K$ test errors $L_{S_{\text {test }}}\left(f_{k}\right)$ from the true $L_{\mathscr{D}}\left(f_{k}\right)$ ?}
-- Claim: we can bound the maximum deviation for all $K$ candidates, by
-
-\scalebox{0.8}{
+\subsection*{How far is each of the $K$ test errors $L_{S_{\text {test }}}(f_{k})$ from the true $L_{\mathscr{D}}(f_{k})$ ?}
+- \underline{Claim}: we can bound the maximum deviation for all $K$ candidates, by
 $
-\mathbb{P}\left[\max _{k}\left|L_{\mathscr{D}}\left(f_{k}\right)-L_{S_{\text {test }}}\left(f_{k}\right)\right| \geq \sqrt{\frac{(b-a)^{2} \ln (2 K / \delta)}{2\left|S_{\text {test }}\right|}}\right] \leq \delta
+\mathbb{P}[\max _{k}|L_{\mathscr{D}}(f_{k})-L_{S_{\text {test }}}(f_{k})| \geq \sqrt{\frac{(b-a)^{2} \ln (2 K / \delta)}{2|S_{\text {test }}|}}] \leq \delta
 $
-}
 
-\begin{itemize}
-  \item The error decreases as $\mathcal{O}\left(1 / \sqrt{\left|S_{\text {test }}\right|}\right)$ with the number test points
-  \item When testing $K$ hyper-parameters, the error only goes up by $\sqrt{\ln (K)}$
-\end{itemize}
+- The error decreases as $\mathcal{O}(1 / \sqrt{|S_{\text {test }}|})$ with the number test points
 
-$\Rightarrow$ So we can test many different models without incurring a large penalty
+- test $K$ hyper-parameters, the error only goes up by $\sqrt{\ln (K)}$
 
-\begin{itemize}
-  \item It can be extended to infinitely many models
-\end{itemize}
+$\Rightarrow$ can test many different models without incurring a large penalty
+
+- It can be extended to infinitely many models
 
 \subsection*{Proof: A simple union bound}
 - Special case $K=1$
-
-
 $
 \mathbb{P}[\max_{k}|L_{\mathscr{D}}(f_{k})-L_{S_{\text{test}}}(f_{k})| \geq \varepsilon]  
 $
-
 $=\mathbb{P}[\cup_{k}\{ |L_{\mathscr{D}}(f_{k})-L_{S_{\text{test}}}(f_{k})|
 \geq \varepsilon\}]
 $
-
 $\leq \sum_{k} \mathbb{P}[|L_{\mathscr{D}}(f_{k})-L_{S_{\text{test}}}(f_{k})| 
  \geq \varepsilon]
 $
-
 $
  \leq 2 K e^{-2 N \varepsilon^{2} /(b-a)^{2}}
 $
 
-- Equating $\delta=2 K e^{-2 N \varepsilon^{2} /(b-a)^{2}}$, we get $\varepsilon=\sqrt{\frac{(b-a)^{2} \ln (2 K / \delta)}{2 N}}$ as stated
+- $\delta=2 K e^{-2 N \varepsilon^{2} /(b-a)^{2}}\Rightarrow \varepsilon=\sqrt{\frac{(b-a)^{2} \ln (2 K / \delta)}{2 N}}$
 
-- If we choose the "best" function according to the empirical risk then its true risk is not too far away from the true risk of the optimal choice
+% - If we choose the "best" function according to the empirical risk then its true risk is not too far away from the true risk of the optimal choice
 
-
-- Let $k^{*}=\operatorname{argmin}_{k} L_{\mathscr{D}}\left(f_{k}\right)$ (smallest true risk) and $\hat{k}=\operatorname{argmin}_{k} L_{S_{\text {test }}}\left(f_{k}\right)$ (smallest empirical risk) then:
-
-$
-\mathbb{P}\left[L_{\mathscr{D}}\left(f_{\hat{k}}\right) \geq L_{\mathscr{D}}\left(f_{k^{*}}\right)+2 \sqrt{\frac{(b-a)^{2} \ln (2 K / \delta)}{2\left|S_{\text {test }}\right|}}\right] \leq \delta
-$
-
-\subsection*{Hoeffding's inequality Proof}
-\begin{itemize}
-  \item We equivalently assume that $\mathbb{E}[\Theta]=0$ and that $\Theta_{n} \in[a, b]$
-  \item We will only show that
-\end{itemize}
+- Let $k^{*}=\operatorname{argmin}_{k} L_{\mathscr{D}}(f_{k})$ (smallest true risk) and $\hat{k}=\operatorname{argmin}_{k} L_{S_{\text {test }}}(f_{k})$ (smallest empirical risk) then:
 
 $
-\mathbb{P}\left\{\frac{1}{N} \sum_{n=1}^{N} \Theta_{n} \geq \varepsilon\right\} \leq e^{-2 N \varepsilon^{2} /(b-a)^{2}}
+\mathbb{P}[L_{\mathscr{D}}(f_{\hat{k}}) \geq L_{\mathscr{D}}(f_{k^{*}})+2 \sqrt{\frac{(b-a)^{2} \ln (2 K / \delta)}{2|S_{\text {test }}|}}] \leq \delta
 $
 
-This, together with the equivalent bound
+% \subsection*{Hoeffding's inequality Proof}
+% \begin{itemize}
+%   \item We equivalently assume that $\mathbb{E}[\Theta]=0$ and that $\Theta_{n} \in[a, b]$
+%   \item We will only show that
+% \end{itemize}
 
-$
-\mathbb{P}\left\{\frac{1}{N} \sum_{n=1}^{N} \Theta_{n} \leq-\varepsilon\right\} \leq e^{-2 N \varepsilon^{2} /(b-a)^{2}}
-$
+% $
+% \mathbb{P}\{\frac{1}{N} \sum_{n=1}^{N} \Theta_{n} \geq \varepsilon\} \leq e^{-2 N \varepsilon^{2} /(b-a)^{2}}
+% $
 
-will prove the claim:
+% This, together with the equivalent bound
 
-For any $s \geq 0, \quad \mathbb{P}\left\{\frac{1}{N} \sum_{n=1}^{N} \Theta_{n} \geq \varepsilon\right\}=\mathbb{P}\left\{s \frac{1}{N} \sum_{n=1}^{N} \Theta_{n} \geq s \varepsilon\right\}$
+% $
+% \mathbb{P}\{\frac{1}{N} \sum_{n=1}^{N} \Theta_{n} \leq-\varepsilon\} \leq e^{-2 N \varepsilon^{2} /(b-a)^{2}}
+% $
 
-$
-=\mathbb{P}\left\{e^{s \frac{1}{N} \sum_{n=1}^{N} \Theta_{n}} \geq e^{s \varepsilon}\right\}
-$
+% will prove the claim:
 
-$
-\begin{aligned}
-& \leq \mathbb{E}\left[e^{s \frac{1}{N} \sum_{n=1}^{N} \Theta_{n}}\right] e^{-s \varepsilon} \quad \text { (Markov inequality) } \\
-& =\prod_{n=1}^{N} \mathbb{E}\left[e^{\frac{s \Theta_{n}}{N}}\right] e^{-s \varepsilon} \quad \text { (the r.v } \Theta_{n} \text { are indep.) } \\
-& =\mathbb{E}\left[e^{\frac{s \Theta}{N}}\right]^{N} e^{-s \varepsilon} \quad \quad \text { (the r.v } \Theta_{n} \text { are i.d.) } \\
-& \leq e^{s^{2}(b-a)^{2} /(8 N)} e^{-s \varepsilon} \quad \text { (Hoeffding lemma) }
-\end{aligned}
-$
+% For any $s \geq 0, \quad \mathbb{P}\{\frac{1}{N} \sum_{n=1}^{N} \Theta_{n} \geq \varepsilon\}=\mathbb{P}\{s \frac{1}{N} \sum_{n=1}^{N} \Theta_{n} \geq s \varepsilon\}$
 
-What do we do now? We have for any $s \geq 0$
+% $
+% =\mathbb{P}\{e^{s \frac{1}{N} \sum_{n=1}^{N} \Theta_{n}} \geq e^{s \varepsilon}\}
+% $
 
-$
-\mathbb{P}\left\{\frac{1}{N} \sum_{n=1}^{N} \Theta_{n} \geq \varepsilon\right\} \leq e^{s^{2}(b-a)^{2} /(8 N)} e^{-s \varepsilon}
-$
+% $
+% \begin{aligned}
+% & \leq \mathbb{E}[e^{s \frac{1}{N} \sum_{n=1}^{N} \Theta_{n}}] e^{-s \varepsilon} \quad \text { (Markov inequality) } \\
+% & =\prod_{n=1}^{N} \mathbb{E}[e^{\frac{s \Theta_{n}}{N}}] e^{-s \varepsilon} \quad \text { (the r.v } \Theta_{n} \text { are indep.) } \\
+% & =\mathbb{E}[e^{\frac{s \Theta}{N}}]^{N} e^{-s \varepsilon} \quad \quad \text { (the r.v } \Theta_{n} \text { are i.d.) } \\
+% & \leq e^{s^{2}(b-a)^{2} /(8 N)} e^{-s \varepsilon} \quad \text { (Hoeffding lemma) }
+% \end{aligned}
+% $
 
-In particular for the minimum value obtained for $s=\frac{4 N \varepsilon}{(b-a)^{2}}$
+% What do we do now? We have for any $s \geq 0$
 
-$
-\mathbb{P}\left\{\frac{1}{N} \sum_{n=1}^{N} \Theta_{n} \geq \varepsilon\right\} \leq e^{-2 N \varepsilon^{2} /(b-a)^{2}}
-$
+% $
+% \mathbb{P}\{\frac{1}{N} \sum_{n=1}^{N} \Theta_{n} \geq \varepsilon\} \leq e^{s^{2}(b-a)^{2} /(8 N)} e^{-s \varepsilon}
+% $
 
-\subsection*{Hoeffding lemma}
-For any random variable $X$, with $\mathbb{E}[X]=0$ and $X \in[a, b]$ we have
+% In particular for the minimum value obtained for $s=\frac{4 N \varepsilon}{(b-a)^{2}}$
 
-$
-\mathbb{E}\left[e^{s X}\right] \leq e^{\frac{1}{8} s^{2}(b-a)^{2}} \text { for any } s \geq 0
-$
+% $
+% \mathbb{P}\{\frac{1}{N} \sum_{n=1}^{N} \Theta_{n} \geq \varepsilon\} \leq e^{-2 N \varepsilon^{2} /(b-a)^{2}}
+% $
 
-Proof outline:
+% \subsection*{Hoeffding lemma}
+% For any random variable $X$, with $\mathbb{E}[X]=0$ and $X \in[a, b]$ we have
 
-Consider the convex function $s \mapsto e^{s x}$. In the range $[a, b]$ it is upper bounded by the chord
+% $
+% \mathbb{E}[e^{s X}] \leq e^{\frac{1}{8} s^{2}(b-a)^{2}} \text { for any } s \geq 0
+% $
 
-$
-e^{s x} \leq \frac{x-a}{b-a} e^{s b}+\frac{b-x}{b-a} e^{s a}
-$
+% Proof outline:
 
-Taking the expectation and recalling that $\mathbb{E}[X]=0$, we get
+% Consider the convex function $s \mapsto e^{s x}$. In the range $[a, b]$ it is upper bounded by the chord
 
-$
-\mathbb{E}\left[e^{s X}\right] \leq \frac{b}{b-a} e^{s a}-\frac{a}{b-a} e^{s b} \leq e^{s^{2}(b-a)^{2} / 8}
-$
+% $
+% e^{s x} \leq \frac{x-a}{b-a} e^{s b}+\frac{b-x}{b-a} e^{s a}
+% $
+
+% Taking the expectation and recalling that $\mathbb{E}[X]=0$, we get
+
+% $
+% \mathbb{E}[e^{s X}] \leq \frac{b}{b-a} e^{s a}-\frac{a}{b-a} e^{s b} \leq e^{s^{2}(b-a)^{2} / 8}
+% $

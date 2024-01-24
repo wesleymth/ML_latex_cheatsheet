@@ -1,58 +1,55 @@
-\section*{Maximum Likelihood}
+\section{Maximum Likelihood}
 
 \subsection*{Gaussian distribution and independence}
-- A Gaussian random variable in $\mathbb{R}$ with mean $\mu$ and variance $\sigma^{2}$ has a density of
+% - A Gaussian random variable in $\mathbb{R}$ with mean $\mu$ and variance $\sigma^{2}$ has a density of
 
-$p\left(y \mid \mu, \sigma^{2}\right)=\mathcal{N}\left(y \mid \mu, \sigma^{2}\right)=\frac{1}{\sqrt{2 \pi \sigma^{2}}} \exp \left[-\frac{(y-\mu)^{2}}{2 \sigma^{2}}\right]$.
+$p(y \mid \mu, \sigma^{2})=\mathcal{N}(y \mid \mu, \sigma^{2})=\frac{1}{\sqrt{2 \pi \sigma^{2}}} \exp [-\frac{(y-\mu)^{2}}{2 \sigma^{2}}]$,
+$\boldsymbol{\Sigma}$ psd.
 
-- The density of a Gaussian random vector with mean $\boldsymbol{\mu}$ and covariance $\boldsymbol{\Sigma}$ (which must be a positive semi-definite matrix) is
+$\mathcal{N}(\mathbf{y} \mid \boldsymbol{\mu}, \boldsymbol{\Sigma})=\frac{1}{\sqrt{(2 \pi)^{D} \operatorname{det}(\boldsymbol{\Sigma})}} \exp [-\frac{1}{2}(\mathbf{y}-\boldsymbol{\mu})^{\top} \boldsymbol{\Sigma}^{-1}(\mathbf{y}-\boldsymbol{\mu})]$
 
-$\mathcal{N}(\mathbf{y} \mid \boldsymbol{\mu}, \boldsymbol{\Sigma})\\=\frac{1}{\sqrt{(2 \pi)^{D} \operatorname{det}(\boldsymbol{\Sigma})}} \exp \left[-\frac{1}{2}(\mathbf{y}-\boldsymbol{\mu})^{\top} \boldsymbol{\Sigma}^{-1}(\mathbf{y}-\boldsymbol{\mu})\right]$.
-
-- Two random variables $X$ and $Y$ are called independent when $p(x, y)=p(x) p(y)$.
+- Two RVs $X$, $Y$ independent when $p(x, y)=p(x) p(y)$.
 
 \subsection*{A probabilistic model for least-squares}
 
-- Data generation: $
+- $
 y_{n}=\mathbf{x}_{n}^{\top} \mathbf{w}+\epsilon_{n}
-$ where the $\epsilon_{n}$ (the noise) is a zero mean Gaussian random variable.
+$ where the $\epsilon_{n}$ zero mean Gaussian RV
 
-- Given $N$ samples, the likelihood of the data vector $\mathbf{y}=$ $\left(y_{1}, \cdots, y_{N}\right)$ given the input $\mathbf{X}$ and the model $\mathbf{w}$ is equal to
+% - Given $N$ samples, the likelihood of the data vector $\mathbf{y}=$ $(y_{1}, \cdots, y_{N})$ given the input $\mathbf{X}$ and the model $\mathbf{w}$ is equal to
 
-$p(\mathbf{y} \mid \mathbf{X}, \mathbf{w})=\prod_{n=1}^{N} p\left(y_{n} \mid \mathbf{x}_{n}, \mathbf{w}\right)=\prod_{n=1}^{N} \mathcal{N}\left(y_{n} \mid \mathbf{x}_{n}^{\top} \mathbf{w}, \sigma^{2}\right)$.
+$p(\mathbf{y} \mid \mathbf{X}, \mathbf{w})=\prod_{n=1}^{N} p(y_{n} \mid \mathbf{x}_{n}, \mathbf{w})=\prod_{n=1}^{N} \mathcal{N}(y_{n} \mid \mathbf{x}_{n}^{\top} \mathbf{w}, \sigma^{2})$
 
-- The probabilistic view point is that we should maximize this likelihood over the choice of model w. I.e., the "best" model is the one that maximizes this likelihood.
+% - Maximize this likelihood over the choice of model w.
 
 \subsection*{Defining cost with log-likelihood}
 
-$\mathcal{L}_{\mathrm{LL}}(\mathbf{w}):=\log p(\mathbf{y} \mid \mathbf{X}, \mathbf{w})=-\frac{1}{2 \sigma^{2}} \sum_{n=1}^{N}\left(y_{n}-\mathbf{x}_{n}^{\top} \mathbf{w}\right)^{2}+$ cnst.
+$\mathcal{L}_{\mathrm{LL}}(\mathbf{w}):=\log p(\mathbf{y} \mid \mathbf{X}, \mathbf{w})=-\frac{1}{2 \sigma^{2}} \sum_{n=1}^{N}(y_{n}-\mathbf{x}_{n}^{\top} \mathbf{w})^{2}+$ cnst.
 
 \subsection*{Maximum-likelihood estimator (MLE)}
 
 $\arg \min _{\mathbf{w}} \mathcal{L}_{\mathrm{MSE}}(\mathbf{w})=\arg \max _{\mathbf{w}} \mathcal{L}_{\mathrm{LL}}(\mathbf{w})$.
 
-- MLE $\rightarrow$ finding the model under which the observed data is most likely to have been generated from (probabilistically).
+% - MLE $\rightarrow$ finding the model under which the observed data is most likely to have been generated from (probabilistically).
 
 \subsection*{Properties of MLE}
 - MLE is a sample approximation to the expected log-likelihood:
-
-$$
+$
 \mathcal{L}_{\mathrm{LL}}(\mathbf{w}) \approx \mathbb{E}_{p(y, \mathbf{x})}[\log p(y \mid \mathbf{x}, \mathbf{w})]
-$$
+$
 
-- MLE is consistent, i.e., it will give us the correct model assuming that we have a sufficient amount of data. (can be proven under some weak conditions)
-
-$\mathbf{w}_{\text {MLE }} \longrightarrow^{p} \mathbf{w}_{\text {true }} \quad$ in probability
+- MLE is consistent, i.e., it will give us the correct model assuming that we have a sufficient amount of data.
+$\mathbf{w}_{\text {MLE }} \longrightarrow^{p} \mathbf{w}_{\text {true }}$
 
 - The MLE is asymptotically normal, i.e.,
 
-$\left(\mathbf{w}_{\text {MLE }}-\mathbf{w}_{\text {true }}\right) \longrightarrow^{d}\\ \frac{1}{\sqrt{N}} \mathcal{N}\left(\mathbf{w}_{\text {MLE }} \mid \mathbf{0}, \mathbf{F}^{-1}\left(\mathbf{w}_{\text {true }}\right)\right)$
+$(\mathbf{w}_{\text {MLE }}-\mathbf{w}_{\text {true }}) \longrightarrow^{d} \frac{1}{\sqrt{N}} \mathcal{N}(\mathbf{w}_{\text {MLE }} \mid \mathbf{0}, \mathbf{F}^{-1}(\mathbf{w}_{\text {true }}))$
 
-where $\mathbf{F}(\mathbf{w})=-\mathbb{E}_{p(\mathbf{y})}\left[\frac{\partial^{2} \mathcal{L}}{\partial \mathbf{w} \partial \mathbf{w}^{\top}}\right]$ is the Fisher information.
+where $\mathbf{F}(\mathbf{w})=-\mathbb{E}_{p(\mathbf{y})}[\frac{\partial^{2} \mathcal{L}}{\partial \mathbf{w} \partial \mathbf{w}^{\top}}]$ is the Fisher information.
 
-- MLE is efficient, i.e. it achieves the Cramer-Rao lower bound. Covariance $\left(\mathbf{w}_{\text {MLE }}\right)=\mathbf{F}^{-1}\left(\mathbf{w}_{\text {true }}\right)$
+- MLE is efficient, i.e. it achieves the Cramer-Rao lower bound. Covariance $(\mathbf{w}_{\text {MLE }})=\mathbf{F}^{-1}(\mathbf{w}_{\text {true }})$
 
-\subsection*{Laplace distribution}
-$
-p\left(y_{n} \mid \mathbf{x}_{n}, \mathbf{w}\right)=\frac{1}{2 b} e^{-\frac{1}{b}\left|y_{n}-\mathbf{x}_{n}^{\top} \mathbf{w}\right|}
-$
+\subsection*{Laplace distribution $
+p(y_{n} \mid \mathbf{x}_{n}, \mathbf{w})=\frac{1}{2 b} e^{-\frac{1}{b}|y_{n}-\mathbf{x}_{n}^{\top} \mathbf{w}|}
+$}
+

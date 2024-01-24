@@ -1,47 +1,46 @@
-\section*{Text Representation}
+\section{Text Representation}
 
--Finding numerical representations for words is fundamental for all machine learning methods dealing with text data.
+% -Finding numerical representations for words is fundamental for all machine learning methods dealing with text data.
 
--Goal: For each word, find mapping (embedding) $w_{i} \mapsto \mathbf{w}_{i} \in \mathbb{R}^{K}$
+-For each word, find mapping (embedding) $w_{i} \mapsto \mathbf{w}_{i} \in \mathbb{R}^{K}$
 
-\subsection*{Co-Occurence Matrix}
+\subsection*{Co-Occurence Matrix: sparse}
 
--A big corpus of un-labeled text can be represented as the co-occurrence counts. $n_{i j}:=$ \#contexts where word $w_{i}$ occurs together with word $w_{j}$.
+-big corpus un-labeled, co-occurrence counts. $n_{i j}:=$ \#contexts where word $w_{i}$ occurs together with word $w_{j}$.
 
-- Needs definition of Context e.g. document, paragraph, sentence, window and Vocabulary $\mathcal{V}:=\left\{w_{1}, \ldots, w_{D}\right\}$
+% - Needs def. of Context e.g. document, paragraph, sentence, window and Vocabulary $\mathcal{V}:=\left\{w_{1}, \ldots, w_{D}\right\}$
 
-- For words $w_{d}=1,2, \ldots, D$ and context words $w_{n}=1,2, \ldots, N$, the co-occurence counts $n_{i j}$ form a very sparse $D \times N$ matrix.
+% - For words $w_{d}=1,2, \ldots, D$ and context words $w_{n}=1,2, \ldots, N$, the co-occurence counts $n_{i j}$ form a very sparse $D \times N$ matrix.
 
-\subsection*{Learning Word-Representations}
+\subsection*{Learning Word-Representations: Matrix Factorisation}
 
-- Find a factorization of the cooccurence matrix!
+% - Find a factorization of the cooccurence matrix!
 
-- Typically uses $\log$ of the actual counts, i.e. $x_{d n}:=\log \left(n_{d n}\right)$.
-
-- Aim to find $\mathbf{W}, \mathbf{Z}$ s.t. $
+- transformation: $x_{d n}:=\log \left(n_{d n}\right)$.
+$\mathbf{W}, \mathbf{Z}$ s.t. $
 \mathbf{X} \approx \mathbf{W} \mathbf{Z}^{\top}
 $
 
 $
-\min _{\mathbf{W}, \mathbf{Z}} \mathcal{L}(\mathbf{W}, \mathbf{Z}):=\\\frac{1}{2} \sum_{(d, n) \in \Omega} f_{d n}\left[x_{d n}-\left(\mathbf{W} \mathbf{Z}^{\top}\right) d n\right]^{2}
+\min _{\mathbf{W}, \mathbf{Z}} \mathcal{L}(\mathbf{W}, \mathbf{Z}):=\frac{1}{2} \sum_{(d, n) \in \Omega} f_{d n}\left[x_{d n}-\left(\mathbf{W} \mathbf{Z}^{\top}\right) d n\right]^{2}
 $
 
 where $\mathbf{W} \in \mathbb{R}^{D \times K}$, $\mathbf{Z} \in \mathbb{R}^{N \times K}$, $K \ll$ $D, N$, $\Omega \subseteq[D] \times[N]$ indices of non-zeros of the count matrix $\mathbf{X}$, $f_{d n}$ are weights to each entry.
 
-\subsection*{GloVe}
-A variant of word2vec.
+\subsection*{GloVe: word2vec variant}
+% - A variant of word2vec.
+$f_{d n}:=\min \left\{1,\left(n_{d n} / n_{\max }\right)^{\alpha}\right\}, \alpha \in[0 ; 1]$ (e.g. $\alpha=\frac{3}{4}$)
 
-$f_{d n}:=\min \left\{1,\left(n_{d n} / n_{\max }\right)^{\alpha}\right\}, \quad \alpha \in[0 ; 1] \quad$ (e.g. $\alpha=\frac{3}{4}$)
+% \textbf{Note:} Choosing K; $K$ e.g. 50, 100, 500
 
-\textbf{Note:} Choosing K; $K$ e.g. 50, 100, 500
+\subsection*{Training: SGD or Alternating Least-Squares (ALS)}
+% - Stochastic Gradient Descent (SGD) ($\Theta(K)$ per step $\rightarrow$ easily parralelizable)
 
-\subsection*{Training}
-- Stochastic Gradient Descent (SGD) ($\Theta(K)$ per step $\rightarrow$ easily parralelizable)
-
-- Alternating Least-Squares (ALS)
+% - Alternating Least-Squares (ALS)
 
 \subsection*{Skip-Gram Model}
-- Uses binary classification (logistic regression objective), to separate real word pairs $\left(w_{d}, w_{n}\right)$ from fake word pairs. Same inner product score $=$ matrix factorization.
+- Binary classification: real or fake word pairs $\left(w_{d}, w_{n}\right)$.
+%  Same inner product score $=$ matrix factorization.
 
 - Given $w_{d}$, a context word $w_{n}$ is:
 
@@ -49,38 +48,36 @@ real $=$ appearing together in a context window of size 5
 
 fake $=$ any word $w_{n^{\prime}}$ sampled randomly: Negative sampling (also: Noise Contrastive Estimation)
 
-\section*{Learning Representations of Sentences \& Documents}
-- Supervised: For a supervised task (e.g. predicting the emotion of a tweet), we can use matrix factorization or CNNs.
-- Unsupervised: 
+% \section*{Learning Representations of Sentences \& Documents}
+% - Supervised: For a supervised task (e.g. predicting the emotion of a tweet), we can use matrix factorization or CNNs.
+% - Unsupervised: 
 
-Adding or averaging (fixed, given) word vectors, 
+% Adding or averaging (fixed, given) word vectors, 
 
-Training word vectors such that adding/averaging works well
+% Training word vectors such that adding/averaging works well
 
-Direct unsupervised training for sentences (appearing together with context sentences) instead of words
+% Direct unsupervised training for sentences (appearing together with context sentences) instead of words
 
-\subsection*{Fast Text}
-Matrix factorization to learn document/sentence representations (supervised).
+\subsection*{Fast Text: Matrix factor. for sentence representations}
 
-Given a sentence $s_{n}=$ $\left(w_{1}, w_{2}, \ldots, w_{m}\right)$, let $\mathbf{x}_{n} \in \mathbb{R}^{|\mathcal{V}|}$ be the bag-of-words representation of the sentence.
+-sentence $s_{n}=$ $\left(w_{1}, w_{2}, \ldots, w_{m}\right)$, let $\mathbf{x}_{n} \in \mathbb{R}^{|\mathcal{V}|}$ bag-of-words representation of the sentence.
 
-$$
+$
 \min _{\mathbf{W}, \mathbf{Z}} \mathcal{L}(\mathbf{W}, \mathbf{Z}):=\sum_{s_{n} \text { a sentence }} f\left(y_{n} \mathbf{W} \mathbf{Z}^{\top} \mathbf{x}_{n}\right)
-$$
+$,
+where $\mathbf{W} \in \mathbb{R}^{1 \times K}, \mathbf{Z} \in \mathbb{R}^{|\mathcal{V}| \times K}$, $\mathbf{x}_{n} \in \mathbb{R}^{|\mathcal{V}|}$ represents our $n$-th training sentence.
 
-where $\mathbf{W} \in \mathbb{R}^{1 \times K}, \mathbf{Z} \in \mathbb{R}^{|\mathcal{V}| \times K}$ are the variables, and the vector $\mathbf{x}_{n} \in \mathbb{R}^{|\mathcal{V}|}$ represents our $n$-th training sentence.
-
-Here $f$ is a linear classifier loss function, and $y_{n} \in\{ \pm 1\}$ is the classification label for sentence $\mathbf{x}_{n}$.
+- $f$ is a linear classifier loss function, $y_{n} \in\{ \pm 1\}$ is the classification label for sentence $\mathbf{x}_{n}$.
 
 
-\subsection*{Language Models}
-\subsubsection*{Selfsupervised training:}
-- Can a model generate text? train classifier to predict the continuation (next word) of given text
+% \subsection*{Language Models}
+% \subsubsection*{Selfsupervised training:}
+% - Can a model generate text? train classifier to predict the continuation (next word) of given text
 
-- Multi-class:
-Use soft-max loss function with a large number of classes $D=$ vocabulary size
+% - Multi-class:
+% Use soft-max loss function with a large number of classes $D=$ vocabulary size
 
-- Binary classification: 
-Predict if next word is real or fake (i.e. as in word2vec)
+% - Binary classification: 
+% Predict if next word is real or fake (i.e. as in word2vec)
 
-- Impressive recent progress using large models, such as transformers
+% - Impressive recent progress using large models, such as transformers

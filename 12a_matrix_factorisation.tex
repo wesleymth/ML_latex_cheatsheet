@@ -1,7 +1,7 @@
-\section*{Matrix Factorization}
-
-Given items (movies) $d=1, 2, . . . , D$ and users $n= 1, 2, . . . , N$, we define X to be the $D \times N$ matrix containing all rating entries. That is, $x_{dn}$ is the rating of n-th user for d-th item.
-Note that most ratings $x_{dn}$ are missing, and our task is to predict them accurately.
+\section{Matrix Factorization}
+Given items (movies) $d=1, 2, . . . , D$ and users $n= 1, 2, . . . , N$, X is $D \times N$ (sparse)
+% we define X to be the $D \times N$ matrix containing all rating entries. That is, $x_{dn}$ is the rating of n-th user for d-th item.
+% Note that most ratings $x_{dn}$ are missing, and our task is to predict them accurately.
 
 \subsection*{Algorithm}
 
@@ -9,11 +9,11 @@ $X \approx WZ^T$, $W \in \mathbb{R}^{D \times K}, \ Z \in \mathbb{R}^{N \times K
 
 $\operatorname*{min}_{W,Z}~{\mathcal{L}}(W,Z):=\frac{1}{2}\sum_{(d,n)\in\mathbb{Q}} [x_{dn}-(WZ^T)_{dn}]^2$
 
-- We hope to ``explain" each rating $x_{dn}$ by a numerical representation of the corresponding item and user - in fact by the inner product of an item feature vector with the user feature vector.
+% - We hope to ``explain" each rating $x_{dn}$ by a numerical representation of the corresponding item and user - in fact by the inner product of an item feature vector with the user feature vector.
 
 
 
-- The set $\Omega\subseteq\left[D\right]\times\left[N\right]$ collects the indices of the observed ratings of the input matrix $X$.
+% - The set $\Omega\subseteq\left[D\right]\times\left[N\right]$ collects the indices of the observed ratings of the input matrix $X$.
 
 - This cost is not jointly convex w.r.t. W and Z, nor identifiable as $(w^*, z^*) \Leftrightarrow (\beta w^*, \beta^{-1} z^*)$
 
@@ -28,38 +28,35 @@ $\frac{1}{2}\sum_{(d,n)\in\Omega}[x_{d n}-(W Z^{T})_{d n}]^{2}+\frac{\lambda_{w}
 $\lambda_{w},\lambda_{z}\, \in \mathbb{R} > 0$
 
 
-\subsection*{Stochastic Gradient Descent}
+\subsection*{Stochastic Gradient Descent ($\mathcal{O}(K)$)}
 
-$\mathcal{L} = \frac{1}{|\Omega|} \sum_{(d,n)\in\Omega}\underbrace{{\frac{1}{2}}[x_{d n}-(\mathbf{W}\mathbf{Z}^{\textsf{T}})_{d n}]^{2}}_{f_{d,n}}$
+$\mathcal{L} = \frac{1}{|\Omega|} \sum_{(d,n)\in\Omega}{\frac{1}{2}}[x_{d n}-(\mathbf{W}\mathbf{Z}^{\textsf{T}})_{d n}]^{2}=\frac{1}{|\Omega|} \sum_{(d,n)\in\Omega} f_{d,n}$
 
-For one fixed element (d, n) of the sum, we derive the gradient entry (d', k) for W:
+% For one fixed element (d, n) of the sum, we derive the gradient entry (d', k) for W:
 
-${\frac{\partial}{\partial w_{d^{\prime},k}}}f_{d,n}(W, Z) \in \mathbb{R}^{D\times K}=\\\left\{\begin{array}{l l}{-\left[x_{d n}-({\bf W Z}^{T})_{d n}\right]z_{n,k}\;\;\;\mathrm{if}\;d^{\prime}=d} \\ {0 \mathrm{~otherwise}}\end{array}\right.$
+${\frac{\partial}{\partial w_{d^{\prime},k}}}f_{d,n}(W, Z) =\left\{\begin{array}{l l}{-\left[x_{d n}-({\bf W Z}^{T})_{d n}\right]z_{n,k}\;\;\;\mathrm{if}\;d^{\prime}=d} \\ {0 \mathrm{~otherwise}}\end{array}\right.\in \mathbb{R}^{D\times K}$
 
-${\frac{\partial}{\partial z_{n^{\prime},k}}}f_{d,n}(W, Z)\in \mathbb{R}^{N\times K}=\\\left\{\begin{array}{l l}{-\left[x_{d n}-({\bf W Z}^{T})_{d n}\right]w_{d,k}\;\;\;\mathrm{if}\;n^{\prime}=n} \\ {0 \mathrm{~otherwise}}\end{array}\right.$
+${\frac{\partial}{\partial z_{n^{\prime},k}}}f_{d,n}(W, Z)=\left\{\begin{array}{l l}{-\left[x_{d n}-({\bf W Z}^{T})_{d n}\right]w_{d,k}\;\;\;\mathrm{if}\;n^{\prime}=n} \\ {0 \mathrm{~otherwise}}\end{array}\right.\in \mathbb{R}^{N\times K}$
 
-- cost: $\Theta(K)$ which is cheap!
+% - cost: $\Theta(K)$ which is cheap!
 
 \subsection*{Alternating Least Squares}
 
-- No missing entries:
-
 ${\textstyle\frac{1}{2}}\sum_{d=1}^{D}\sum_{n=1}^{N}\left[x_{d n}-\left(W\mathbf{Z}^{\mathsf{T}}\right)_{d n}\right]^{2}$
-$\\=\frac{1}{2}\|\mathbf{X}-\mathbf{W}\mathbf{Z}^{\mathsf{T}}\|_{{Frob}}^{2}$
+$=\frac{1}{2}\|\mathbf{X}-\mathbf{W}\mathbf{Z}^{\mathsf{T}}\|_{{Frob}}^{2}$
 
-- We first minimize w.r.t. Z for fixed W and then minimize W given Z (closed form solutions):
+% - We first minimize w.r.t. Z for fixed W and then minimize W given Z (closed form solutions):
 
-$Z^{\mathsf{T}}:=(\mathsf{W}^{\mathsf{T}}\mathsf{W}+\lambda_{z}\mathsf{I}_{K})^{-1}\mathsf{W}^{\mathsf{T}}\mathsf{X}$
-
+$Z^{\mathsf{T}}:=(\mathsf{W}^{\mathsf{T}}\mathsf{W}+\lambda_{z}\mathsf{I}_{K})^{-1}\mathsf{W}^{\mathsf{T}}\mathsf{X}$,
 $\mathbf{W}^{\mathsf{T}}:=(\mathbf{Z}^{\mathsf{T}}\mathbf{Z}+\lambda_{w}\mathbf{I}_{K})^{-1}\mathbf{Z}^{\mathsf{T}}\mathbf{X}^{\mathsf{T}}$
 
 - Cost: need to invert a $K \times K$ matrix
 
-- With missing entries:
-Can you derive the ALS updates for the more general setting, when only the ratings $(d, n) \in \Omega$ contribute to the cost, i.e.
-$\frac{1}{2}\sum_{(d,n)\in\Omega}\big[x_{d n}-\big(\mathsf{W Z}^{\mathsf{T}}\big)_{d n}\big]^{2}$
+% - With missing entries:
+% Can you derive the ALS updates for the more general setting, when only the ratings $(d, n) \in \Omega$ contribute to the cost, i.e.
+% $\frac{1}{2}\sum_{(d,n)\in\Omega}\big[x_{d n}-\big(\mathsf{W Z}^{\mathsf{T}}\big)_{d n}\big]^{2}$
 
-Compute the gradient with respect to each group of variables, and set to zero.
+% Compute the gradient with respect to each group of variables, and set to zero.
 
 % \subsection*{Update for $Z$ with fixed $W$:}
 % The ALS update for $Z^{\mathsf{T}}$ is given by:
